@@ -11,7 +11,7 @@ These are some of my personal dotfiles. I don't stick to any particular distro s
   - `powerlevel10k` as the theme
   - `nerd-fonts` for *ALL* the glyphs
   - `nord` as the terminal color scheme
-  - `Source Code Pro` as the terminal font, but anyone patched by nerd-fonts will work
+  - `RobotoMono` as the terminal font, but anyone patched by nerd-fonts will work
 
 ## Screenshots
 
