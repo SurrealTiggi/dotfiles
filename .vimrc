@@ -24,16 +24,17 @@ filetype plugin indent on
 
 " General
 set encoding=utf-8
-set autoread																						" reload files when changed on disk
-set ttimeoutlen=10																" adjust timeout to avoid escape key contention
-set softtabstop=2																	" insert mode tab and backspace use x spaces
-set tabstop=1																					" make actual tab x spaces
-set shiftwidth=2																		" normal mode indentation becomes x spaces
-set ignorecase																				" case-insensitive search
-set list																										" show trailing whitespace
+set autoread                                        " reload files when changed on disk
+set ttimeoutlen=10                                  " adjust timeout to avoid escape key contention
+"set softtabstop=2                                  " insert mode tab and backspace use x spaces
+set tabstop=2                                       " make existing tab characters x spaces
+set shiftwidth=2                                    " normal mode indentation becomes x spaces
+set expandtab                                       " pressing tab inserts x spaces
+set ignorecase                                      " case-insensitive search
+set list                                            " show trailing whitespace
 set listchars=tab:.\ ,trail:▫
-set number																								" show line numbers
-set ruler																									" show ruler
+set number                                          " show line numbers
+set ruler                                           " show ruler
 
 " in case you forgot to sudo
 cnoremap w!! %!sudo tee > /dev/null %
