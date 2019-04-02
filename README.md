@@ -14,5 +14,5 @@ These are some of my personal dotfiles. I don't stick to any particular distro s
 		- `RobotoMono` as the terminal font, but anyone patched by nerd-fonts will work
 
 ## Screenshots
-![alt text](raw.githubusercontent.com/SurrealTiggi/dotfiles/master/term.png)
+![alt text](https://github.com/SurrealTiggi/dotfiles/raw/master/term.png)
 
