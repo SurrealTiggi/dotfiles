@@ -112,7 +112,7 @@ export NVM_DIR="/home/tbaptista/.nvm"
 # Aliases
 alias python='python3'
 alias pip='pip3'
-alias ls='colorls --sd'
+alias ll='colorls --sd'
 
 # PL9K
 ## General
