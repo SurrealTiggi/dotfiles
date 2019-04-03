@@ -2,12 +2,12 @@
 "├── autoload
 "│   └── pathogen.vim
 "└── bundle
-"    ├── nerdtree															Directory browser in vim
-"    ├── nerdtree-git-plugin				Git support for NERDTree
-"    ├── vim-airline												Airline theme
-"    ├── vim-fugitive											Git wrapper
-"    ├── vim-signify												Best git gutter
-"    └── nord-vim															Nord colorscheme
+"    ├── nerdtree                   Directory browser in vim
+"    ├── nerdtree-git-plugin        Git support for NERDTree
+"    ├── vim-airline                Airline theme
+"    ├── vim-fugitive               Git wrapper
+"    ├── vim-signify                Best git gutter
+"    └── nord-vim                   Nord colorscheme
 
 
 " Pathogen
@@ -37,7 +37,7 @@ set number                                          " show line numbers
 set ruler                                           " show ruler
 
 " in case you forgot to sudo
-cnoremap w!! %!sudo tee > /dev/null %
+cnoremap w!! execute 'silent! write !sudo tee % > /dev/null' <bar> edit!
 
 " Plugin Settings
 " airline

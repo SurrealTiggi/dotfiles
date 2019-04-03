@@ -12,6 +12,7 @@ These are some of my personal dotfiles. I don't stick to any particular distro s
   - `nerd-fonts` for *ALL* the glyphs
   - `nord` as the terminal color scheme
   - `RobotoMono` as the terminal font, but anyone patched by nerd-fonts will work
+  - `colorls` to colorize and decorate `ls`
 
 ## Screenshots
 ![alt text](https://raw.githubusercontent.com/SurrealTiggi/dotfiles/master/term.png)
