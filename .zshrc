@@ -85,6 +85,7 @@ source $ZSH/oh-my-zsh.sh
 source /usr/local/bin/aws_zsh_completer.sh
 source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
 source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # User configuration
 
@@ -126,19 +127,18 @@ export GOPATH=$HOME/go
 #export GOOS="linux"
 export CGO_ENABLED=1
 
+# PYENV
+eval "$(pyenv init -)"
+
 # PATH
 export PATH=$PATH:/usr/local/Cellar/mtr/0.92/sbin/:$GOPATH/bin:$HOME/node_modules/.bin:$HOME/.cargo/bin
 
 # Aliases
-alias python='python3'
-alias pip='pip3'
-alias ipy='ptipython'
+# alias python='python3'
+# alias pip='pip3'
+# alias ipy='ptipython'
 alias ll='colorls --sd'
 alias ls='colorls --sd -1'
-
-## Openstack
-alias oscix='source ~/.cloudcreds/openstackrc_test.sh'
-#alias openstack='~/.cloudcreds/dockerwrapper.sh'
 
 ## K8S
 alias k='kubectl'
@@ -154,68 +154,19 @@ alias jqi='fx' # interactive JSON shell viewer (github.com/antonmedv/fx)
 ## Vim
 alias vim='nvim'
 
-## Vault
-export VAULT_ADDR=https://vault.poppulo-tooling.com
-#export VAULT_PWD=]_i&dRNR7^//E_h4_Qei$@55X:X[Z*dt~*r]$&LP@b3Y:{CuMo
+## Remove duplicates from fzf
+setopt EXTENDED_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_BEEP
 
 ## FZF
 export FZF_DEFAULT_OPTS="--no-mouse --height 30% -1 --reverse --multi --inline-info"
 
-# PL9K
-## General
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
-POWERLEVEL9K_SHORTEN_STRATEGY=truncate_folders
-POWERLEVEL9K_STATUS_VERBOSE=true
-POWERLEVEL9K_STATUS_CROSS=true
-#POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-#POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="❱ "
-
-## Context
-POWERLEVEL9K_CONTEXT_TEMPLATE='%n'
-#POWERLEVEL9K_CONTEXT_DEFAULT_FOREGROUND='white'
-
-## Battery
-POWERLEVEL9K_BATTERY_CHARGING='yellow'
-POWERLEVEL9K_BATTERY_CHARGED='green'
-POWERLEVEL9K_BATTERY_DISCONNECTED='$DEFAULT_COLOR'
-POWERLEVEL9K_BATTERY_LOW_THRESHOLD='10'
-POWERLEVEL9K_BATTERY_LOW_COLOR='red'
-#POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=''
-POWERLEVEL9K_BATTERY_ICON='\uf1e6 '
-
-## VCS
-POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='yellow'
-POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='orange'
-POWERLEVEL9K_VCS_UNTRACKED_ICON='?'
-
-## K8S
-zsh_custom_kube_ps1(){
-  echo -n "$(_kube_ps1_symbol)$KUBE_PS1_SEPERATOR$KUBE_PS1_CONTEXT$KUBE_PS1_DIVIDER$KUBE_PS1_NAMESPACE" | sed -e 's/\%//'
-}
-POWERLEVEL9K_CUSTOM_KUBE_PS1='zsh_custom_kube_ps1'
-
-## Left/Right prompts
-#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon context battery dir kube-ps1 vcs)
-#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon context battery dir vcs)
-#POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status ip background_jobs time)
-
-
-## Time
-POWERLEVEL9K_TIME_FORMAT="%D{%H:%M}"
-POWERLEVEL9K_TIME_BACKGROUND='white'
-#POWERLEVEL9K_LOAD_CRITICAL_BACKGROUND="white"
-#POWERLEVEL9K_LOAD_WARNING_BACKGROUND="white"
-#POWERLEVEL9K_LOAD_NORMAL_BACKGROUND="white"
-#POWERLEVEL9K_LOAD_CRITICAL_FOREGROUND="red"
-#POWERLEVEL9K_LOAD_WARNING_FOREGROUND="yellow"
-#POWERLEVEL9K_LOAD_NORMAL_FOREGROUND="black"
-#POWERLEVEL9K_LOAD_CRITICAL_VISUAL_IDENTIFIER_COLOR="red"
-#POWERLEVEL9K_LOAD_WARNING_VISUAL_IDENTIFIER_COLOR="yellow"
-#POWERLEVEL9K_LOAD_NORMAL_VISUAL_IDENTIFIER_COLOR="green"
-#POWERLEVEL9K_HOME_ICON=''
-#POWERLEVEL9K_HOME_SUB_ICON=''
-#POWERLEVEL9K_FOLDER_ICON=''
-#
 function kt() {
   if (( ${+POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND} )); then
     unset POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND

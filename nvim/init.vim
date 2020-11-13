@@ -1,7 +1,25 @@
 " vim-plug
 if empty(glob("~/.vim/autoload/plug.vim"))
-    execute '!curl -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
+    silent execute '!mkdir -p ~/.config/nvim'
+    silent execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.github.com/junegunn/vim-plug/master/plug.vim'
+    silent execute '!ln -s ~/.vim/autoload/ ~/.config/nvim'
+    silent execute '!ln -s ~/.vim/plugged/ ~/.config/nvim'
 endif
+
+" Disable ALE LSP to not conflict with coc.nvim https://github.com/dense-analysis/ale#faq-coc-nvim
+let g:ale_disable_lsp = 1
+
+" Coc.nvim Plugins
+let g:coc_global_extensions = [
+\ 'coc-json',
+\ 'coc-tsserver',
+\ 'coc-html',
+\ 'coc-css',
+\ 'coc-sh',
+\ 'coc-python',
+\ 'coc-go',
+\ ]
+
 call plug#begin('~/.vim/plugged')
 
 " Automatically install missing plugins
@@ -9,9 +27,6 @@ autocmd VimEnter *
   \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \|   PlugInstall --sync | q
   \| endif
-
-" Build tags for python correctly
-autocmd BufWritePost *.py silent! !ctags -R --extra=+f --python-kinds=-i --languages=python 2&gt; /dev/null &amp;
 
 " Disable vi compatibility
 set nocompatible
@@ -37,7 +52,6 @@ set number                                          " show line numbers
 set ruler                                           " show ruler
 set foldmethod=indent                               " enable method folding
 set foldlevel=99                                    " sets fold level
-set tags+=./.tags,.tags,../.tags,../../.tags        " Recursively check parent dirs for tags files
 
 " in case you forgot to sudo
 cnoremap w!! execute 'silent! write !sudo tee % > /dev/null' <bar> edit!
@@ -48,24 +62,12 @@ nnoremap <space> za
 " ----------------------------------------------------------------
 " Plugins (vim-plug)
 " ----------------------------------------------------------------
-" deoplete
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-if has('python3')
-  let g:deoplete#enable_at_startup = 1
-endif
-" deplete plugins
-Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
-Plug 'deoplete-plugins/deoplete-jedi' " Remember pip install jedi
+" Coc.nvim
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " ctags for Go-To-Definition | C-]
 Plug 'ludovicchabant/vim-gutentags' " Remember brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 " Tagbar for easy tags
-Plug 'majutsushi/tagbar'
+Plug 'preservim/tagbar'
 " Lightline theme
 Plug 'itchyny/lightline.vim'
 " Bracket/misc pairs
@@ -85,24 +87,47 @@ Plug 'APZelos/blamer.nvim'
 " NERDCommenter
 Plug 'preservim/nerdcommenter'
 " FZF/Rg | :Rg
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'juneggnn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+" Coc-FZF
+Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
 " vim-go
-Plug 'fatih/vim-go'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " NERDTree
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 " Nord-vim
 Plug 'arcticicestudio/nord-vim'
+" Javascript syntax
+Plug 'pangloss/vim-javascript'
+" Typescript syntax
+Plug 'leafgarland/typescript-vim'
+" JSX syntax
+Plug 'maxmellon/vim-jsx-pretty'
+" TSX syntax
+Plug 'peitalin/vim-jsx-typescript'
+" Import Cost
+" Plug 'yardnsm/vim-import-cost', { 'do': 'npm install' }
 
 " ----------------------------------------------------------------
 " Plugins Settings
 " ----------------------------------------------------------------
+" use tab to autocomplete isntead of arrows
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
+" Coc.nvim
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gt <Plug>(coc-type-definition)
+nmap <silent> gr <Plug>(coc-references)
+nnoremap <silent> <space>s       :<C-u>CocFzfList symbols<CR>
+nnoremap <silent> <space>d       :<C-u>CocFzfList diagnostics<CR>
+
 " ALE linter
 let g:ale_fixers = {
       \   '*': ['remove_trailing_lines', 'trim_whitespace'],
       \   'css': ['prettier', 'stylelint'],
       \   'javascript': ['eslint', 'prettier'],
+      \   'typescript': ['eslint', 'prettier'],
       \   'python': ['isort', 'black'],
       \   'HTML': ['HTMLHint', 'proselint'],
       \   'go': ['gofmt', 'goimports'],
@@ -110,10 +135,23 @@ let g:ale_fixers = {
 
 let g:ale_linters = {
              \ 'go': ['golint'],
-             \ 'python': ['pylama'],
+             \ 'python': ['flake8'],
+             \ 'javascript': ['eslint'],
+             \ 'typescript': ['eslint', 'prettier'],
+             \ 'markdown': ['mdl', 'writegood'],
              \}
 let g:ale_fix_on_save = 1
 let g:ale_python_black_options = '-l 79'
+let g:ale_python_mypy_ignore_invalid_syntax = 1
+let g:ale_python_mypy_options = '--ignore-missing-imports'
+let g:ale_python_flake8_options = '--max-complexity 10'
+
+let g:ale_echo_msg_error_str = ''
+let g:ale_echo_msg_warning_str = ''
+let g:ale_echo_msg_format = '%severity% [%linter%] %s'
+
+nmap <silent> <C-k> <Plug>(ale_previous_wrap) " Ctrl+k
+nmap <silent> <C-j> <Plug>(ale_next_wrap)     " Ctrl+j
 
 " lightline
 let g:lightline = {
@@ -174,6 +212,19 @@ let g:lightline#ale#indicator_ok = "\uf00c"
 
 set noshowmode
 
+" Gutentags
+let g:gutentags_ctags_extra_args = ['--options=/Users/tbaptista/.ctagsrc']
+let g:gutentags_add_default_project_roots = 0
+let g:gutentags_project_root = ['package.json', '.git']
+let g:gutentags_cache_dir = expand('~/.cache/vim/ctags')
+let g:gutentags_generate_on_new = 1
+let g:gutentags_generate_on_missing = 1
+let g:gutentags_generate_on_write = 1
+let g:gutentags_generate_on_empty_buffer = 0
+
+" Build tags for python correctly
+" autocmd BufWritePost *.py silent! !ctags -R --extras=+f --python-kinds=-i --languages=python 2&gt; /dev/null &amp;
+
 " Tagbar
 nmap <F8> :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
@@ -202,16 +253,13 @@ let g:fzf_action = {
       \ 'ctrl-i': 'split'}
 
 " vim-go
+let g:go_def_mapping_enabled = 0      " Let coc-go handle mappings
 let g:go_fmt_command = "goimports"    " Run goimports along gofmt on each save
 let g:go_auto_type_info = 1           " Automatically get signature/type info for object under cursor
-" Build/Test on save.
-augroup auto_go
-	autocmd!
-	autocmd BufWritePost *.go :GoBuild
-augroup end
 
 " NERDTree
 map <C-n> :NERDTreeToggle<CR>
+let NERDTreeIgnore=['\~$', '.o$', 'bower_components', 'node_modules', '__pycache__']
 let NERDTreeQuitOnOpen=1
 
 " vim-plug closure
