@@ -1,4 +1,16 @@
-# dotfiles
+# dotfiles [Zsh + Neovim + Neofetch]
+
+```
+       __      __  _____ __
+  ____/ /___  / /_/ __(_) /__  _____
+ / __  / __ \/ __/ /_/ / / _ \/ ___/
+/ /_/ / /_/ / /_/ __/ / /  __(__  )
+\__,_/\____/\__/_/ /_/_/\___/____/
+
+```
+[![forthebadge](https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
+</div>
 
 These are some of my personal dotfiles.
 
@@ -27,3 +39,4 @@ List in `brew.txt` for now
 ## TODO
 
 - [ ] Installation script
+- [ ] Improve docs

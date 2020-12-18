@@ -139,6 +139,7 @@ export PATH=$PATH:/usr/local/Cellar/mtr/0.92/sbin/:$GOPATH/bin:$HOME/node_module
 # alias ipy='ptipython'
 alias ll='colorls --sd'
 alias ls='colorls --sd -1'
+alias tree='colorls --tree'
 
 ## K8S
 alias k='kubectl'
