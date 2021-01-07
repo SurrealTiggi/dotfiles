@@ -86,6 +86,7 @@ source /usr/local/bin/aws_zsh_completer.sh
 source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
 source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $HOME/.nvm/bash_completion
 
 # User configuration
 
@@ -119,7 +120,7 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 #Exports
 export JAVA_HOME=$(/usr/libexec/java_home)
-export NVM_DIR="/home/tbaptista/.nvm"
+export NVM_DIR="${HOME}/.nvm"
 
 # GO exports
 export GOPATH=$HOME/go
@@ -142,14 +143,14 @@ alias ls='colorls --sd -1'
 alias tree='colorls --tree'
 
 ## K8S
-alias k='kubectl'
+alias k='kubecolor'
 alias kcx='kubectx'
 alias kcxd='kubectx docker-for-desktop'
 alias kns='kubens'
 alias kdebug='k run --generator=run-pod/v1 -it tiago-debug --rm --image=surrealtiggi/kube-helper --image-pull-policy=Always /bin/sh'
 
 ## JQ
-alias jqs='jid' # jq compatible shell (github.com/simeji/jid)
+alias jqs='jiq' # jq compatible shell (github.com/fiatjaf/jiq)
 alias jqi='fx' # interactive JSON shell viewer (github.com/antonmedv/fx)
 
 ## Vim
@@ -165,14 +166,16 @@ setopt HIST_FIND_NO_DUPS
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_BEEP
 
-## FZF
-export FZF_DEFAULT_OPTS="--no-mouse --height 30% -1 --reverse --multi --inline-info"
 
+# Kubecolor auto-completion
+complete -o default -F __start_kubectl kubecolor
+
+# kubeconfig p10k toggle
 function kt() {
   if (( ${+POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND} )); then
     unset POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND
   else
-    POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND='kubectl|helm|kubens|kubectx|oc|istioctl|kogito|k9s|helmfile|k'
+    POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND='helm|kubens|kubectx|oc|istioctl|kogito|k9s|helmfile'
   fi
   p10k reload
   if zle; then
@@ -181,10 +184,26 @@ function kt() {
   fi
 }
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# P10K
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/vault vault
 
+# FZF
+# export FZF_DEFAULT_COMMAND='rg --hidden -l ""'
+
+export FZF_DEFAULT_OPTS="--no-mouse --height 30% -1 --reverse --multi --inline-info"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# NVM
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+autoload -U add-zsh-hook
+load-nvmrc() {
+  if [[ -f .nvmrc && -r .nvmrc ]]; then
+    nvm use
+  fi
+}
+add-zsh-hook chpwd load-nvmrc

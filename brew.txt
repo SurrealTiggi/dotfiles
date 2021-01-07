@@ -59,6 +59,7 @@ jq
 kafkacat
 kops
 kube-ps1
+dty1er/tap/kubecolor
 kubectx
 kubernetes-cli
 kubernetes-helm
