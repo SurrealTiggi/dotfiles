@@ -135,6 +135,7 @@ sqlite
 telnet
 terraform
 terragrunt
+tidy-html5
 tree
 unbound
 unibilium

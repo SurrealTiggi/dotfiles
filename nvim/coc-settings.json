@@ -1,5 +1,24 @@
 {
   "diagnostic.displayByAle":true,
+  "diagnostic.enable": false,
   "python.jediEnabled": true,
-  "python.pythonPath": "python"
+  "python.pythonPath": "/Users/tbaptista/.pyenv/shims/python",
+  "suggest.enablePreview": true,
+  "suggest.floatEnable": true,
+  "coc.preferences.currentFunctionSymbolAutoUpdate": true,
+  "snippets.ultisnips.directories": [
+    "UltiSnips",
+    "gosnippets/UltiSnips"
+  ],
+  "languageserver": {
+    "terraform": {
+      "command": "terraform-lsp",
+      "filetypes": [
+        "terraform",
+        "tf"
+      ],
+      "initializationOptions": {},
+      "settings": {}
+    }
+  }
 }

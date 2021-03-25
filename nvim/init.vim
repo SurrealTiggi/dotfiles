@@ -1,3 +1,12 @@
+" ███╗   ██╗ ███████╗ ██████╗  ██╗   ██╗ ██╗ ███╗   ███╗
+" ████╗  ██║ ██╔════╝██╔═══██╗ ██║   ██║ ██║ ████╗ ████║
+" ██╔██╗ ██║ █████╗  ██║   ██║ ██║   ██║ ██║ ██╔████╔██║
+" ██║╚██╗██║ ██╔══╝  ██║   ██║ ╚██╗ ██╔╝ ██║ ██║╚██╔╝██║
+" ██║ ╚████║ ███████╗╚██████╔╝  ╚████╔╝  ██║ ██║ ╚═╝ ██║
+" ╚═╝  ╚═══╝ ╚══════╝ ╚═════╝    ╚═══╝   ╚═╝ ╚═╝     ╚═╝
+"
+" https://github.com/surrealtiggi/dotfiles
+
 ""  INITIAL SETUP
 """ Automatically configure vim-plug
 if empty(glob("~/.vim/autoload/plug.vim"))
@@ -18,6 +27,10 @@ let g:coc_global_extensions = [
 \ 'coc-sh',
 \ 'coc-python',
 \ 'coc-go',
+\ 'coc-snippets',
+\ 'coc-emmet',
+\ 'coc-pairs',
+\ 'coc-tailwindcss',
 \ ]
 
 
@@ -45,44 +58,72 @@ set ruler                                                         " show ruler
 set foldmethod=indent                                             " enable method folding
 set foldlevel=99                                                  " sets fold level
 set clipboard=unnamedplus                                         " yank across different terminals
+set termguicolors                                                 " Enable 24bit colors
+set noshowmode                                                    " Disable showing a line when in certain modes
+set showtabline=2                                                 " Always show tabline
+set incsearch                                                     " Start searching immediately as you type
+set scrolloff=8                                                   " Scroll 8 spaces from top/bottom
+set nohlsearch                                                    " Don't leave search words highlighted
+set cursorline                                                    " Show cursorline
 " set tags+=./.tags,.tags,../.tags,../../.tags                    " Recursively check parent dirs for tags files
-
 """ Set leader
 nnoremap <SPACE> <Nop>
 let mapleader=" "
 
 ""  PLUGINS (vim-plug)
 " vim-plug loader
-call plug#begin('~/.vim/plugged')
-
+if has('nvim-0.5')
+  call plug#begin('~/.vim/plugged.nightly')
+else
+  call plug#begin('~/.vim/plugged')
+endif
+"""  Language Support
 Plug 'neoclide/coc.nvim', {'branch': 'release'}         " Coc.nvim
-Plug 'ludovicchabant/vim-gutentags'                     " ctags for Go-To-Definition | <C-]>. Remember brew install --HEAD universal-ctags/universal-ctags/universal-ctags
-Plug 'preservim/tagbar'                                 " Tagbar for easy tags
-Plug 'editorconfig/editorconfig-vim'                    " EditorConfig
-Plug 'kassio/neoterm'                                   " Terminal in vim
-Plug 'itchyny/lightline.vim'                            " Lightline theme
-Plug 'jiangmiao/auto-pairs'                             " Brackets/misc pairs
-Plug 'dense-analysis/ale'                               " General purpose configurable linter
-Plug 'maximbaz/lightline-ale'                           " Nicer linter theme
-Plug 'tpope/vim-fugitive'                               " Definitive git plugin | :Git
-Plug 'junegunn/gv.vim'                                  " Git commit browser | :GV
-Plug 'stsewd/fzf-checkout.vim'                          " Git checkout with FZF
-Plug 'airblade/vim-gitgutter'                           " Git gutter
-Plug 'APZelos/blamer.nvim'                              " In-line git blame
-Plug 'preservim/nerdcommenter'                          " NERDCommenter for block comments
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }     " FZF/Rg | :Rg
-Plug 'junegunn/fzf.vim'                                 " FZF.vim
-Plug 'antoinemadec/coc-fzf', {'branch': 'release'}      " Coc.fzf
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }      " Golang dev
-Plug 'preservim/nerdtree'                               " NERDTree for navigation
-Plug 'Xuyuanp/nerdtree-git-plugin'                      " Git status in NERDTree
-Plug 'arcticicestudio/nord-vim'                         " Nord colorscheme
+Plug 'honza/vim-snippets'                               " All the snippets
+Plug 'hashivim/vim-terraform'                           " Terraform dev
+"""  Code quality
+Plug 'dense-analysis/ale'                               " General purpose configurable linter
+Plug 'editorconfig/editorconfig-vim'                    " EditorConfig
 Plug 'pangloss/vim-javascript'                          " Javascript syntax
 Plug 'leafgarland/typescript-vim'                       " Typescript syntax
 Plug 'maxmellon/vim-jsx-pretty'                         " JSX syntax
 Plug 'peitalin/vim-jsx-typescript'                      " TSX syntax
-Plug 'ryanoasis/vim-devicons'                           " VIM Material Icons for plugins
+Plug 'plasticboy/vim-markdown'                          " Markdown helpers (includes folding)
+"""  Utilities
+Plug 'kassio/neoterm'                                   " Terminal in vim
+Plug 'tpope/vim-fugitive'                               " Definitive git plugin | :Git
+Plug 'tpope/vim-rhubarb'                                " Enable :GBrowse when :GV
+Plug 'junegunn/gv.vim'                                  " Git commit browser | :GV
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }     " FZF/Rg | :Rg
+Plug 'junegunn/fzf.vim'                                 " FZF.vim
+Plug 'antoinemadec/coc-fzf', {'branch': 'release'}      " Coc.fzf
+Plug 'stsewd/fzf-checkout.vim'                          " Git checkout with FZF
+Plug 'preservim/nerdcommenter'                          " NERDCommenter for block comments
+Plug 'preservim/nerdtree'                               " NERDTree for navigation
+Plug 'ludovicchabant/vim-gutentags'                     " ctags for Go-To-Definition | <C-]>. Remember brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+Plug 'preservim/tagbar'                                 " Tagbar for easy tags
+" Plug 'jiangmiao/auto-pairs'                             " Brackets/misc pairs
+Plug 'APZelos/blamer.nvim'                              " In-line git blame
+Plug 'christianrondeau/vim-base64'                      " Base64 encoder/decoder | <leader>atob,<leader>btoa
+Plug 'kristijanhusak/vim-carbon-now-sh'                 " Open selection in carbon.now.sh
+" Plug 'mbbill/undotree'
+"""  Functional Aesthetics
+Plug 'itchyny/lightline.vim'                            " Lightline theme
+Plug 'mengelbrecht/lightline-bufferline'                " Bufferline functionality for lightline
+Plug 'maximbaz/lightline-ale'                           " Add ale status to lightline
+Plug 'airblade/vim-gitgutter'                           " Git gutter
+Plug 'Xuyuanp/nerdtree-git-plugin'                      " Git status in NERDTree
 Plug 'lambdalisue/glyph-palette.vim'                    " Color highlights for NERDTree
+Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' } " Display colors next to color codes
+if has('nvim-0.5')
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " The best highlights
+endif
+"""  Make things pretty
+Plug 'christianchiarulli/nvcode-color-schemes.vim'      " A collection of treesitter compatible themes (nvcode,onedark,nord,aurora,gruvbox,palenight,snazzy)
+Plug 'cocopon/iceberg.vim'                              " Iceberg colorscheme
+Plug 'ghifarit53/tokyonight-vim'                        " Tokyo Night colorscheme
+Plug 'ryanoasis/vim-devicons'                           " VIM Material Icons for plugins
 
 " vim-plug closure
 call plug#end()
@@ -98,6 +139,13 @@ function! ToggleFold()
          set foldlevel=20
      endif
  endfunction
+ """ Refresh NERDTree on open
+function! NERDTreeToggleAndRefresh()
+  :NERDTreeToggle
+  if g:NERDTree.IsOpen()
+    :NERDTreeRefreshRoot
+  endif
+endfunction
 
 """ Lightline
 function! LightlineGitBranch()
@@ -114,6 +162,13 @@ function! LightlineFilename()
   return expand('%')
 endfunction
 
+function! LightlineReadonly()
+  return &ft !~? 'help\|vimfiler' && &readonly ? '' : ''
+endfunction
+function! LightlineModified()
+  return &modifiable && &modified ? '' : ''
+endfunction
+
 function! MyFiletype()
   return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
 endfunction
@@ -122,10 +177,20 @@ function! MyFileformat()
   return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
 endfunction
 
+function! CocCurrentFunction() abort
+  return get(b:, 'coc_current_function', '') . '()'
+endfunction
+
+function! Timer()
+  " return strftime("%H:%S")
+  return strftime("%H:%M %d-%b-%y") . " IST" "Timer in status line
+  " return !date
+endfunction
+
 """ FZF/Rg
 " From :help fzf-vim-example-advanced-ripgrep-integration
 function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --hidden --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let command_fmt = 'rg --hidden --glob "!{**/node_modules/*,.git/*,go.sum,package-lock.json,**/bin/*,**/build/*,.nuxt/*,yarn.lock}" --column --line-number --no-heading --color=always --smart-case -- %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
@@ -133,76 +198,127 @@ function! RipgrepFzf(query, fullscreen)
 endfunction
 
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+""" Show documentation in floating preview window
+" From https://github.com/neoclide/coc.nvim#example-vim-configuration
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+""" Helper for <tab> trigger completion
+" From https://github.com/neoclide/coc-snippets#examples
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 ""  PLUGIN SETTINGS
+""" Coc.nvim
+let g:coc_snippet_next = '<tab>'
+""" vim-terraform
+let g:terraform_align = 1
+let g:terraform_fmt_on_save = 0 " Leave it to ale
+let g:terraform_fold_sections = 1 " Enable folding
+""" NVim Treesitter
+if has('nvim-0.5')
+  lua require'nvim-treesitter.configs'.setup { ensure_installed = "bash","css","go","graphql","html","javascript","typescript","jsdoc","json","python","regex","rust","toml","vue","yaml", highlight = { enable = true}}
+endif
+""" NVCode
+let g:nvcode_termcolors=256
 """ ALE linter
+let g:ale_linters = {
+      \ 'go': ['golangci-lint'],
+      \ 'python': ['flake8'],
+      \ 'terraform': ['terraform'],
+      \ 'markdown': ['mdl', 'writegood'],
+      \ 'javascript': ['eslint'],
+      \ 'typescript': ['eslint'],
+      \ 'css': ['stylelint'],
+      \ 'html': ['htmlhint'],
+      \}
 let g:ale_fixers = {
-      \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-      \   'css': ['prettier', 'stylelint'],
-      \   'javascript': ['eslint', 'prettier'],
-      \   'typescript': ['eslint', 'prettier'],
-      \   'python': ['isort', 'black'],
-      \   'HTML': ['HTMLHint', 'proselint'],
-      \   'go': ['gofmt', 'goimports'],
+      \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+      \ 'go': ['gofmt', 'goimports'],
+      \ 'python': ['isort', 'black'],
+      \ 'terraform': ['terraform'],
+      \ 'javascript': ['eslint', 'prettier'],
+      \ 'typescript': ['eslint', 'prettier'],
+      \ 'html': ['prettier'],
+      \ 'css': ['stylelint', 'prettier'],
       \}
 
-let g:ale_linters = {
-             \ 'go': ['golint'],
-             \ 'python': ['flake8'],
-             \ 'javascript': ['eslint'],
-             \ 'typescript': ['eslint', 'prettier'],
-             \ 'markdown': ['mdl', 'writegood'],
-             \}
 let g:ale_fix_on_save = 1
-let g:ale_python_black_options = '-l 79' " 88 is the default
+let g:ale_go_golangci_lint_options = '--fast'
+" let g:ale_python_black_options = '-l 79' " 88 is the default
 let g:ale_python_mypy_ignore_invalid_syntax = 1
 let g:ale_python_mypy_options = '--ignore-missing-imports'
-let g:ale_python_flake8_options = '--max-complexity 10'
-" let g:ale_python_flake8_options = '--max-complexity 10 --max-line-length 88'
+" let g:ale_python_flake8_options = '--max-complexity 10'
+let g:ale_python_flake8_options = '--max-complexity 10 --max-line-length 88'
 
 let g:ale_echo_msg_error_str = ''
 let g:ale_echo_msg_warning_str = ''
 let g:ale_echo_msg_format = '%severity% [%linter%] %s'
-
-
 """ lightline
-let g:lightline = {
-      \ 'colorscheme': 'seoul256',
-      \ 'component_function': {
+let g:lightline = {}
+" let g:lightline.colorscheme = 'seoul256'
+let g:lightline.colorscheme = 'tokyonight'
+let g:lightline.component_function = {
       \   'gitbranch': 'LightlineGitBranch',
       \   'filename': 'LightlineFilename',
+      \   'readonly': 'LightlineReadOnly',
+      \   'modified': 'LightlineModified',
       \   'filetype': 'MyFiletype',
       \   'fileformat': 'MyFileformat',
-      \ },
+      \   'lsp': 'coc#status',
+      \   'time': 'Timer',
+      \   'currentfunction': 'CocCurrentFunction',
       \ }
-
-let g:gitbranch_icon = ''
-
 let g:lightline.component_expand = {
-      \  'linter_checking': 'lightline#ale#checking',
-      \  'linter_infos': 'lightline#ale#infos',
-      \  'linter_warnings': 'lightline#ale#warnings',
-      \  'linter_errors': 'lightline#ale#errors',
-      \  'linter_ok': 'lightline#ale#ok',
+      \ 'linter_checking': 'lightline#ale#checking',
+      \ 'linter_infos': 'lightline#ale#infos',
+      \ 'linter_warnings': 'lightline#ale#warnings',
+      \ 'linter_errors': 'lightline#ale#errors',
+      \ 'linter_ok': 'lightline#ale#ok',
+      \ 'buffers': 'lightline#bufferline#buffers',
       \ }
 let g:lightline.component_type = {
-      \     'linter_checking': 'right',
-      \     'linter_infos': 'right',
-      \     'linter_warnings': 'warning',
-      \     'linter_errors': 'error',
-      \     'linter_ok': 'right',
+      \ 'linter_checking': 'right',
+      \ 'linter_infos': 'right',
+      \ 'linter_warnings': 'warning',
+      \ 'linter_errors': 'error',
+      \ 'linter_ok': 'right',
+      \ 'time': 'left',
+      \ 'buffers': 'tabsel',
       \ }
-
+" let g:lightline.component = {'separator': ''}
+let g:lightline.component = {'lineinfo': ' %3l:%-2c'}
+let g:gitbranch_icon = ''
 let g:lightline.active = {
       \ 'left':
       \   [[ 'mode', 'paste' ],
       \    [ 'gitbranch'],
-      \    [ 'readonly', 'filename', 'modified' ]],
+      \    [ 'currentfunction','readonly', 'filename', 'modified' ]],
       \ 'right':
       \   [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
       \    [ 'lineinfo', 'percent' ],
       \    [ 'fileformat', 'fileencoding', 'filetype' ]]
       \ }
+
+" Sticking with tabs and not buffers for now, some plugins(nerdtree,<C-h>) default to a tab so
+" can get confusing
+let g:lightline.tabline = {'left': [['tabs']], 'right': [['lsp', 'time']]}
+" let g:lightline.tabline = {'left': [['buffers']], 'right': [['lsp', 'time']]}
+" let g:lightline#bufferline#unnamed = '[No Name]'
+" let g:lightline#bufferline#show_number = 1
+" let g:lightline#bufferline#unicode_symbols = 1
+
+let g:lightline.separator = { 'left': "\ue0b0", 'right': "\ue0b2" }
+let g:lightline.subseparator = { 'left': "\ue0b1", 'right': "\ue0b3" }
 
 let g:lightline#ale#indicator_checking = "\uf110"
 let g:lightline#ale#indicator_infos = "\uf129 "
@@ -210,7 +326,8 @@ let g:lightline#ale#indicator_warnings = "\uf071 "
 let g:lightline#ale#indicator_errors = "\uf05e "
 let g:lightline#ale#indicator_ok = "\uf00c"
 
-set noshowmode
+
+
 
 """ Gutentags
 let g:gutentags_ctags_extra_args = ['--options=/Users/tbaptista/.ctagsrc']
@@ -231,8 +348,23 @@ let g:fzf_action = {
 
 """ vim-go
 let g:go_def_mapping_enabled = 0      " Let coc-go handle mappings
+let g:go_code_completion_enabled = 0  " Let coc-go handle completion
 let g:go_fmt_command = "goimports"    " Run goimports along gofmt on each save
 let g:go_auto_type_info = 1           " Automatically get signature/type info for object under cursor
+let g:go_auto_sameids = 1             " Highlight matching names in viewport
+let g:go_doc_popup_window = 1         " use a popup window for :GoDoc [K]
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+if has('nvim-0.4')
+  let g:go_fold_enable = ['block', 'import', 'varconst', 'package_comment']
+endif
+
 """ Tagbar
 let g:tagbar_autofocus = 1
 let g:tagbar_autoclose = 1
@@ -256,13 +388,19 @@ let g:NERDSpaceDelims = 1
 let g:NERDCompactSexyComs = 1
 
 """ NERDTree
-let NERDTreeIgnore=['\~$', 'bower_components', 'node_modules', '__pycache__', '^.git$', '.aws-sam$', '^dist$', '^.terraform$']
-let NERDTreeQuitOnOpen=1
-let NERDTreeShowHidden=1
+let g:NERDTreeIgnore=[
+      \ '\~$', 'bower_components', 'node_modules', '__pycache__',
+      \ '^.git$', '.aws-sam$', '^dist$', '^.terraform$', 'resources$[[dir]]',
+      \ 'build$[[dir]]', 'bin$[[dir]]', 'yarn.lock', '.nuxt$[[dir]]'
+      \ ]
+let g:NERDTreeQuitOnOpen=1
+let g:NERDTreeShowHidden=1
+let g:NERDTreeAutoDeleteBuffer = 1
+let g:NERDTreeMinimalUI = 1
 
-""" Purely for aesthetics
-let g:NERDTreeDirArrowExpandable = "\uf553"
-let g:NERDTreeDirArrowCollapsible = "\ufb0c"
+"""" Purely for aesthetics
+" let g:NERDTreeDirArrowExpandable = "▸"
+" let g:NERDTreeDirArrowCollapsible = "▾"
 let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Modified"  : "*",
     \ "Staged"    : "✹",
@@ -279,12 +417,12 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 " Setting glyphs manually because for some reason the var doesn't show up
 let g:glyph_palette#palette = {
       \ 'GlyphPalette1': ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-      \ 'GlyphPalette2': ['', '', '', '﵂','', '', '', ''],
+      \ 'GlyphPalette2': ['', '', '', '﵂','', '', '', '', ''],
       \ 'GlyphPalette3': ['λ', '', '', '', '', '', '', '', '', '', '', '', '', ''],
       \ 'GlyphPalette4': ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
       \ 'GlyphPalette6': ['', '', ''],
       \ 'GlyphPalette7': ['', '', '', '', '', '', '', '', '', ''] ,
-      \ 'GlyphPalette9': ['', '', '', '', 'ﬥ'],
+      \ 'GlyphPalette9': ['', '',  '', 'ﬥ'],
       \ 'GlyphPalette12': ['', '', '', ''],
       \ 'GlyphPaletteDirectory': ['', '', '', '', '', ''],
       \}
@@ -293,6 +431,7 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols = {}
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['package.*\.json$'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.*\.md$'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.*\.sh$'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.*\.rst$'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.gitignore$'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['Makefile$'] = ''
@@ -309,21 +448,23 @@ autocmd VimEnter *
 
 """ Automatically reload current file if buffer changes
 au FocusGained,BufEnter * :checktime
-
 """ Reload glyphs for NERDTree
 augroup my-glyph-palette
   autocmd! *
   autocmd FileType nerdtree call glyph_palette#apply()
 augroup END
 
-""" Switch to manual folding after loading indent fold [NOT WORKING]
-" augroup vimrc
-  " au BufReadPre * setlocal foldmethod=indent
-  " au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
-" augroup END
 
-""" vimrc folding
-" From https://vi.stackexchange.com/questions/3814/is-there-a-best-practice-to-fold-a-vimrc-file
+""" use treesitter for folding if possible
+augroup fold_go
+  autocmd!
+  if has('nvim-0.5')
+    autocmd FileType go,python setlocal foldmethod=expr | set fde=nvim_treesitter#foldexpr()
+  else
+    autocmd FileType go setlocal foldmethod=syntax
+  endif
+augroup END
+""" vimrc folding (https://vi.stackexchange.com/questions/3814/is-there-a-best-practice-to-fold-a-vimrc-file)
 augroup fold_vimrc
   autocmd!
   autocmd FileType vim
@@ -341,39 +482,55 @@ vnoremap < <gv
 vnoremap > >gv
 """" Quick hack in case you forgot to sudo
 cnoremap w!! execute 'silent! write !sudo tee % > /dev/null' <bar> edit!
-"""" use tab to autocomplete instead of arrows
+"""" [coc.nvim] use tab to autocomplete instead of arrows
+inoremap <silent><expr> <TAB>
+    \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+"""" [coc.nvim] Make <CR> auto-select the first completion item and notify coc.nvim to format on enter
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 """" Tagbar
 nmap <F8> :TagbarToggle<CR>
-"""" Coc.nvim
+"""" [coc.nvim] Code navigation
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gt <Plug>(coc-type-definition)
 nmap <silent> gr <Plug>(coc-references)
-nmap <silent> qf <Plug>(coc-fix-current)
+nmap <silent> rn <Plug>(coc-rename)
+nmap <silent> gf <Plug>(coc-fix-current)
 " nnoremap <silent> <space>s       :<C-u>CocFzfList symbols<CR>
 " nnoremap <silent> <space>d       :<C-u>CocFzfList diagnostics<CR>
-
+"""" vim-go
+nmap <silent> gtf :GoTestFunc<CR>
+"""" Override K to use custom function
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+"""" Use visual K|J to move a single line up|down
+vnoremap <silent>K :m '<-2<CR>gv=gv
+vnoremap <silent>J :m '>+1<CR>gv=gv
+"""" carbon-now-sh
+vnoremap <F5> :CarbonNowSh<CR>
 """ [Ctrl] bindings
+"""" Coc.nvim
+inoremap <silent><expr> <C-space> coc#refresh()
 """" Ale
-nmap <silent> <C-k> <Plug>(ale_previous_wrap) " Ctrl+k
-nmap <silent> <C-j> <Plug>(ale_next_wrap)     " Ctrl+j
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 """" Neoterm
+tnoremap <C-z> <C-\><C-n>:Tclose<CR>
 nmap <C-z> :Topen resize=20<Enter>
 """" NERDTree
-map <C-n> :NERDTreeToggle<CR>
+map <silent> <C-n> :call NERDTreeToggleAndRefresh()<CR>
 """" NERDCommenter
 nmap <C-_> <leader>c<Space>
 vmap <C-_> <leader>c<Space>gv
 """" FZF/Rg
-" Ctrl+F to search text via RipgrepFzf() wrapper
-" Ctrl+P to search for files
-" Ctrl+H to view open file history
 nnoremap <C-f> :RG<CR>
-nnoremap <C-p> :FZF<CR>
+" nnoremap <C-p> :FZF<CR>
+nnoremap <C-p> :GFiles<CR>
 nnoremap <C-h> :History<CR>
-"""" Tab navigation
-nmap <C-t><left> :tabr<CR>
-nmap <C-t><right> :tabl<CR>
 """" Make home/end behave the same as everywhere else
 map <C-a> <home>
 map <C-e> <end>
@@ -381,6 +538,8 @@ map <C-e> <end>
 map <silent> <C-q> :bp<bar>sp<bar>bn<bar>bd<CR>
 
 """ <leader> bindings
+"""" Quick save
+map <silent><leader>w :update!<CR>
 """" Folding shortcuts
 nnoremap <silent> <leader>f @=(foldlevel('.')?'za':"\<space>")<CR>
 vnoremap <silent> <leader>f zf
@@ -390,11 +549,12 @@ nnoremap <silent> <leader>a :call ToggleFold()<CR>
 nmap <leader>gc :GBranches<CR>
 """" Vim-fugitive
 nmap <silent> <leader>gs :G<CR>
-nmap <silent> <leader>gco :Gcommit<CR>
+nmap <silent> <leader>gco :Git commit<CR>
 nmap <silent> <leader>gv :GV<CR>
-nmap <silent> <leader>gj :diffget //3<CR>  " [dv] Pull change from right side in conflict
-nmap <silent> <leader>gf :diffget //2<CR>  " [dv] Pull change from left side in conflict
-nmap <silent> <leader>gdiff :Gdiffsplit<CR>   " Show diff for current file
+nmap <silent> <leader>gds :Gdiffsplit!<CR>  " Open 3 way diff split for merge conflicts
+nmap <silent> <leader>gj :diffget //3<CR>   " Pull change from right side in conflict
+nmap <silent> <leader>gf :diffget //2<CR>   " Pull change from left side in conflict
+nmap <silent> <leader>gdiff :Gdiffsplit<CR> " Show diff for current file
 """" Window navigation, normalizing t(tab), s(vsplit), i(hsplit)
 " Also use <leader><Arrow> for navigation
 nmap <leader>t :tab split<CR>   " tab split
@@ -404,8 +564,18 @@ nmap <leader><Left> <C-w><Left>
 nmap <leader><Right> <C-w><Right>
 nmap <leader><Up> <C-w><Up>
 nmap <leader><Down> <C-w><Down>
+" Tab switching
+nnoremap <leader>t<Left> :tabprevious<CR>
+nnoremap <leader>t<Right> :tabnext<CR>
+" Buffer switching
+noremap <silent> <leader>[ :bp<CR>
+noremap <silent> <leader>] :bn<CR>
 """" Reload vimrc without closing vim
 map <silent> <leader>vimrc :source ~/.vimrc<CR>
+"""" Quick JSON formatter (needs jq)
+map <silent> <leader>jq :%!jq .<CR>
 
-" Theme
-colorscheme nord
+""  THEME
+colorscheme palenight
+""" Show off animoo background
+hi Normal guibg=NONE ctermbg=NONE
