@@ -25,8 +25,8 @@ let g:coc_global_extensions = [
 \ 'coc-html',
 \ 'coc-css',
 \ 'coc-sh',
-\ 'coc-python',
 \ 'coc-go',
+\ 'coc-pyright',
 \ 'coc-snippets',
 \ 'coc-emmet',
 \ 'coc-pairs',
@@ -103,10 +103,9 @@ Plug 'preservim/nerdcommenter'                          " NERDCommenter for bloc
 Plug 'preservim/nerdtree'                               " NERDTree for navigation
 Plug 'ludovicchabant/vim-gutentags'                     " ctags for Go-To-Definition | <C-]>. Remember brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 Plug 'preservim/tagbar'                                 " Tagbar for easy tags
-" Plug 'jiangmiao/auto-pairs'                             " Brackets/misc pairs
 Plug 'APZelos/blamer.nvim'                              " In-line git blame
 Plug 'christianrondeau/vim-base64'                      " Base64 encoder/decoder | <leader>atob,<leader>btoa
-Plug 'kristijanhusak/vim-carbon-now-sh'                 " Open selection in carbon.now.sh
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}     " Multi-cursor in vim
 " Plug 'mbbill/undotree'
 """  Functional Aesthetics
 Plug 'itchyny/lightline.vim'                            " Lightline theme
@@ -190,7 +189,7 @@ endfunction
 """ FZF/Rg
 " From :help fzf-vim-example-advanced-ripgrep-integration
 function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --hidden --glob "!{**/node_modules/*,.git/*,go.sum,package-lock.json,**/bin/*,**/build/*,.nuxt/*,yarn.lock}" --column --line-number --no-heading --color=always --smart-case -- %s || true'
+  let command_fmt = 'rg --hidden --glob "!{**/node_modules/*,**/.git/*,**/go.sum,**/package-lock.json,**/yarn.lock,**/bin/*,**/build/*,**/.nuxt/*,**/.next/*}" --column --line-number --no-heading --color=always --smart-case -- %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
@@ -217,9 +216,12 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+
 ""  PLUGIN SETTINGS
 """ Coc.nvim
 let g:coc_snippet_next = '<tab>'
+let g:python_host_prog = '$HOME/.pyenv/shims/python'
+let g:python3_host_prog = '$HOME/.pyenv/shims/python3'
 """ vim-terraform
 let g:terraform_align = 1
 let g:terraform_fmt_on_save = 0 " Leave it to ale
@@ -246,8 +248,8 @@ let g:ale_fixers = {
       \ 'go': ['gofmt', 'goimports'],
       \ 'python': ['isort', 'black'],
       \ 'terraform': ['terraform'],
-      \ 'javascript': ['eslint', 'prettier'],
-      \ 'typescript': ['eslint', 'prettier'],
+      \ 'javascript': ['prettier'],
+      \ 'typescript': ['prettier'],
       \ 'html': ['prettier'],
       \ 'css': ['stylelint', 'prettier'],
       \}
@@ -258,11 +260,15 @@ let g:ale_go_golangci_lint_options = '--fast'
 let g:ale_python_mypy_ignore_invalid_syntax = 1
 let g:ale_python_mypy_options = '--ignore-missing-imports'
 " let g:ale_python_flake8_options = '--max-complexity 10'
-let g:ale_python_flake8_options = '--max-complexity 10 --max-line-length 88'
+" let g:ale_python_flake8_options = '--max-complexity 10 --max-line-length 88'
 
 let g:ale_echo_msg_error_str = ''
 let g:ale_echo_msg_warning_str = ''
-let g:ale_echo_msg_format = '%severity% [%linter%] %s'
+let g:ale_echo_msg_format = '%severity% [%linter%:%code%] %s'
+" let g:ale_sign_warning = ""
+" let g:ale_sign_error = "﯇"
+" highlight clear ALEErrorSign
+" highlight clear ALEWarningSign
 """ lightline
 let g:lightline = {}
 " let g:lightline.colorscheme = 'seoul256'
@@ -311,11 +317,11 @@ let g:lightline.active = {
 
 " Sticking with tabs and not buffers for now, some plugins(nerdtree,<C-h>) default to a tab so
 " can get confusing
-let g:lightline.tabline = {'left': [['tabs']], 'right': [['lsp', 'time']]}
-" let g:lightline.tabline = {'left': [['buffers']], 'right': [['lsp', 'time']]}
+" let g:lightline.tabline = {'left': [['tabs']], 'right': [['lsp']]}
+let g:lightline.tabline = {'left': [['buffers']], 'right': [['lsp']]}
 " let g:lightline#bufferline#unnamed = '[No Name]'
-" let g:lightline#bufferline#show_number = 1
-" let g:lightline#bufferline#unicode_symbols = 1
+let g:lightline#bufferline#show_number = 1
+let g:lightline#bufferline#unicode_symbols = 1
 
 let g:lightline.separator = { 'left': "\ue0b0", 'right': "\ue0b2" }
 let g:lightline.subseparator = { 'left': "\ue0b1", 'right': "\ue0b3" }
@@ -349,6 +355,7 @@ let g:fzf_action = {
 """ vim-go
 let g:go_def_mapping_enabled = 0      " Let coc-go handle mappings
 let g:go_code_completion_enabled = 0  " Let coc-go handle completion
+let g:go_gopls_options = ['-remote=auto']
 let g:go_fmt_command = "goimports"    " Run goimports along gofmt on each save
 let g:go_auto_type_info = 1           " Automatically get signature/type info for object under cursor
 let g:go_auto_sameids = 1             " Highlight matching names in viewport
@@ -379,6 +386,9 @@ if has("nvim")
   let g:blamer_delay = 250
 endif
 
+""" visual-multi
+let g:VM_default_mappings = 0                       " Remove all default maps
+let g:VM_maps = {}
 """ Neoterm
 let g:neoterm_default_mod = "botright"
 let g:neoterm_autoinsert = 1
@@ -389,9 +399,9 @@ let g:NERDCompactSexyComs = 1
 
 """ NERDTree
 let g:NERDTreeIgnore=[
-      \ '\~$', 'bower_components', 'node_modules', '__pycache__',
+      \ '\~$', 'bower_components', 'node_modules', '__pycache__', '^.pytest_cache', '^.mypy_cache','^.vim',
       \ '^.git$', '.aws-sam$', '^dist$', '^.terraform$', 'resources$[[dir]]',
-      \ 'build$[[dir]]', 'bin$[[dir]]', 'yarn.lock', '.nuxt$[[dir]]'
+      \ 'build$[[dir]]', 'bin$[[dir]]', 'yarn.lock', '.nuxt$[[dir]]', '.next$[[dir]]'
       \ ]
 let g:NERDTreeQuitOnOpen=1
 let g:NERDTreeShowHidden=1
@@ -402,15 +412,15 @@ let g:NERDTreeMinimalUI = 1
 " let g:NERDTreeDirArrowExpandable = "▸"
 " let g:NERDTreeDirArrowCollapsible = "▾"
 let g:NERDTreeGitStatusIndicatorMapCustom = {
-    \ "Modified"  : "*",
-    \ "Staged"    : "✹",
-    \ "Untracked" : "?",
+    \ "Modified"  : "",
+    \ "Staged"    : "●",
+    \ "Untracked" : "",
     \ "Renamed"   : "➜",
     \ "Unmerged"  : "═",
-    \ "Deleted"   : "x",
+    \ "Deleted"   : "",
     \ "Dirty"     : "*",
-    \ "Clean"     : "✔︎",
-    \ 'Ignored'   : '☒',
+    \ "Clean"     : "",
+    \ 'Ignored'   : '',
     \ "Unknown"   : "!"
     \ }
 
@@ -422,7 +432,7 @@ let g:glyph_palette#palette = {
       \ 'GlyphPalette4': ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
       \ 'GlyphPalette6': ['', '', ''],
       \ 'GlyphPalette7': ['', '', '', '', '', '', '', '', '', ''] ,
-      \ 'GlyphPalette9': ['', '',  '', 'ﬥ'],
+      \ 'GlyphPalette9': ['', '',  '', 'ﬥ', ''],
       \ 'GlyphPalette12': ['', '', '', ''],
       \ 'GlyphPaletteDirectory': ['', '', '', '', '', ''],
       \}
@@ -438,14 +448,13 @@ let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['Makefile$'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.*\.y.*ml$'] = 'ﬥ'
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['^.gitlab-ci\.y.*ml$'] = ''
 let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.*\.toml$'] = ''
-
+let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.*\.tf$'] = ''
 ""  AUTO
 """ Automatically install missing plugins
 autocmd VimEnter *
   \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \|   PlugInstall --sync | q
   \| endif
-
 """ Automatically reload current file if buffer changes
 au FocusGained,BufEnter * :checktime
 """ Reload glyphs for NERDTree
@@ -453,8 +462,6 @@ augroup my-glyph-palette
   autocmd! *
   autocmd FileType nerdtree call glyph_palette#apply()
 augroup END
-
-
 """ use treesitter for folding if possible
 augroup fold_go
   autocmd!
@@ -471,10 +478,11 @@ augroup fold_vimrc
                       \ setlocal foldmethod=expr |
                       \ set fde=getline(v\:lnum)=~'^\"\"'?'>'.(matchend(getline(v\:lnum),'\"\"*')-1)\:'='
 augroup END
-
 """ Build tags for python correctly
 " autocmd BufWritePost *.py silent! !ctags -R --extras=+f --python-kinds=-i --languages=python 2&gt; /dev/null &amp;
-
+""" Force a rescan for js/ts buffers
+autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
+autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
 ""  KEY BINDINGS
 """ Simple bindings
 """" Continue tabbing
@@ -531,11 +539,17 @@ nnoremap <C-f> :RG<CR>
 " nnoremap <C-p> :FZF<CR>
 nnoremap <C-p> :GFiles<CR>
 nnoremap <C-h> :History<CR>
+"""" Visual-Multi
+let g:VM_maps['Find Under']         = '<C-d>'
+let g:VM_maps["Select Cursor Down"] = '<C-S-Down>'
+let g:VM_maps["Select Cursor Up"]   = '<C-S-Up>'
 """" Make home/end behave the same as everywhere else
 map <C-a> <home>
 map <C-e> <end>
-"""" Close buffers without closing vim
-map <silent> <C-q> :bp<bar>sp<bar>bn<bar>bd<CR>
+"""" Close buffer safely
+nnoremap <leader>q :bd!<CR>
+"""" List buffers
+nnoremap <C-b> :Buffers<CR>
 
 """ <leader> bindings
 """" Quick save
@@ -546,18 +560,18 @@ vnoremap <silent> <leader>f zf
 nnoremap <silent> <leader>a :call ToggleFold()<CR>
 """" fzf-checkout
 " Alt-Enter to checkout + track remote
-nmap <leader>gc :GBranches<CR>
+nmap <leader>gco :GBranches<CR>
 """" Vim-fugitive
 nmap <silent> <leader>gs :G<CR>
-nmap <silent> <leader>gco :Git commit<CR>
-nmap <silent> <leader>gv :GV<CR>
+nmap <silent> <leader>gc :Git commit<CR>
+nmap <silent> <leader>gv :GV --name-only<CR>
 nmap <silent> <leader>gds :Gdiffsplit!<CR>  " Open 3 way diff split for merge conflicts
 nmap <silent> <leader>gj :diffget //3<CR>   " Pull change from right side in conflict
 nmap <silent> <leader>gf :diffget //2<CR>   " Pull change from left side in conflict
-nmap <silent> <leader>gdiff :Gdiffsplit<CR> " Show diff for current file
+nmap <silent> <leader>gdf :Gdiffsplit<CR> " Show diff for current file
 """" Window navigation, normalizing t(tab), s(vsplit), i(hsplit)
 " Also use <leader><Arrow> for navigation
-nmap <leader>t :tab split<CR>   " tab split
+nmap <leader>t :tab new<CR>   " tab split
 nmap <leader>s <C-w>v<CR>       " vertical split
 nmap <leader>i <C-w>s<CR>       " horizontal split
 nmap <leader><Left> <C-w><Left>
@@ -568,8 +582,8 @@ nmap <leader><Down> <C-w><Down>
 nnoremap <leader>t<Left> :tabprevious<CR>
 nnoremap <leader>t<Right> :tabnext<CR>
 " Buffer switching
-noremap <silent> <leader>[ :bp<CR>
-noremap <silent> <leader>] :bn<CR>
+noremap <silent> <S-Tab> :bp<CR>
+noremap <silent> <Tab> :bn<CR>
 """" Reload vimrc without closing vim
 map <silent> <leader>vimrc :source ~/.vimrc<CR>
 """" Quick JSON formatter (needs jq)
@@ -579,3 +593,5 @@ map <silent> <leader>jq :%!jq .<CR>
 colorscheme palenight
 """ Show off animoo background
 hi Normal guibg=NONE ctermbg=NONE
+hi LineNr     ctermbg=NONE guibg=NONE
+hi SignColumn ctermbg=NONE guibg=NONE

@@ -12,7 +12,7 @@ fi
 export ZSH="/Users/tbaptista/.oh-my-zsh"
 
 # Tmux fix
-export TERM=xterm-256color
+# export TERM=xterm-256color
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -20,7 +20,7 @@ export TERM=xterm-256color
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="powerlevel10k/powerlevel10k"
 POWERLEVEL9K_MODE='nerdfont-complete'
-neofetch
+# neofetch
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -75,18 +75,17 @@ neofetch
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-	git
-	kubectl
+  git
+  kubectl
   aws
   virtualenv
 )
 
 source $ZSH/oh-my-zsh.sh
-source /usr/local/bin/aws_zsh_completer.sh
-source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
-source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $HOME/.nvm/bash_completion
+# source /usr/local/bin/aws_zsh_completer.sh
+# source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
+# source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
+# source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # User configuration
 
@@ -119,8 +118,7 @@ source $HOME/.nvm/bash_completion
 #
 
 #Exports
-export JAVA_HOME=$(/usr/libexec/java_home)
-export NVM_DIR="${HOME}/.nvm"
+# export JAVA_HOME=$(/usr/libexec/java_home)
 
 # GO exports
 export GOPATH=$HOME/go
@@ -129,18 +127,24 @@ export GOPATH=$HOME/go
 export CGO_ENABLED=1
 
 # PYENV
-eval "$(pyenv init -)"
+# setopt shwordsplit
+export PYENV_ROOT="$HOME/.pyenv"
+# export PYENV_SHELL=zsh
+if which pyenv > /dev/null; then eval "$(pyenv init -)" > /dev/null; fi
 
 # PATH
-export PATH=$PATH:/usr/local/Cellar/mtr/0.92/sbin/:$GOPATH/bin:$HOME/node_modules/.bin:$HOME/.cargo/bin
+export PATH=$PYENV_ROOT/shims:$GOPATH/bin:$HOME/node_modules/.bin:$HOME/.cargo/bin:$PATH
+
+# GPG
+export GPG_TTY=$(tty)
 
 # Aliases
-# alias python='python3'
-# alias pip='pip3'
-# alias ipy='ptipython'
+# alias ruby="$HOME/.rbenv/shims/ruby"
+# alias gem="$HOME/.rbenv/shims/gem"
 alias ll='colorls --sd'
 alias ls='colorls --sd -1'
 alias tree='colorls --tree'
+alias cat='bat'
 
 ## K8S
 alias k='kubecolor'
@@ -156,6 +160,12 @@ alias jqi='fx' # interactive JSON shell viewer (github.com/antonmedv/fx)
 ## Vim
 alias vim='nvim'
 
+## Git
+alias gpl='git pull'
+
+# History settings
+HISTSIZE=1000000
+SAVEHIST=1000000
 ## Remove duplicates from fzf
 setopt EXTENDED_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
@@ -190,15 +200,17 @@ function kt() {
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/vault vault
 
-# FZF
-# export FZF_DEFAULT_COMMAND='rg --hidden -l ""'
+# FZF | Ctrl+T
+export FZF_DEFAULT_COMMAND='rg --hidden --follow --no-ignore-vcs --hidden -g "!{**/node_modules/*,.git/*,go.sum,package-lock.json}"'
 
 export FZF_DEFAULT_OPTS="--no-mouse --height 30% -1 --reverse --multi --inline-info"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # NVM
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
 
 autoload -U add-zsh-hook
 load-nvmrc() {
@@ -207,3 +219,4 @@ load-nvmrc() {
   fi
 }
 add-zsh-hook chpwd load-nvmrc
+source ~/.vgsrc
