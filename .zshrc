@@ -118,6 +118,8 @@ source $ZSH/oh-my-zsh.sh
 #
 
 #Exports
+# Main Git dir
+export MY_GIT=$HOME/git
 # export JAVA_HOME=$(/usr/libexec/java_home)
 
 # GO exports
@@ -132,13 +134,18 @@ export PYENV_ROOT="$HOME/.pyenv"
 # export PYENV_SHELL=zsh
 if which pyenv > /dev/null; then eval "$(pyenv init -)" > /dev/null; fi
 
-# PATH
-export PATH=$PYENV_ROOT/shims:$GOPATH/bin:$HOME/node_modules/.bin:$HOME/.cargo/bin:$PATH
+# PATH, putting aws v2 first to override pyenv shim
+export PATH=/Applications/Postgres.app/Contents/Versions/13/bin:/usr/local/Cellar/awscli/2.2.11/bin:$PYENV_ROOT/shims:$GOPATH/bin:$HOME/node_modules/.bin:$HOME/.cargo/bin:$PATH
 
 # GPG
 export GPG_TTY=$(tty)
 
 # Aliases
+# Dots
+alias dots="cd $MY_GIT/personal/public/dotfiles"
+
+# Handy map
+alias map="cat $HOME/vgs.aws.md"
 # alias ruby="$HOME/.rbenv/shims/ruby"
 # alias gem="$HOME/.rbenv/shims/gem"
 alias ll='colorls --sd'
@@ -162,6 +169,7 @@ alias vim='nvim'
 
 ## Git
 alias gpl='git pull'
+alias gt='git tag'
 
 # History settings
 HISTSIZE=1000000
@@ -201,22 +209,22 @@ autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/vault vault
 
 # FZF | Ctrl+T
-export FZF_DEFAULT_COMMAND='rg --hidden --follow --no-ignore-vcs --hidden -g "!{**/node_modules/*,.git/*,go.sum,package-lock.json}"'
+# export FZF_DEFAULT_COMMAND="rg --hidden --follow --no-ignore-vcs --hidden -g '!{**/node_modules/*,.git/*,go.sum,package-lock.json}'"
+export FZF_DEFAULT_COMMAND="rg --follow --no-ignore-vcs --hidden -g '!{**/node_modules/*,.git/*,go.sum,package-lock.json}'"
 
 export FZF_DEFAULT_OPTS="--no-mouse --height 30% -1 --reverse --multi --inline-info"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+# [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 
-autoload -U add-zsh-hook
-load-nvmrc() {
-  if [[ -f .nvmrc && -r .nvmrc ]]; then
-    nvm use
-  fi
-}
-add-zsh-hook chpwd load-nvmrc
-source ~/.vgsrc
+# autoload -U add-zsh-hook
+# load-nvmrc() {
+  # if [[ -f .nvmrc && -r .nvmrc ]]; then
+    # nvm use
+  # fi
+# }
+# add-zsh-hook chpwd load-nvmrc

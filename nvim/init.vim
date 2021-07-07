@@ -9,11 +9,9 @@
 
 ""  INITIAL SETUP
 """ Automatically configure vim-plug
-if empty(glob("~/.vim/autoload/plug.vim"))
-    silent execute '!mkdir -p ~/.config/nvim'
-    silent execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.github.com/junegunn/vim-plug/master/plug.vim'
-    silent execute '!ln -s ~/.vim/autoload/ ~/.config/nvim'
-    silent execute '!ln -s ~/.vim/plugged/ ~/.config/nvim'
+if empty(glob("~/.config/nvim/autoload/plug.vim"))
+    silent execute '!curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.github.com/junegunn/vim-plug/master/plug.vim'
+    silent execute '!ln -s ~/.config/nvim/init.vim ~/.vimrc'
 endif
 """ Disable ALE LSP to not conflict with coc.nvim https://github.com/dense-analysis/ale#faq-coc-nvim
 let g:ale_disable_lsp = 1
@@ -70,64 +68,27 @@ set cursorline                                                    " Show cursorl
 nnoremap <SPACE> <Nop>
 let mapleader=" "
 
-""  PLUGINS (vim-plug)
-" vim-plug loader
-if has('nvim-0.5')
-  call plug#begin('~/.vim/plugged.nightly')
-else
-  call plug#begin('~/.vim/plugged')
-endif
-"""  Language Support
-Plug 'neoclide/coc.nvim', {'branch': 'release'}         " Coc.nvim
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }      " Golang dev
-Plug 'honza/vim-snippets'                               " All the snippets
-Plug 'hashivim/vim-terraform'                           " Terraform dev
-"""  Code quality
-Plug 'dense-analysis/ale'                               " General purpose configurable linter
-Plug 'editorconfig/editorconfig-vim'                    " EditorConfig
-Plug 'pangloss/vim-javascript'                          " Javascript syntax
-Plug 'leafgarland/typescript-vim'                       " Typescript syntax
-Plug 'maxmellon/vim-jsx-pretty'                         " JSX syntax
-Plug 'peitalin/vim-jsx-typescript'                      " TSX syntax
-Plug 'plasticboy/vim-markdown'                          " Markdown helpers (includes folding)
-"""  Utilities
-Plug 'kassio/neoterm'                                   " Terminal in vim
-Plug 'tpope/vim-fugitive'                               " Definitive git plugin | :Git
-Plug 'tpope/vim-rhubarb'                                " Enable :GBrowse when :GV
-Plug 'junegunn/gv.vim'                                  " Git commit browser | :GV
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }     " FZF/Rg | :Rg
-Plug 'junegunn/fzf.vim'                                 " FZF.vim
-Plug 'antoinemadec/coc-fzf', {'branch': 'release'}      " Coc.fzf
-Plug 'stsewd/fzf-checkout.vim'                          " Git checkout with FZF
-Plug 'preservim/nerdcommenter'                          " NERDCommenter for block comments
-Plug 'preservim/nerdtree'                               " NERDTree for navigation
-Plug 'ludovicchabant/vim-gutentags'                     " ctags for Go-To-Definition | <C-]>. Remember brew install --HEAD universal-ctags/universal-ctags/universal-ctags
-Plug 'preservim/tagbar'                                 " Tagbar for easy tags
-Plug 'APZelos/blamer.nvim'                              " In-line git blame
-Plug 'christianrondeau/vim-base64'                      " Base64 encoder/decoder | <leader>atob,<leader>btoa
-Plug 'mg979/vim-visual-multi', {'branch': 'master'}     " Multi-cursor in vim
-" Plug 'mbbill/undotree'
-"""  Functional Aesthetics
-Plug 'itchyny/lightline.vim'                            " Lightline theme
-Plug 'mengelbrecht/lightline-bufferline'                " Bufferline functionality for lightline
-Plug 'maximbaz/lightline-ale'                           " Add ale status to lightline
-Plug 'airblade/vim-gitgutter'                           " Git gutter
-Plug 'Xuyuanp/nerdtree-git-plugin'                      " Git status in NERDTree
-Plug 'lambdalisue/glyph-palette.vim'                    " Color highlights for NERDTree
-Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' } " Display colors next to color codes
-if has('nvim-0.5')
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " The best highlights
-endif
-"""  Make things pretty
-Plug 'christianchiarulli/nvcode-color-schemes.vim'      " A collection of treesitter compatible themes (nvcode,onedark,nord,aurora,gruvbox,palenight,snazzy)
-Plug 'cocopon/iceberg.vim'                              " Iceberg colorscheme
-Plug 'ghifarit53/tokyonight-vim'                        " Tokyo Night colorscheme
-Plug 'ryanoasis/vim-devicons'                           " VIM Material Icons for plugins
-
-" vim-plug closure
-call plug#end()
+""  VIM IMPORTS
+runtime ./plug.vim
+runtime ./functions.vim
+runtime ./keybinds.vim
+""  LUA IMPORTS
+lua require "nvimTree"
+lua require "telescope-nvim"
 
 ""  FUNCTIONS
+""" Show documentation in floating preview window
+" From https://github.com/neoclide/coc.nvim#example-vim-configuration
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+nnoremap <silent>K :call <SID>show_documentation()<CR>
 """ Folding
 function! ToggleFold()
      if &foldlevel >= 20
@@ -137,13 +98,12 @@ function! ToggleFold()
          "normal! zR<CR> (unfolds everything)
          set foldlevel=20
      endif
- endfunction
- """ Refresh NERDTree on open
-function! NERDTreeToggleAndRefresh()
-  :NERDTreeToggle
-  if g:NERDTree.IsOpen()
-    :NERDTreeRefreshRoot
-  endif
+endfunction
+
+""" Refresh NvimTree on open
+function! NvimTreeToggleAndRefresh()
+  :NvimTreeToggle
+  :NvimTreeRefresh
 endfunction
 
 """ Lightline
@@ -173,7 +133,7 @@ function! MyFiletype()
 endfunction
 
 function! MyFileformat()
-  return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+  return winwidth(0) > 70 ? (&fileformat . '[' . &fileencoding . ']') : ''
 endfunction
 
 function! CocCurrentFunction() abort
@@ -197,17 +157,6 @@ function! RipgrepFzf(query, fullscreen)
 endfunction
 
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-""" Show documentation in floating preview window
-" From https://github.com/neoclide/coc.nvim#example-vim-configuration
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
 
 """ Helper for <tab> trigger completion
 " From https://github.com/neoclide/coc-snippets#examples
@@ -227,9 +176,7 @@ let g:terraform_align = 1
 let g:terraform_fmt_on_save = 0 " Leave it to ale
 let g:terraform_fold_sections = 1 " Enable folding
 """ NVim Treesitter
-if has('nvim-0.5')
-  lua require'nvim-treesitter.configs'.setup { ensure_installed = "bash","css","go","graphql","html","javascript","typescript","jsdoc","json","python","regex","rust","toml","vue","yaml", highlight = { enable = true}}
-endif
+lua require'nvim-treesitter.configs'.setup { ensure_installed = "bash","css","go","graphql","html","javascript","typescript","jsdoc","json","python","regex","rust","toml","vue","yaml", highlight = { enable = true}}
 """ NVCode
 let g:nvcode_termcolors=256
 """ ALE linter
@@ -312,11 +259,9 @@ let g:lightline.active = {
       \ 'right':
       \   [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
       \    [ 'lineinfo', 'percent' ],
-      \    [ 'fileformat', 'fileencoding', 'filetype' ]]
+      \    [ 'fileformat', 'filetype' ]]
       \ }
 
-" Sticking with tabs and not buffers for now, some plugins(nerdtree,<C-h>) default to a tab so
-" can get confusing
 " let g:lightline.tabline = {'left': [['tabs']], 'right': [['lsp']]}
 let g:lightline.tabline = {'left': [['buffers']], 'right': [['lsp']]}
 " let g:lightline#bufferline#unnamed = '[No Name]'
@@ -332,9 +277,6 @@ let g:lightline#ale#indicator_warnings = "\uf071 "
 let g:lightline#ale#indicator_errors = "\uf05e "
 let g:lightline#ale#indicator_ok = "\uf00c"
 
-
-
-
 """ Gutentags
 let g:gutentags_ctags_extra_args = ['--options=/Users/tbaptista/.ctagsrc']
 let g:gutentags_add_default_project_roots = 0
@@ -345,7 +287,6 @@ let g:gutentags_generate_on_missing = 1
 let g:gutentags_generate_on_write = 1
 let g:gutentags_generate_on_empty_buffer = 0
 
-"
 """ FZF/Rg
 let g:fzf_action = {
       \ 'ctrl-t': 'tab split',
@@ -368,9 +309,7 @@ let g:go_highlight_structs = 1
 let g:go_highlight_extra_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_types = 1
-if has('nvim-0.4')
-  let g:go_fold_enable = ['block', 'import', 'varconst', 'package_comment']
-endif
+let g:go_fold_enable = ['block', 'import', 'varconst', 'package_comment']
 
 """ Tagbar
 let g:tagbar_autofocus = 1
@@ -389,6 +328,9 @@ endif
 """ visual-multi
 let g:VM_default_mappings = 0                       " Remove all default maps
 let g:VM_maps = {}
+let g:VM_maps['Find Under']         = '<C-d>'
+let g:VM_maps["Select Cursor Down"] = '<C-S-Down>'
+let g:VM_maps["Select Cursor Up"]   = '<C-S-Up>'
 """ Neoterm
 let g:neoterm_default_mod = "botright"
 let g:neoterm_autoinsert = 1
@@ -396,59 +338,11 @@ let g:neoterm_autoinsert = 1
 """ NERDCommenter
 let g:NERDSpaceDelims = 1
 let g:NERDCompactSexyComs = 1
+""" Vimspector + vim-test
+" let test#strategy = "neovim"
+" let test#neovim#term_position = "vertical"
 
-""" NERDTree
-let g:NERDTreeIgnore=[
-      \ '\~$', 'bower_components', 'node_modules', '__pycache__', '^.pytest_cache', '^.mypy_cache','^.vim',
-      \ '^.git$', '.aws-sam$', '^dist$', '^.terraform$', 'resources$[[dir]]',
-      \ 'build$[[dir]]', 'bin$[[dir]]', 'yarn.lock', '.nuxt$[[dir]]', '.next$[[dir]]'
-      \ ]
-let g:NERDTreeQuitOnOpen=1
-let g:NERDTreeShowHidden=1
-let g:NERDTreeAutoDeleteBuffer = 1
-let g:NERDTreeMinimalUI = 1
 
-"""" Purely for aesthetics
-" let g:NERDTreeDirArrowExpandable = "▸"
-" let g:NERDTreeDirArrowCollapsible = "▾"
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-    \ "Modified"  : "",
-    \ "Staged"    : "●",
-    \ "Untracked" : "",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "",
-    \ "Dirty"     : "*",
-    \ "Clean"     : "",
-    \ 'Ignored'   : '',
-    \ "Unknown"   : "!"
-    \ }
-
-" Setting glyphs manually because for some reason the var doesn't show up
-let g:glyph_palette#palette = {
-      \ 'GlyphPalette1': ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-      \ 'GlyphPalette2': ['', '', '', '﵂','', '', '', '', ''],
-      \ 'GlyphPalette3': ['λ', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-      \ 'GlyphPalette4': ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
-      \ 'GlyphPalette6': ['', '', ''],
-      \ 'GlyphPalette7': ['', '', '', '', '', '', '', '', '', ''] ,
-      \ 'GlyphPalette9': ['', '',  '', 'ﬥ', ''],
-      \ 'GlyphPalette12': ['', '', '', ''],
-      \ 'GlyphPaletteDirectory': ['', '', '', '', '', ''],
-      \}
-
-let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols = {}
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['package.*\.json$'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.*\.md$'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.*\.sh$'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.*\.rst$'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.gitignore$'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['Makefile$'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.*\.y.*ml$'] = 'ﬥ'
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['^.gitlab-ci\.y.*ml$'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.*\.toml$'] = ''
-let g:WebDevIconsUnicodeDecorateFileNodesPatternSymbols['.*\.tf$'] = ''
 ""  AUTO
 """ Automatically install missing plugins
 autocmd VimEnter *
@@ -457,19 +351,11 @@ autocmd VimEnter *
   \| endif
 """ Automatically reload current file if buffer changes
 au FocusGained,BufEnter * :checktime
-""" Reload glyphs for NERDTree
-augroup my-glyph-palette
-  autocmd! *
-  autocmd FileType nerdtree call glyph_palette#apply()
-augroup END
+
 """ use treesitter for folding if possible
 augroup fold_go
   autocmd!
-  if has('nvim-0.5')
-    autocmd FileType go,python setlocal foldmethod=expr | set fde=nvim_treesitter#foldexpr()
-  else
-    autocmd FileType go setlocal foldmethod=syntax
-  endif
+  autocmd FileType go,python setlocal foldmethod=expr | set fde=nvim_treesitter#foldexpr()
 augroup END
 """ vimrc folding (https://vi.stackexchange.com/questions/3814/is-there-a-best-practice-to-fold-a-vimrc-file)
 augroup fold_vimrc
@@ -483,112 +369,6 @@ augroup END
 """ Force a rescan for js/ts buffers
 autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
 autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
-""  KEY BINDINGS
-""" Simple bindings
-"""" Continue tabbing
-vnoremap < <gv
-vnoremap > >gv
-"""" Quick hack in case you forgot to sudo
-cnoremap w!! execute 'silent! write !sudo tee % > /dev/null' <bar> edit!
-"""" [coc.nvim] use tab to autocomplete instead of arrows
-inoremap <silent><expr> <TAB>
-    \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-"""" [coc.nvim] Make <CR> auto-select the first completion item and notify coc.nvim to format on enter
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-"""" Tagbar
-nmap <F8> :TagbarToggle<CR>
-"""" [coc.nvim] Code navigation
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gt <Plug>(coc-type-definition)
-nmap <silent> gr <Plug>(coc-references)
-nmap <silent> rn <Plug>(coc-rename)
-nmap <silent> gf <Plug>(coc-fix-current)
-" nnoremap <silent> <space>s       :<C-u>CocFzfList symbols<CR>
-" nnoremap <silent> <space>d       :<C-u>CocFzfList diagnostics<CR>
-"""" vim-go
-nmap <silent> gtf :GoTestFunc<CR>
-"""" Override K to use custom function
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-"""" Use visual K|J to move a single line up|down
-vnoremap <silent>K :m '<-2<CR>gv=gv
-vnoremap <silent>J :m '>+1<CR>gv=gv
-"""" carbon-now-sh
-vnoremap <F5> :CarbonNowSh<CR>
-""" [Ctrl] bindings
-"""" Coc.nvim
-inoremap <silent><expr> <C-space> coc#refresh()
-"""" Ale
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
-"""" Neoterm
-tnoremap <C-z> <C-\><C-n>:Tclose<CR>
-nmap <C-z> :Topen resize=20<Enter>
-"""" NERDTree
-map <silent> <C-n> :call NERDTreeToggleAndRefresh()<CR>
-"""" NERDCommenter
-nmap <C-_> <leader>c<Space>
-vmap <C-_> <leader>c<Space>gv
-"""" FZF/Rg
-nnoremap <C-f> :RG<CR>
-" nnoremap <C-p> :FZF<CR>
-nnoremap <C-p> :GFiles<CR>
-nnoremap <C-h> :History<CR>
-"""" Visual-Multi
-let g:VM_maps['Find Under']         = '<C-d>'
-let g:VM_maps["Select Cursor Down"] = '<C-S-Down>'
-let g:VM_maps["Select Cursor Up"]   = '<C-S-Up>'
-"""" Make home/end behave the same as everywhere else
-map <C-a> <home>
-map <C-e> <end>
-"""" Close buffer safely
-nnoremap <leader>q :bd!<CR>
-"""" List buffers
-nnoremap <C-b> :Buffers<CR>
-
-""" <leader> bindings
-"""" Quick save
-map <silent><leader>w :update!<CR>
-"""" Folding shortcuts
-nnoremap <silent> <leader>f @=(foldlevel('.')?'za':"\<space>")<CR>
-vnoremap <silent> <leader>f zf
-nnoremap <silent> <leader>a :call ToggleFold()<CR>
-"""" fzf-checkout
-" Alt-Enter to checkout + track remote
-nmap <leader>gco :GBranches<CR>
-"""" Vim-fugitive
-nmap <silent> <leader>gs :G<CR>
-nmap <silent> <leader>gc :Git commit<CR>
-nmap <silent> <leader>gv :GV --name-only<CR>
-nmap <silent> <leader>gds :Gdiffsplit!<CR>  " Open 3 way diff split for merge conflicts
-nmap <silent> <leader>gj :diffget //3<CR>   " Pull change from right side in conflict
-nmap <silent> <leader>gf :diffget //2<CR>   " Pull change from left side in conflict
-nmap <silent> <leader>gdf :Gdiffsplit<CR> " Show diff for current file
-"""" Window navigation, normalizing t(tab), s(vsplit), i(hsplit)
-" Also use <leader><Arrow> for navigation
-nmap <leader>t :tab new<CR>   " tab split
-nmap <leader>s <C-w>v<CR>       " vertical split
-nmap <leader>i <C-w>s<CR>       " horizontal split
-nmap <leader><Left> <C-w><Left>
-nmap <leader><Right> <C-w><Right>
-nmap <leader><Up> <C-w><Up>
-nmap <leader><Down> <C-w><Down>
-" Tab switching
-nnoremap <leader>t<Left> :tabprevious<CR>
-nnoremap <leader>t<Right> :tabnext<CR>
-" Buffer switching
-noremap <silent> <S-Tab> :bp<CR>
-noremap <silent> <Tab> :bn<CR>
-"""" Reload vimrc without closing vim
-map <silent> <leader>vimrc :source ~/.vimrc<CR>
-"""" Quick JSON formatter (needs jq)
-map <silent> <leader>jq :%!jq .<CR>
-
 ""  THEME
 colorscheme palenight
 """ Show off animoo background

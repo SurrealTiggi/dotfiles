@@ -1,2 +1,6 @@
 [user]
   email = surrealtiggi@gmail.com
+  signingkey =
+
+[commit]
+  gpgsign = true

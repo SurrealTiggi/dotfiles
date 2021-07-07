@@ -1,6 +1,7 @@
 --HEAD neovim
 --HEAD universal-ctags/universal-ctags/universal-ctags
 --cask font-fira-code-nerd-font
+--cask font-fira-mono-nerd-font
 --cask font-hack-nerd-font
 --cask font-jetbrains-mono-nerd-font
 alacritty
