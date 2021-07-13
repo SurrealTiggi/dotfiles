@@ -125,7 +125,7 @@ key_bindings:
   - { key: Right,   mods: Alt,      chars: "\x1b\x66" }    # ^[f
   - { key: Left,    mods: Alt,      chars: "\x1b\x62" }    # ^[b
   - { key: V,       mods: Control,  action: Paste }
-  # - { key: Home,    chars: "\x1bOH",   mode: AppCursor   }
-  # - { key: Home,    chars: "\x1b[H",   mode: ~AppCursor  }
-  # - { key: End,     chars: "\x1bOF",   mode: AppCursor   }
-  # - { key: End,     chars: "\x1b[F",   mode: ~AppCursor  }
+  - { key: Home,    chars: "\x1bOH",   mode: AppCursor   }
+  - { key: Home,    chars: "\x1b[H",   mode: ~AppCursor  }
+  - { key: End,     chars: "\x1bOF",   mode: AppCursor   }
+  - { key: End,     chars: "\x1b[F",   mode: ~AppCursor  }

@@ -49,6 +49,7 @@ rust
 shellcheck
 speedtest-cli
 terragrunt
+the_silver_searcher
 tfenv
 tidy-html5
 tmux

@@ -1,5 +1,10 @@
 ""  KEY BINDINGS
+""" Set leader
+nnoremap <SPACE> <Nop>
+let mapleader=" "
+
 """ Simple bindings
+
 """" Continue tabbing
 vnoremap < <gv
 vnoremap > >gv
@@ -33,14 +38,12 @@ nmap <silent> ff :Telescope current_buffer_fuzzy_find<CR>
 " nnoremap <silent> <space>d       :<C-u>CocFzfList diagnostics<CR>
 """" vim-go
 nmap <silent> gtf :GoTestFunc<CR>
-"""" Override K to use custom function
-nnoremap <silent>K :call <SID>show_documentation()<CR>
+
 """" Use visual K|J to move a single line up|down
 vnoremap <silent>K :m '<-2<CR>gv=gv
 vnoremap <silent>J :m '>+1<CR>gv=gv
 """" carbon-now-sh
 vnoremap <F5> :CarbonNowSh<CR>
-
 """ [Ctrl] bindings
 """" Coc.nvim
 inoremap <silent><expr> <C-space> coc#refresh()
@@ -80,12 +83,13 @@ map <C-e> <end>
 nnoremap <leader>q :bd!<CR>
 
 """ <leader> bindings
-"""" Quick save
-map <silent><leader>w :update!<CR>
 """" Folding shortcuts
 nnoremap <silent> <leader>f @=(foldlevel('.')?'za':"\<space>")<CR>
 vnoremap <silent> <leader>f zf
 nnoremap <silent> <leader>a :call ToggleFold()<CR>
+"""" Quick save
+map <silent><leader>w :update!<CR>
+
 """" fzf-checkout
 " Alt-Enter to checkout + track remote
 nmap <leader>gco :GBranches<CR>
