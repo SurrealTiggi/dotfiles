@@ -7,6 +7,7 @@ set tabstop=2                                                     " make existin
 set shiftwidth=2                                                  " normal mode indentation becomes x spaces
 set expandtab                                                     " pressing tab inserts x spaces
 set ignorecase                                                    " case-insensitive search
+set hidden                                                        " Don't unload hidden buffers (enabled for toggleterm)
 set list                                                          " show trailing whitespace
 set listchars=tab:•\ ,trail:▫,precedes:«,extends:»,nbsp:␣         " special chars to show (leaving out eol:¬ as it gets noisy)
 set number                                                        " show line numbers

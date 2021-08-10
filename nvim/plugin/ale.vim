@@ -1,6 +1,7 @@
 """ ALE linter
+" Disabled      \ 'go': ['golangci-lint'],
 let g:ale_linters = {
-      \ 'go': ['golangci-lint'],
+      \ 'go': [],
       \ 'python': ['flake8'],
       \ 'terraform': ['terraform'],
       \ 'markdown': ['mdl', 'writegood'],
@@ -9,9 +10,11 @@ let g:ale_linters = {
       \ 'css': ['stylelint'],
       \ 'html': ['htmlhint'],
       \}
+
+" Disabled      \ 'go': ['gofmt', 'goimports'],
 let g:ale_fixers = {
       \ '*': ['remove_trailing_lines', 'trim_whitespace'],
-      \ 'go': ['gofmt', 'goimports'],
+      \ 'go': [],
       \ 'python': ['isort', 'black'],
       \ 'terraform': ['terraform'],
       \ 'javascript': ['prettier'],

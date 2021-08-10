@@ -90,6 +90,7 @@ let g:lightline.tabline = {'left': [['buffers']], 'right': [['lsp']]}
 " let g:lightline#bufferline#unnamed = '[No Name]'
 let g:lightline#bufferline#show_number = 1
 let g:lightline#bufferline#unicode_symbols = 1
+" let g:lightline#bufferline#shorten_path = 0
 
 let g:lightline.separator = { 'left': "\ue0b0", 'right': "\ue0b2" }
 let g:lightline.subseparator = { 'left': "\ue0b1", 'right': "\ue0b3" }

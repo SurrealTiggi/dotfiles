@@ -10,6 +10,8 @@ g.nvim_tree_gitignore = 1 -- Hide any files specified in .gitignore
 g.nvim_tree_quit_on_open = 1
 g.nvim_tree_width = 50
 g.nvim_tree_width_allow_resize = 1
+g.nvim_tree_auto_resize=1
+g.nvim_tree_lsp_diagnostics = 1
 
 g.nvim_tree_show_icons = {
     git = 1,
@@ -29,7 +31,7 @@ g.nvim_tree_icons = {
      unmerged = "",
      renamed = "➜",
      untracked = "",
-     deleted = "",
+     deleted = "",
      ignored = "◌"
    }
  }

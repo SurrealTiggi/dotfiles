@@ -22,5 +22,3 @@ endfunction
 
 """ Coc.nvim
 let g:coc_snippet_next = '<tab>'
-let g:python_host_prog = '$HOME/.pyenv/shims/python'
-let g:python3_host_prog = '$HOME/.pyenv/shims/python3'

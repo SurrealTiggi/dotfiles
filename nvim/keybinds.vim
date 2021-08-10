@@ -4,7 +4,12 @@ nnoremap <SPACE> <Nop>
 let mapleader=" "
 
 """ Simple bindings
-
+"""" Make Y behave
+nnoremap Y y$
+"""" Stay centered when jumping around
+nnoremap n nzzzv
+nnoremap N Nzzzv
+nnoremap J mzJ`z
 """" Continue tabbing
 vnoremap < <gv
 vnoremap > >gv
@@ -50,9 +55,11 @@ inoremap <silent><expr> <C-space> coc#refresh()
 """" Ale
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
-"""" Neoterm
-tnoremap <C-z> <C-\><C-n>:Tclose<CR>
-nmap <C-z> :Topen resize=20<Enter>
+"""" Toggleterm
+nnoremap <silent><c-z> <Cmd>exe v:count . "ToggleTerm"<CR>
+tnoremap <silent><c-z> <Esc><Cmd>exe v:count . "ToggleTerm"<CR>
+" tnoremap <C-z> <C-\><C-n>:Tclose<CR>
+" noremap <C-z> :Topen resize=20<Enter>
 """" NvimTree
 nnoremap <silent> <C-n> :call NvimTreeToggleAndRefresh()<CR>
 lua <<EOF
@@ -72,9 +79,9 @@ vmap <C-_> <leader>c<Space>gv
 nnoremap <C-f> :lua require('telescope.builtin').my_live_grep()<CR>
 " nnoremap <C-f> :RG<CR>
 nnoremap <C-p> :lua require('telescope.builtin').my_find_files()<CR>
-" nnoremap <C-p> :GFiles<CR>
+" nnoremap <C-p> :Telescope find_files<CR>
 nnoremap <C-h> :lua require('telescope.builtin').my_oldfiles()<CR>
-" nnoremap <C-h> :History<CR>
+" nnoremap <C-h> :Telescope oldfiles<CR>
 nnoremap <C-b> :Telescope buffers<CR>
 """" Make home/end behave the same as everywhere else
 map <C-a> <home>
@@ -93,6 +100,8 @@ map <silent><leader>w :update!<CR>
 """" fzf-checkout
 " Alt-Enter to checkout + track remote
 nmap <leader>gco :GBranches<CR>
+"""" lazygit
+nnoremap <leader>lg <cmd>lua _lazygit_toggle()<CR>
 """" Vim-fugitive
 nmap <silent> <leader>gs :G<CR>
 nmap <silent> <leader>gc :Git commit<CR>
