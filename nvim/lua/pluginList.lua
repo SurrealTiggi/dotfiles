@@ -27,6 +27,21 @@ return packer.startup(
 
     -- [[ Language Support ]] --
     ----------------------------
+    -- Built-in LSP
+    -- use({
+      -- 'neovim/nvim-lspconfig',
+      -- config = require('modules.config.nvim-lspconfig'),
+      -- event = 'ColorScheme',
+      -- requires = {
+        -- { 'kabouzeid/nvim-lspinstall', module = 'lspinstall' },
+        -- { 'glepnir/lspsaga.nvim', module = 'lspsaga' },
+        -- { 'ray-x/lsp_signature.nvim', module = 'lsp_signature' },
+        -- {
+          -- 'jose-elias-alvarez/nvim-lsp-ts-utils',
+          -- module = 'nvim-lsp-ts-utils',
+        -- },
+      -- },
+    -- })
     -- Treesitter for highlights and AST
     use {
       "nvim-treesitter/nvim-treesitter",
@@ -46,6 +61,28 @@ return packer.startup(
     use {
       "nvim-telescope/telescope-fzf-native.nvim",
       run = "make",
+    }
+    -- Floating terminal
+    use {
+      "akinsho/nvim-toggleterm.lua",
+      event = "BufWinEnter",
+      config = require("plugin.terminal")
+    }
+
+    -- [[ Functional Aesthetics ]] --
+    ---------------------------------
+    -- NerdIcons
+    use {
+      "kyazdani42/nvim-web-devicons",
+      config = require("plugin.nvim-web-devicons"),
+      -- module = "nvim-web-devicons",
+    }
+
+    -- File tree with nerdicons
+    use {
+      "kyazdani42/nvim-tree.lua",
+      config = require("plugin.nvim-tree"),
+      -- module = "nvim-tree",
     }
 
     -- [[ Misc ]] --

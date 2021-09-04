@@ -1,15 +1,6 @@
 ""  PLUGINS (vim-plug)
 " vim-plug loader
 call plug#begin('~/.config/nvim/plugged.nightly')
-""" Core
-Plug 'akinsho/nvim-toggleterm.lua'                                " Floating terminal in vim
-Plug 'kyazdani42/nvim-tree.lua'                                   " Tree navigation with nerdicons
-Plug 'kyazdani42/nvim-web-devicons'                               " Lua nerdicons
-" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}       " The best highlights
-" Plug 'nvim-treesitter/playground'                                 " Purely for :TSHighlightCapturesUnderCursor
-
-" Plug 'tjdevries/astronauta.nvim'                                  " Run ftplugin/*.lua at the right time
-
 """  LSP Core
 Plug 'neovim/nvim-lspconfig'                                      "
 Plug 'kabouzeid/nvim-lspinstall'
@@ -20,6 +11,7 @@ Plug 'lukas-reineke/indent-blankline.nvim'                        " Indent lines
 
 
 "" OLD CRAP TO CLEAN UP
+Plug 'mustache/vim-mustache-handlebars'                 " [REPLACE???] Mustache/handlebar syntax highlights and ftdetect
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}         " [REPLACE] Coc.nvim
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }      " [REPLACE] Golang dev

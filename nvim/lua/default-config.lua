@@ -93,6 +93,3 @@ my_nvim.lang = {
     },
   },
 }
-
-require "core.nvimtree"
-require "core.terminal"
