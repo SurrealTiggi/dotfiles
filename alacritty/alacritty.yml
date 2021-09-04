@@ -9,6 +9,16 @@
 #   https://github.com/alacritty/alacritty
 #
 #
+#
+# shell:
+  # program: /usr/local/bin/tmux
+  # args:
+  #   - new-session
+  #   - -A
+  #   - -D
+  #   - -s
+  #   - scratch
+
 window:
   dynamic_title: true
   dimensions:
@@ -19,10 +29,7 @@ window:
     # x: 0
     # y: 0
 
-  startup_mode: SimpleFullscreen
-  #position:
-  #  x: 10
-  #  y: 10
+  startup_mode: Windowed
 
   padding:
     x: 0
@@ -46,10 +53,10 @@ font:
     family: FiraMono Nerd Font
     style: Regular
   italic:
-    family: Hack Nerd Font
+    family: VictorMono Nerd Font
     style: Italic
   bold_italic:
-    family: Hack Nerd Font
+    family: VictorMono Nerd Font
     style: Bold Italic
   size: 14
   use_thin_strokes: true

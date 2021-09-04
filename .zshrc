@@ -1,6 +1,7 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
+zmodload zsh/zprof
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -19,6 +20,8 @@ export ZSH="/Users/tbaptista/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="powerlevel10k/powerlevel10k"
+# ZSH_THEME=robbyrussell
+# ZSH_THEME="spaceship-prompt/spaceship"
 POWERLEVEL9K_MODE='nerdfont-complete'
 # neofetch
 
@@ -78,6 +81,7 @@ plugins=(
   git
   kubectl
   aws
+  asdf
   virtualenv
 )
 
@@ -135,10 +139,15 @@ export PYENV_ROOT="$HOME/.pyenv"
 if which pyenv > /dev/null; then eval "$(pyenv init -)" > /dev/null; fi
 
 # PATH, putting aws v2 first to override pyenv shim
-export PATH=/Applications/Postgres.app/Contents/Versions/13/bin:/usr/local/Cellar/awscli/2.2.11/bin:$PYENV_ROOT/shims:$GOPATH/bin:$HOME/node_modules/.bin:$HOME/.cargo/bin:$PATH
+# export PATH=/Applications/Postgres.app/Contents/Versions/13/bin:/usr/local/Cellar/awscli/2.2.11/bin:$PYENV_ROOT/shims:$GOPATH/bin:$HOME/node_modules/.bin:$HOME/.cargo/bin:$PATH
+export AWS_BREW_VERSION=$(brew list --versions | grep awscli | awk '{print $2}')
+export PATH=${KREW_ROOT:-$HOME/.krew}/bin:/Applications/Postgres.app/Contents/Versions/13/bin:/usr/local/Cellar/awscli/${AWS_BREW_VERSION}/bin:$GOPATH/bin:$HOME/node_modules/.bin:$HOME/.cargo/bin:$PATH
 
 # GPG
 export GPG_TTY=$(tty)
+
+# K8S
+export KUBE_EDITOR=nvim
 
 # Aliases
 # Dots
@@ -156,8 +165,8 @@ alias cat='bat'
 ## K8S
 alias k='kubecolor'
 alias kcx='kubectx'
-alias kcxd='kubectx docker-for-desktop'
 alias kns='kubens'
+alias kvu="k view-utilization -h"
 alias kdebug='k run --generator=run-pod/v1 -it tiago-debug --rm --image=surrealtiggi/kube-helper --image-pull-policy=Always /bin/sh'
 
 ## JQ
@@ -206,7 +215,7 @@ function kt() {
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/local/bin/vault vault
+# complete -o nospace -C /usr/local/bin/vault vault
 
 # FZF | Ctrl+T
 # export FZF_DEFAULT_COMMAND="rg --hidden --follow --no-ignore-vcs --hidden -g '!{**/node_modules/*,.git/*,go.sum,package-lock.json}'"
@@ -216,7 +225,7 @@ export FZF_DEFAULT_OPTS="--no-mouse --height 30% -1 --reverse --multi --inline-i
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # NVM
-export NVM_DIR="$HOME/.nvm"
+# export NVM_DIR="$HOME/.nvm"
 # [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 # [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
@@ -228,3 +237,5 @@ export NVM_DIR="$HOME/.nvm"
   # fi
 # }
 # add-zsh-hook chpwd load-nvmrc
+eval "$(direnv hook zsh)"
+zprof

@@ -36,6 +36,14 @@ List in `brew.txt` for now
 
 ![alt text](https://raw.githubusercontent.com/SurrealTiggi/dotfiles/master/term.png)
 
+## Credit
+NVChad
+LunarVim
+kyoto.nvim
+https://github.com/martinsione/dotfiles
+https://github.com/ayamir/nvimdots
+r/neovim
+
 ## TODO
 
 - [ ] Installation script
