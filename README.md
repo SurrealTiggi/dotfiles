@@ -43,6 +43,8 @@ kyoto.nvim
 https://github.com/martinsione/dotfiles
 https://github.com/ayamir/nvimdots
 r/neovim
+tmux-plugin-sysstat
+tmux-power
 
 ## TODO
 

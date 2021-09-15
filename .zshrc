@@ -17,9 +17,11 @@ export ZSH="/Users/tbaptista/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 ## Plugins
+# NOTE: Disabling kubectl since we load completion already, and it just adds some aliases https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
 plugins=(
   git
   aws
+  asdf
   # kubectl
 )
 
@@ -34,6 +36,7 @@ source $ZSH/oh-my-zsh.sh
 
 ## ZSH Vars
 export ZSH_CONFIG="$HOME/.config/zsh/config"
+export ZSH_THEMES="$HOME/.config/zsh/themes"
 # export ZSH_PLUGIN="$ZDOTDIR/plugins"
 # export ZSH_CACHE="$HOME/.cache/zsh"
 
@@ -42,6 +45,10 @@ export ZSH_CONFIG="$HOME/.config/zsh/config"
 [ -f $ZSH_CONFIG/aliases.zsh ] && source $ZSH_CONFIG/aliases.zsh
 [ -f $ZSH_CONFIG/options.zsh ] && source $ZSH_CONFIG/options.zsh
 [ -f $ZSH_CONFIG/completion.zsh ] && source $ZSH_CONFIG/completion.zsh
+[ -f $ZSH_CONFIG/functions.zsh ] && source $ZSH_CONFIG/functions.zsh
+
+## Powerlevel overrides
+[[ ! -f $ZSH_THEMES/p10k.zsh ]] || source $ZSH_THEMES/p10k.zsh
 
 ## Extras
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -49,9 +56,5 @@ export ZSH_CONFIG="$HOME/.config/zsh/config"
 ## Misc
 # TODO: Look into a better way to do this as it causes overhead
 # eval "$(direnv hook zsh)"
-
-## Powerlevel10k
-export POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # zprof

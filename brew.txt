@@ -3,9 +3,9 @@
 --cask amethyst
 --cask font-fira-code-nerd-font
 --cask font-fira-mono-nerd-font
+--cask font-iosevka-nerd-font
 --cask font-hack-nerd-font
 --cask font-jetbrains-mono-nerd-font
---cask font-space-mono-nerd-font
 --cask font-victor-mono-nerd-font
 alacritty
 asdf
@@ -14,7 +14,6 @@ bat
 brew-gem
 docutils
 dty1er/tap/kubecolor
-fx
 fx
 fzf
 git-delta

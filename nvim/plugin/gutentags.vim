@@ -10,7 +10,7 @@ let g:gutentags_ctags_extra_args = [
       \ '--tag-relative=yes',
       \ '--fields=+ailmnS',
       \ ]
-let g:gutentags_exclude_filetypes = ['vim', 'zsh', 'yaml', 'yml', 'hcl']
+let g:gutentags_exclude_filetypes = ['vim', 'zsh', 'yaml', 'yml', 'hcl', 'tmux']
 let g:gutentags_ctags_exclude = [
       \ '*.git', '*.hg', '*.svg',
       \ '*/tests/*',

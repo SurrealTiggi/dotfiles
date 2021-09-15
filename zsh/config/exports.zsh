@@ -10,8 +10,9 @@ export CGO_ENABLED=1
 
 # Pyenv
 # TODO: Is pyenv still required with asdf?
+# FIXME: Commenting out as it's slow to start
 export PYENV_ROOT="$HOME/.pyenv"
-if which pyenv > /dev/null; then eval "$(pyenv init -)" > /dev/null; fi
+# if which pyenv > /dev/null; then eval "$(pyenv init -)" > /dev/null; fi
 
 # GPG
 export GPG_TTY=$(tty)

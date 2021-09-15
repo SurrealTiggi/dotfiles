@@ -29,7 +29,7 @@ Plug 'plasticboy/vim-markdown'                          " [REMOVE] Markdown help
 
 
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}     " [REPLACE???] Multi-cursor in vim
-Plug 'ludovicchabant/vim-gutentags'                     " [REPLACE???] ctags for Go-To-Definition | <C-]>. Remember brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+" Plug 'ludovicchabant/vim-gutentags'                     " [REPLACE???] ctags for Go-To-Definition | <C-]>. Remember brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 Plug 'preservim/nerdcommenter'                          " [REPLACE] NERDCommenter for block comments
 Plug 'tpope/vim-fugitive'                               " [REPLACE???] Definitive git plugin | :Git
 Plug 'tpope/vim-rhubarb'                                " [REMOVE???] Enable :GBrowse when :GV
