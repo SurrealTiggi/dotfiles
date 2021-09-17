@@ -19,7 +19,10 @@ tmux_set() {
 
 ################################## Options ####################################
 # TODO: Move colors to #Colors
+# TODO: configure $config_dir
+# TODO: Consolidate tmux_get|tmux_set into helpers()
 get_options() {
+  cpu_tmp_dir=$(tmux_get '@sysstat_cpu_tmp_dir' '/var/tmp')
   right_arrow_icon=$(tmux_get '@my_tmux_right_arrow_icon' '')
   left_arrow_icon=$(tmux_get '@my_tmux_left_arrow_icon' '')
   upload_speed_icon=$(tmux_get '@my_tmux_upload_speed_icon' '')
@@ -107,8 +110,8 @@ tmux_set @prefix_highlight_output_suffix "#[fg=$TC]#[bg=$BG]$right_arrow_icon"
 set_segments() {
   date_segment="#[fg=$G04,bg=$TC] $date_icon $date_format "
   time_segment="#[fg=$TC,bg=$G06] $time_icon $time_format "
-  systats_segment="#[fg=$TC,bg=$G05] ﬙ #{sysstat_cpu}#[fg=$TC,bg=$G05]  #{sysstat_mem}#[fg=$TC,bg=$G05]  #{sysstat_swap}#[fg=$TC,bg=$G05]  #{sysstat_loadavg} "
-  weather_segment="#[fg=$TC,bg=$G05] #{weather}"
+  systats_segment="#[fg=$TC,bg=$G05] ﬙ #(~/.config/tmux/scripts/cpu.sh)#[fg=$TC,bg=$G05]  #(~/.config/tmux/scripts/mem.sh)#[fg=$TC,bg=$G05]  #(~/.config/tmux/scripts/swap.sh)#[fg=$TC,bg=$G05]  #(~/.config/tmux/scripts/loadavg.sh) "
+  weather_segment="#[fg=$TC,bg=$G05] #(~/.config/tmux/scripts/weather.sh)"
 }
 set_segments
 
