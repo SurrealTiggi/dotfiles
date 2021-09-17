@@ -10,7 +10,15 @@ source "$CURRENT_DIR/helpers.sh"
 
 refresh_interval=$(get_tmux_option "status-interval" "5")
 samples_count="60"
-cpu_metric_file="$(get_tmux_option "@sysstat_cpu_tmp_dir" "/dev/null")/cpu_collect.metric"
+
+# Create a temp dir if one hasn't been provided
+my_tmp_dir=$(get_tmux_option "@sysstat_cpu_tmp_dir" "/dev/null")
+if [[ $my_tmp_dir == "/dev/null" ]]; then
+  my_tmp_dir=$(mktemp -d)
+  set_tmux_option "@sysstat_cpu_tmp_dir" "$my_tmp_dir"
+fi
+
+cpu_metric_file="${my_tmp_dir}/cpu_collect.metric"
 
 get_cpu_usage() {
   if is_osx; then

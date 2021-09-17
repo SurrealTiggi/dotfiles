@@ -22,7 +22,6 @@ tmux_set() {
 # TODO: configure $config_dir
 # TODO: Consolidate tmux_get|tmux_set into helpers()
 get_options() {
-  cpu_tmp_dir=$(tmux_get '@sysstat_cpu_tmp_dir' '/var/tmp')
   right_arrow_icon=$(tmux_get '@my_tmux_right_arrow_icon' '')
   left_arrow_icon=$(tmux_get '@my_tmux_left_arrow_icon' '')
   upload_speed_icon=$(tmux_get '@my_tmux_upload_speed_icon' '')

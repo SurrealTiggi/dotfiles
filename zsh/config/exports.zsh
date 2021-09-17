@@ -14,6 +14,9 @@ export CGO_ENABLED=1
 export PYENV_ROOT="$HOME/.pyenv"
 # if which pyenv > /dev/null; then eval "$(pyenv init -)" > /dev/null; fi
 
+# Docker remote
+export DOCKER_HOST=tcp://ornstein.cm.local:2375
+
 # GPG
 export GPG_TTY=$(tty)
 
@@ -31,5 +34,6 @@ export PATH="$(brew --prefix awscli)/bin:$PATH"
 export PATH="$GOPATH/bin:$PATH"
 export PATH="$HOME/node_modules/.bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 export PATH="/Applications/Postgres.app/Contents/Versions/13/bin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
