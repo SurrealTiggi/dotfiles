@@ -1,4 +1,5 @@
 return function()
+
   local g = vim.g
   -- local colors = require("colors")
 
@@ -36,4 +37,5 @@ return function()
        ignored = "◌"
      }
    }
+  require"nvim-tree".setup{}
  end

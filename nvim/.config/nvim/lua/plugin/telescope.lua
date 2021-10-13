@@ -3,6 +3,7 @@
 -- from https://github.com/nvim-telescope/telescope.nvim/issues/559
 
 -- syntax adapted from https://github.com/martinsione/dotfiles
+
 return function()
     local present, telescope = pcall(require, "telescope")
     if not present then
@@ -11,13 +12,28 @@ return function()
     local builtin = require("telescope.builtin")
     local actions = require("telescope.actions")
 
-    require('telescope').load_extension('coc')
+    local telescope_actions = require("telescope.actions.set")
+
+    local fixfolds = {
+	    hidden = true,
+	    attach_mappings = function(_)
+        telescope_actions.select:enhance({
+          post = function()
+            vim.cmd(":normal! zx")
+          end,
+        })
+		    return true
+	    end,
+    }
+
+    -- require('telescope').load_extension('coc')
     require('telescope').load_extension('fzf')
 
     telescope.setup({
       defaults = {
         find_command = {
           "ag",
+          "--hidden",
           "--no-heading",
           "--with-filename",
           "--no-line-number",
@@ -41,6 +57,15 @@ return function()
           ["<cr>"] = actions.select_default + actions.center,
         },
       },
+      pickers = {
+		    buffers = fixfolds,
+		    file_browser = fixfolds,
+		    find_files = fixfolds,
+		    git_files = fixfolds,
+		    grep_string = fixfolds,
+		    live_grep = fixfolds,
+		    oldfiles = fixfolds,
+      },
       extensions = {
         fzf = {
           fuzzy = true,
@@ -51,31 +76,31 @@ return function()
       }
     })
 
-    local find_files_opts = {
-      attach_mappings = function(_)
-        actions.center:replace(function(_)
-          vim.wo.foldmethod = vim.wo.foldmethod or "expr"
-          vim.wo.foldexpr = vim.wo.foldexpr or "nvim_treesitter#foldexpr()"
-          vim.cmd(":normal! zx")
-          vim.cmd(":normal! zz")
-          pcall(vim.cmd, ":loadview") -- silent load view
-        end)
-        return true
-      end,
-    }
+--    local find_files_opts = {
+--      attach_mappings = function(_)
+--        actions.center:replace(function(_)
+--          vim.wo.foldmethod = vim.wo.foldmethod or "expr"
+--          vim.wo.foldexpr = vim.wo.foldexpr or "nvim_treesitter#foldexpr()"
+--          vim.cmd(":normal! zx")
+--          vim.cmd(":normal! zz")
+--          pcall(vim.cmd, ":loadview") -- silent load view
+--        end)
+--        return true
+--      end,
+--    }
 
-    builtin.my_find_files = function(opts)
-      opts = opts or {}
-      return builtin.find_files(vim.tbl_extend("error", find_files_opts, opts))
-    end
+--    builtin.my_find_files = function(opts)
+--      opts = opts or {}
+--      return builtin.find_files(vim.tbl_extend("error", find_files_opts, opts))
+--    end
 
-    builtin.my_live_grep = function(opts)
-      opts = opts or {}
-      return builtin.live_grep(vim.tbl_extend("error", find_files_opts, opts))
-    end
+--    builtin.my_live_grep = function(opts)
+--      opts = opts or {}
+--      return builtin.live_grep(vim.tbl_extend("error", find_files_opts, opts))
+--    end
 
-    builtin.my_oldfiles = function(opts)
-      opts = opts or {}
-      return builtin.oldfiles(vim.tbl_extend("error", find_files_opts, opts))
-    end
+--    builtin.my_oldfiles = function(opts)
+--      opts = opts or {}
+--      return builtin.oldfiles(vim.tbl_extend("error", find_files_opts, opts))
+--    end
 end

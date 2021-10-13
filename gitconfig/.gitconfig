@@ -15,8 +15,9 @@
 [rebase]
   autoStash = true
 
+# https://git-scm.com/docs/pretty-formats#Documentation/pretty-formats.txt-emGem for signature status
 [alias]
-  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %C(cyan)-- %an (%G?)-- %Creset%Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 
 [delta]
   line-numbers = true
@@ -32,3 +33,5 @@
 path = ~/.gitconfig_work
 [includeIf "gitdir:~/git/personal/"]
 path = ~/.gitconfig_priv
+[includeIf "gitdir:~/git/dirtypillows/"]
+path = ~/.gitconfig_dp

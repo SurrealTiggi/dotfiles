@@ -1,5 +1,5 @@
 -- Global vars
-CONFIG_PATH = os.getenv "HOME" .. "/.local/share/lunarvim/lvim"
+-- CONFIG_PATH = os.getenv "HOME" .. "/.local/share/lunarvim/lvim"
 DATA_PATH = vim.fn.stdpath "data" -- $HOME/.local/share/nvim
 CACHE_PATH = vim.fn.stdpath "cache" -- $HOME/.cache/nvim
 TERMINAL = vim.fn.expand "$TERMINAL"
@@ -15,6 +15,7 @@ vim.g.python_host_prog = '$HOME/.asdf/shims/python'
 vim.g.python3_host_prog = '$HOME/.asdf/shims/python3'
 
 -- TODO: Config object + on_attach stuff should be a separate import
+--[[
 local common_on_attach = require("lsp").common_on_attach
 local common_capabilities = require("lsp").common_capabilities
 
@@ -93,3 +94,6 @@ my_nvim.lang = {
     },
   },
 }
+
+]]
+

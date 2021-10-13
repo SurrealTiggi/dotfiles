@@ -30,6 +30,7 @@ export FZF_DEFAULT_OPTS="--no-mouse --height 30% -1 --reverse --multi --inline-i
 ## Path stuff
 # Putting aws v2 first to override pyenv shim
 export PATH="$(brew --prefix awscli)/bin:$PATH"
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 # TODO: Do we still need explicit bin dirs with asdf?
 export PATH="$GOPATH/bin:$PATH"
 export PATH="$HOME/node_modules/.bin:$PATH"

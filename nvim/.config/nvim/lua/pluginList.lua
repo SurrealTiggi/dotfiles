@@ -28,20 +28,22 @@ return packer.startup(
     -- [[ Language Support ]] --
     ----------------------------
     -- Built-in LSP
-    -- use({
-      -- 'neovim/nvim-lspconfig',
-      -- config = require('modules.config.nvim-lspconfig'),
-      -- event = 'ColorScheme',
-      -- requires = {
-        -- { 'kabouzeid/nvim-lspinstall', module = 'lspinstall' },
-        -- { 'glepnir/lspsaga.nvim', module = 'lspsaga' },
-        -- { 'ray-x/lsp_signature.nvim', module = 'lsp_signature' },
-        -- {
-          -- 'jose-elias-alvarez/nvim-lsp-ts-utils',
-          -- module = 'nvim-lsp-ts-utils',
-        -- },
-      -- },
-    -- })
+    --[[
+    use({
+      'neovim/nvim-lspconfig',
+      config = require('modules.config.nvim-lspconfig'),
+      event = 'ColorScheme',
+      requires = {
+        { 'kabouzeid/nvim-lspinstall', module = 'lspinstall' },
+        { 'glepnir/lspsaga.nvim', module = 'lspsaga' },
+        { 'ray-x/lsp_signature.nvim', module = 'lsp_signature' },
+        {
+          'jose-elias-alvarez/nvim-lsp-ts-utils',
+          module = 'nvim-lsp-ts-utils',
+        },
+      },
+    })
+    ]]
     -- Treesitter for highlights and AST
     use {
       "nvim-treesitter/nvim-treesitter",

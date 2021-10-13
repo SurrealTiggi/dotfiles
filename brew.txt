@@ -18,7 +18,7 @@ fx
 fzf
 git-delta
 git-quick-stats
-go
+gitui
 google-cloud-sdk
 gotop
 gpg-suite
@@ -31,10 +31,8 @@ ipcalc
 iproute2mac
 jawshooah/pyenv/pyenv-default-packages
 jid
-jiq
 jq
 kube-ns
-kubecolor
 kubectl
 kubectx
 lazygit
@@ -48,12 +46,12 @@ ripgrep
 rust
 shellcheck
 speedtest-cli
+stow
 terragrunt
 the_silver_searcher
 tfenv
 tidy-html5
 tmux
-unrar
 wget
 yarn
 zsh-completions

@@ -25,6 +25,8 @@ window:
     columns: 0
     lines: 0
 
+  opacity: 0.9
+
   # position:
     # x: 0
     # y: 0
@@ -58,10 +60,10 @@ font:
   bold_italic:
     family: VictorMono Nerd Font
     style: Bold Italic
-  size: 15
+  size: 16
   use_thin_strokes: true
 
-background_opacity: 0.9
+# background_opacity: 0.9
 live_config_reload: true
 
 mouse_bindings:
@@ -127,12 +129,15 @@ colors:
 # For reference https://www.eso.org/~ndelmott/ascii.html
 key_bindings:
   - { key: Slash,   mods: Control,  chars: "\x1f" }        # ^_
-  # - { key: W,       mods: Control,  chars: "\x17" }    # ^W
+  - { key: R,       mods: Control,  chars: "\x12" }        # ^R
+  # - { key: W,       mods: Control,  chars: "\x17" }        # ^W
   - { key: Period,  mods: Alt,      chars: "\x1b\x2e" }    # ^[.
   - { key: Right,   mods: Alt,      chars: "\x1b\x66" }    # ^[f
   - { key: Left,    mods: Alt,      chars: "\x1b\x62" }    # ^[b
   - { key: V,       mods: Control,  action: Paste }
+  # - { key: N,       mods: Command,  action: CreateNewWindow }
   - { key: Home,    chars: "\x1bOH",   mode: AppCursor   }
   - { key: Home,    chars: "\x1b[H",   mode: ~AppCursor  }
   - { key: End,     chars: "\x1bOF",   mode: AppCursor   }
   - { key: End,     chars: "\x1b[F",   mode: ~AppCursor  }
+  # - { key: N,       mods: Command,  command: { program: "open", args: ["-n", "/Applications/Alacritty.app"] } }
