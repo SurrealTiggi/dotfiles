@@ -6,6 +6,7 @@ return function()
       "css",
       "go",
       "graphql",
+      "hcl",
       "html",
       "javascript",
       "typescript",

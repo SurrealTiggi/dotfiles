@@ -29,13 +29,15 @@ typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
   virtualenv
   kubecontext
   aws
+  gcloud
 )
 
 typeset -g POWERLEVEL9K_MODE=nerdfont-complete
 typeset -g POWERLEVEL9K_ICON_PADDING=moderate
 
 #################################[ os_icon: os identifier ]##################################
-typeset -g POWERLEVEL9K_APPLE_ICON='\uf5a6 ' # hazard
+# typeset -g POWERLEVEL9K_APPLE_ICON='\uf5a6 ' # hazard
+typeset -g POWERLEVEL9K_APPLE_ICON='\ufb8a ' # skull
 
 ################################[ prompt_char: prompt symbol ]################################
 local my_ok_prompt="%{$fg_bold[red]%}❱%{$fg_bold[yellow]%}❱%{$fg_bold[green]%}❱"
@@ -91,3 +93,9 @@ typeset -g POWERLEVEL9K_AWS_DEFAULT_FOREGROUND=$color_orange
 ## Transient prompt
 # typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=off
 # typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+
+#####################################[ gcloud: GCP profile ]##################################
+typeset -g POWERLEVEL9K_GCLOUD_SHOW_ON_COMMAND='gcloud|gcp'
+typeset -g POWERLEVEL9K_GCLOUD_VISUAL_IDENTIFIER_EXPANSION=' '
+typeset -g POWERLEVEL9K_GCLOUD_FOREGROUND=$color_light_blue
+

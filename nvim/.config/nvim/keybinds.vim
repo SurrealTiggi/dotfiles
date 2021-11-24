@@ -49,14 +49,12 @@ vmap <C-_> <leader>c<Space>gv
 """" Telescope
 nnoremap <C-f> :Telescope live_grep<CR>
 nnoremap <C-p> :Telescope find_files<CR>
-nnoremap <C-h> :Telescope oldfiles<CR>
+" nnoremap <C-h> :Telescope oldfiles<CR>
+nnoremap <C-h> <cmd>lua require('telescope.builtin').my_oldfiles()<cr><CR>
 nnoremap <C-b> :Telescope buffers<CR>
 """" Make home/end behave the same as everywhere else
 map <C-a> <home>
 map <C-e> <end>
-"""" Close buffer safely
-nnoremap <leader>q :bd!<CR>
-
 """ <leader> bindings
 """" Folding shortcuts
 nnoremap <silent> <leader>f @=(foldlevel('.')?'za':"\<space>")<CR>
@@ -86,3 +84,5 @@ noremap <silent> <Tab> :bn<CR>
 map <silent> <leader>vimrc :source ~/.vimrc<CR>
 """" Quick JSON formatter (needs jq)
 map <silent> <leader>jq :%!jq .<CR>
+"""" Close buffer safely
+nnoremap <leader>q :bd!<CR>

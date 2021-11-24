@@ -46,6 +46,7 @@ colorscheme palenight
 " colorscheme tokyonight
 
 """ Show off animoo background
-hi Normal     guibg=NONE ctermbg=NONE
-hi LineNr     ctermbg=NONE guibg=NONE
-hi SignColumn ctermbg=NONE guibg=NONE
+" FIXME: Disabled as inactive buffer dimming doesn't work as well with this
+" hi Normal     guibg=NONE ctermbg=NONE
+" hi LineNr     ctermbg=NONE guibg=NONE
+" hi SignColumn ctermbg=NONE guibg=NONE

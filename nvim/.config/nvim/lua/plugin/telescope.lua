@@ -15,15 +15,15 @@ return function()
     local telescope_actions = require("telescope.actions.set")
 
     local fixfolds = {
-	    hidden = true,
-	    attach_mappings = function(_)
+      hidden = true,
+      attach_mappings = function(_)
         telescope_actions.select:enhance({
           post = function()
             vim.cmd(":normal! zx")
           end,
         })
-		    return true
-	    end,
+        return true
+      end,
     }
 
     -- require('telescope').load_extension('coc')
@@ -31,20 +31,35 @@ return function()
 
     telescope.setup({
       defaults = {
+        vimgrep_arguments = {
+          'ag',
+          '--nocolor',
+          '--noheading',
+          '--filename',
+          '--numbers',
+          '--column',
+          '--smart-case',
+          '-u'
+        },
         find_command = {
           "ag",
           "--hidden",
-          "--no-heading",
-          "--with-filename",
-          "--no-line-number",
-          "--no-column",
+          "--nonumbers",
           "--smart-case",
         },
         prompt_prefix = "  ",
         selection_caret = " ",
         sorting_strategy = "descending",
         file_sorter = require("telescope.sorters").get_fzy_sorter,
-        file_ignore_patterns = {},
+        file_ignore_patterns = {
+          '**/.terraform/*',
+          '**/.terragrunt-cache/*',
+          '**/node_modules/*',
+          '.git/*',
+          'go.sum','go.mod',
+          'package-lock.json',
+          '.terraform.lock.hcl'
+        },
         generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
         path_display = { shorten = 5 },
         borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
@@ -58,13 +73,13 @@ return function()
         },
       },
       pickers = {
-		    buffers = fixfolds,
-		    file_browser = fixfolds,
-		    find_files = fixfolds,
-		    git_files = fixfolds,
-		    grep_string = fixfolds,
-		    live_grep = fixfolds,
-		    oldfiles = fixfolds,
+        buffers = fixfolds,
+        file_browser = fixfolds,
+        find_files = fixfolds,
+        git_files = fixfolds,
+        grep_string = fixfolds,
+        live_grep = fixfolds,
+        oldfiles = fixfolds,
       },
       extensions = {
         fzf = {
@@ -76,18 +91,18 @@ return function()
       }
     })
 
---    local find_files_opts = {
---      attach_mappings = function(_)
---        actions.center:replace(function(_)
---          vim.wo.foldmethod = vim.wo.foldmethod or "expr"
---          vim.wo.foldexpr = vim.wo.foldexpr or "nvim_treesitter#foldexpr()"
---          vim.cmd(":normal! zx")
---          vim.cmd(":normal! zz")
---          pcall(vim.cmd, ":loadview") -- silent load view
---        end)
---        return true
---      end,
---    }
+   local find_files_opts = {
+     attach_mappings = function(_)
+       actions.center:replace(function(_)
+         vim.wo.foldmethod = vim.wo.foldmethod or "expr"
+         vim.wo.foldexpr = vim.wo.foldexpr or "nvim_treesitter#foldexpr()"
+         vim.cmd(":normal! zx")
+         vim.cmd(":normal! zz")
+         pcall(vim.cmd, ":loadview") -- silent load view
+       end)
+       return true
+     end,
+   }
 
 --    builtin.my_find_files = function(opts)
 --      opts = opts or {}
@@ -99,8 +114,8 @@ return function()
 --      return builtin.live_grep(vim.tbl_extend("error", find_files_opts, opts))
 --    end
 
---    builtin.my_oldfiles = function(opts)
---      opts = opts or {}
---      return builtin.oldfiles(vim.tbl_extend("error", find_files_opts, opts))
---    end
+   builtin.my_oldfiles = function(opts)
+     opts = opts or {}
+     return builtin.oldfiles(vim.tbl_extend("error", find_files_opts, opts))
+   end
 end

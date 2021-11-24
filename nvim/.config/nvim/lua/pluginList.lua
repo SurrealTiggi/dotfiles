@@ -28,6 +28,7 @@ return packer.startup(
     -- [[ Language Support ]] --
     ----------------------------
     -- Built-in LSP
+    use { 'neovim/nvim-lspconfig' }
     --[[
     use({
       'neovim/nvim-lspconfig',
@@ -48,7 +49,6 @@ return packer.startup(
     use {
       "nvim-treesitter/nvim-treesitter",
       config = require("plugin.treesitter"),
-      event = "BufRead",
       run = ":TSUpdate"
     }
 
@@ -70,6 +70,14 @@ return packer.startup(
       event = "BufWinEnter",
       config = require("plugin.terminal")
     }
+    -- NERDCommenter for sweet block comment goodness
+    use { "preservim/nerdcommenter" }
+    -- Gitsigns for gutter + in-line blame
+    use { 
+      "lewis6991/gitsigns.nvim",
+      config = require("plugin.gitsigns"),
+      event = "BufRead"
+    }
 
     -- [[ Functional Aesthetics ]] --
     ---------------------------------
@@ -87,10 +95,16 @@ return packer.startup(
       -- module = "nvim-tree",
     }
 
+    -- Dim inactive buffers --
+    use {
+      "sunjon/shade.nvim",
+      config = require("plugin.shade"),
+    }
+
     -- [[ Misc ]] --
     ----------------
     -- Treesitter compatible with more italics
-    use { "folke/tokyonight.nvim", event = "ColorSchemePre" }
+    use { "folke/tokyonight.nvim" }
     -- A collection of treesitter compatible themes (nvcode,onedark,nord,aurora,gruvbox,palenight,snazzy)
     use { "christianchiarulli/nvcode-color-schemes.vim", event = "ColorSchemePre" }
 

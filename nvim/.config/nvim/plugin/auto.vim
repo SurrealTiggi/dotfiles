@@ -1,9 +1,10 @@
 ""  AUTO
 """ Automatically install missing plugins
-autocmd VimEnter *
-  \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \|   PlugInstall --sync | q
-  \| endif
+" FIXME: Commented out until vim-plug is installed
+"autocmd VimEnter *
+"  \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+"  \|   PlugInstall --sync | q
+"  \| endif
 """ Automatically reload current file if buffer changes
 au FocusGained,BufEnter * :checktime
 
@@ -24,3 +25,17 @@ augroup END
 """ Force a rescan for js/ts buffers
 autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
 autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
+
+""" nvim-tree hide the cursor and change highlight group to stand out better
+" view all highlight groups
+" :execute 'hi' synIDattr(synID(line("."), col("."), 1), "name")
+"
+" https://github.com/kyazdani42/nvim-tree.lua/issues/132
+"augroup HideCursor
+"  au!
+"  au WinLeave,FileType NvimTree set guicursor=n-v-c-sm:block,i-ci-ve:ver2u,r-cr-o:hor20,
+"  au WinEnter,FileType NvimTree set guicursor=n-c-v:block-Cursor/Cursor-blinkon0,
+"augroup END
+"au FileType NvimTree hi Cursor blend=100
+
+" au WinEnter,FileType NvimTree setlocal winhighlight=CursorLine:NvimTreeWindowPicker

@@ -17,7 +17,30 @@
 
 # https://git-scm.com/docs/pretty-formats#Documentation/pretty-formats.txt-emGem for signature status
 [alias]
-  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %C(cyan)-- %an (%G?)-- %Creset%Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+  lg = log --graph --abbrev-commit --date=iso8601 --pretty=log-default
+  lgs = log --graph --abbrev-commit --date=relative --pretty=single-line
+
+[pretty]
+  single-line = format:%C(yellow)%h%Creset -%C(green)%d%Creset %s %C(241)-- %an (%G?)-- %Creset%C(cyan)(%cr)%Creset
+  log-default = format:%C(auto)%h%C(reset) %C(blue)%ad%C(reset) %C(cyan)(%ar)%C(reset)%C(auto)%d%C(reset)%n %C(yellow)●%C(reset) %s %C(241)%aN (%G?)<%aE>%C(reset)%n%w(0,7,7)%+(trailers:only,unfold)
+
+[diff]
+  algorithm = histogram
+  tool = nvimdiff
+  renames = copies
+  submodule = log
+
+[difftool "nvimdiff"]
+  cmd = nvim -d $LOCAL $REMOTE
+  trustexitcode = true
+
+[merge]
+  tool = nvimmerge
+  keepBackup = false
+  log = true
+
+[mergetool "nvimmerge"]
+  cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c '$wincmd J'
 
 [delta]
   line-numbers = true
@@ -35,3 +58,5 @@ path = ~/.gitconfig_work
 path = ~/.gitconfig_priv
 [includeIf "gitdir:~/git/dirtypillows/"]
 path = ~/.gitconfig_dp
+[init]
+	defaultBranch = main

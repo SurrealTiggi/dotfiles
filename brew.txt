@@ -7,6 +7,8 @@
 --cask font-hack-nerd-font
 --cask font-jetbrains-mono-nerd-font
 --cask font-victor-mono-nerd-font
+--cask stats
+act
 alacritty
 asdf
 aws-sam-cli
@@ -14,6 +16,7 @@ bat
 brew-gem
 docutils
 dty1er/tap/kubecolor
+fd
 fx
 fzf
 git-delta
@@ -27,6 +30,7 @@ helm
 htop
 hugo
 iftop
+infracost
 ipcalc
 iproute2mac
 jawshooah/pyenv/pyenv-default-packages
@@ -35,12 +39,12 @@ jq
 kube-ns
 kubectl
 kubectx
-lazygit
 mtr
 neofetch
 ngrok
 nmap
 nnn
+pre-commit
 rbenv
 ripgrep
 rust
@@ -52,6 +56,7 @@ the_silver_searcher
 tfenv
 tidy-html5
 tmux
+trashhalo/homebrew-brews/imgcat
 wget
 yarn
 zsh-completions

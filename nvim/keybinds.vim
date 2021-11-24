@@ -62,15 +62,6 @@ tnoremap <silent><c-z> <Esc><Cmd>exe v:count . "ToggleTerm"<CR>
 " noremap <C-z> :Topen resize=20<Enter>
 """" NvimTree
 nnoremap <silent> <C-n> :call NvimTreeToggleAndRefresh()<CR>
-lua <<EOF
-    local tree_cb = require'nvim-tree.config'.nvim_tree_callback
-    vim.g.nvim_tree_bindings = {
-      { key = "<C-s>",          cb = tree_cb("vsplit") },
-      { key = "<C-i>",          cb = tree_cb("split") },
-      { key = "<C-t>",          cb = tree_cb("tabnew") },
-    }
-EOF
-
 """" NERDCommenter
 nmap <C-_> <leader>c<Space>
 vmap <C-_> <leader>c<Space>gv

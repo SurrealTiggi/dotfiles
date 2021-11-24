@@ -22,6 +22,7 @@ plugins=(
   git
   aws
   asdf
+  gcloud
   # kubectl
 )
 

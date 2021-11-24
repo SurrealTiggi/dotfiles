@@ -28,3 +28,7 @@ alias vim='nvim'
 ## Git
 alias gpl='git pull'
 alias gt='git tag'
+
+## GCP
+alias gcp='gcloud'
+alias gsp='gcloud config set project'
