@@ -1,4 +1,7 @@
 ## General exports
+# Tmux
+[[ -n $TMUX ]] || export TERM="xterm-256color"
+
 # Main Git dir
 export MY_GIT="$HOME/git"
 

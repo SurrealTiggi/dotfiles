@@ -23,7 +23,7 @@ return function()
     highlight = {
       enable = true
     },
-    indent = { enable = true },
+    indent = { enable = false },
     autopairs = { enable = true },
     rainbow = { enable = true },
     autotag = { enable = true },
