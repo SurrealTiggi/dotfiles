@@ -34,14 +34,6 @@ tnoremap <silent><c-z> <Esc><Cmd>exe v:count . "ToggleTerm"<CR>
 " noremap <C-z> :Topen resize=20<Enter>
 """" NvimTree
 nnoremap <silent> <C-n> :call NvimTreeToggleAndRefresh()<CR>
-lua <<EOF
-    local tree_cb = require'nvim-tree.config'.nvim_tree_callback
-    vim.g.nvim_tree_bindings = {
-      { key = "<C-s>",          cb = tree_cb("vsplit") },
-      { key = "<C-i>",          cb = tree_cb("split") },
-      { key = "<C-t>",          cb = tree_cb("tabnew") },
-    }
-EOF
 
 """" NERDCommenter
 nmap <C-_> <leader>c<Space>
@@ -49,8 +41,8 @@ vmap <C-_> <leader>c<Space>gv
 """" Telescope
 nnoremap <C-f> :Telescope live_grep<CR>
 nnoremap <C-p> :Telescope find_files<CR>
-" nnoremap <C-h> :Telescope oldfiles<CR>
-nnoremap <C-h> <cmd>lua require('telescope.builtin').my_oldfiles()<cr><CR>
+nnoremap <C-h> :Telescope oldfiles<CR>
+" nnoremap <C-h> <cmd>lua require('telescope.builtin').oldfiles()<cr><CR>
 nnoremap <C-b> :Telescope buffers<CR>
 """" Make home/end behave the same as everywhere else
 map <C-a> <home>
@@ -86,3 +78,4 @@ map <silent> <leader>vimrc :source ~/.vimrc<CR>
 map <silent> <leader>jq :%!jq .<CR>
 """" Close buffer safely
 nnoremap <leader>q :bd!<CR>
+" nnoremap <leader>q :lua close_win_and_floats()<CR>

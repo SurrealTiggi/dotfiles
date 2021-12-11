@@ -19,6 +19,7 @@ dty1er/tap/kubecolor
 fd
 fx
 fzf
+fzy
 git-delta
 git-quick-stats
 gitui

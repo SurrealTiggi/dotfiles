@@ -27,12 +27,15 @@
 
 
 ""  VIM IMPORTS
+""" [Auto] plugin/ -- Used for autocommands, global functions and vim plugin specific settings
+""" [Auto] ftplugin/ -- Used to autoload language specific LSP
 runtime ./sets.vim
 "runtime ./plug.vim
 runtime ./keybinds.vim
 
 ""  LUA IMPORTS
-lua require "default-config"
+" Main config -- ensures plugins are installed and bootstrapped
+lua require "init"
 " lua require "settings"
 " lua require "autocommands"
 " lua require "commands"

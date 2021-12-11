@@ -123,6 +123,7 @@ key_bindings:
   - { key: Left,    mods: Alt,      chars: "\x1b\x62" }    # ^[b
   - { key: Right,   mods: Alt,      chars: "\x1b\x66" }    # ^[f
   - { key: V,       mods: Control,  action: Paste }
+  - { key: N,       mods: Command,  action: CreateNewWindow }
   - { key: Home,    chars: "\x1bOH",   mode: AppCursor   }
   - { key: Home,    chars: "\x1b[H",   mode: ~AppCursor  }
   - { key: End,     chars: "\x1bOF",   mode: AppCursor   }
@@ -130,4 +131,3 @@ key_bindings:
   - { key: Back,    chars: "\x7f"}
   # - { key: Home,     mods: Shift, action: ScrollToTop,    mode: ~Alt       }
   # - { key: End,      mods: Shift, action: ScrollToBottom, mode: ~Alt       }
-  # - { key: N,       mods: Command,  command: { program: "open", args: ["-n", "/Applications/Alacritty.app"] } }

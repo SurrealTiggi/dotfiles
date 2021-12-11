@@ -1,8 +1,8 @@
 -- Ensure plugin manager is installed
-local present, _ = pcall(require, "core.packerInit")
+local PACKER_BOOTSTRAP, _ = pcall(require, "core.packerInit")
 local packer
 
-if present then
+if PACKER_BOOTSTRAP then
   packer = require "packer"
 else
   return false
@@ -59,10 +59,9 @@ return packer.startup(
       "nvim-telescope/telescope.nvim",
       config = require("plugin.telescope"),
     }
-    -- Telescope fzf override
+    -- Telescope fzy override
     use {
-      "nvim-telescope/telescope-fzf-native.nvim",
-      run = "make",
+      "nvim-telescope/telescope-fzy-native.nvim",
     }
     -- Floating terminal
     use {
@@ -108,8 +107,13 @@ return packer.startup(
     -- A collection of treesitter compatible themes (nvcode,onedark,nord,aurora,gruvbox,palenight,snazzy)
     use { "christianchiarulli/nvcode-color-schemes.vim", event = "ColorSchemePre" }
 
-    -- TODO: Comment out if it gives issues and just run :PackerSync manually
-    packer.install()
-    packer.compile()
+    -- [[ Loader ]] --
+    ------------------
+    -- Automatically set up config, always keep this at the end
+    if PACKER_BOOTSTRAP then
+      -- require('packer').sync() -- also works but then we get the sync screen on every startup
+      require('packer').install()
+      require('packer').compile()
+    end
   end
 )

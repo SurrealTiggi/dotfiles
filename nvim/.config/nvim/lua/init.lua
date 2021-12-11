@@ -6,7 +6,7 @@ TERMINAL = vim.fn.expand "$TERMINAL"
 USER = vim.fn.expand "$USER"
 
 -- Setup plugins
-require "pluginList"
+require "plugins"
 
 
 

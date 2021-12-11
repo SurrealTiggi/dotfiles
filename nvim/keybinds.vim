@@ -119,7 +119,7 @@ nnoremap <leader>t<Right> :tabnext<CR>
 noremap <silent> <S-Tab> :bp<CR>
 noremap <silent> <Tab> :bn<CR>
 """" Reload vimrc without closing vim
-map <silent> <leader>vimrc :source ~/.vimrc<CR>
+map <silent> <leader>vim :source ~/.config/nvim/init.vim<CR>
 """" Quick JSON formatter (needs jq)
 map <silent> <leader>jq :%!jq .<CR>
 """" Vimspector

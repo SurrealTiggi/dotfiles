@@ -1,9 +1,9 @@
 local packer_url = 'https://github.com/wbthomason/packer.nvim'
 local packer_path = DATA_PATH .. '/site/pack/packer/start/packer.nvim'
 
-local present, packer = pcall(require, "packer")
+local installed, packer = pcall(require, "packer")
 
-if not present then
+if not installed then
     print("Downloading plugin manager packer.nvim ...")
     -- remove the dir before cloning
     vim.fn.delete(packer_path, "rf")
@@ -18,9 +18,9 @@ if not present then
         }
     )
 
-    present, packer = pcall(require, "packer")
+    installed, packer = pcall(require, "packer")
 
-    if present then
+    if installed then
         print("Packer cloned successfully.")
     else
         error("Couldn't clone packer !\nPacker path: " .. packer_path)

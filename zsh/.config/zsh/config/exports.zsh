@@ -30,6 +30,9 @@ export KUBE_EDITOR=nvim
 export FZF_DEFAULT_COMMAND="rg --follow --no-ignore-vcs --hidden -g '!{**/node_modules/*,.git/*,go.sum,package-lock.json}'"
 export FZF_DEFAULT_OPTS="--no-mouse --height 30% -1 --reverse --multi --inline-info"
 
+# Sensitive vars
+[ -f $ZSH_CONFIG/.env.secret ] && source $ZSH_CONFIG/.env.secret
+
 ## Path stuff
 # Putting aws v2 first to override pyenv shim
 export PATH="$(brew --prefix awscli)/bin:$PATH"

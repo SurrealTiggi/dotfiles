@@ -10,27 +10,28 @@ return function()
   g.nvim_tree_width_allow_resize = 1
 
   g.nvim_tree_show_icons = {
-      git = 1,
-      folders = 1,
-      files = 1
+    git = 1,
+    folders = 1,
+    files = 1
   }
 
   g.nvim_tree_special_files = "" -- Don't highlight any files
 
   -- Purely for aesthetics
   g.nvim_tree_icons = {
-     default = "",
-     symlink = "",
-     git = {
-       unstaged = "✗",
-       staged = "●",
-       unmerged = "",
-       renamed = "➜",
-       untracked = "",
-       deleted = "",
-       ignored = "◌"
-     }
-   }
+    default = "",
+    symlink = "",
+    git = {
+      unstaged = "✗",
+      staged = "●",
+      unmerged = "",
+      renamed = "➜",
+      untracked = "",
+      deleted = "",
+      ignored = "◌"
+    }
+  }
+
   require"nvim-tree".setup{
     hijack_cursor = true,
     diagnostics = {
