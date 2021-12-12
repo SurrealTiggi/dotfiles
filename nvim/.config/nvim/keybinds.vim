@@ -26,12 +26,15 @@ nmap <silent> ff :Telescope current_buffer_fuzzy_find<CR>
 """" Use visual K|J to move a single line up|down
 vnoremap <silent>K :m '<-2<CR>gv=gv
 vnoremap <silent>J :m '>+1<CR>gv=gv
+"""" Window resizing (Left|Right use Alt+arrow escape sequence)
+nnoremap <silent><M-Up> :resize -2<CR>
+nnoremap <silent><M-Down> :resize +2<CR>
+nnoremap <silent><Esc>b :vertical resize -2<CR>
+nnoremap <silent><Esc>f :vertical resize +2<CR>
 """ [Ctrl] bindings
 """" Toggleterm
 nnoremap <silent><c-z> <Cmd>exe v:count . "ToggleTerm"<CR>
 tnoremap <silent><c-z> <Esc><Cmd>exe v:count . "ToggleTerm"<CR>
-" tnoremap <C-z> <C-\><C-n>:Tclose<CR>
-" noremap <C-z> :Topen resize=20<Enter>
 """" NvimTree
 nnoremap <silent> <C-n> :call NvimTreeToggleAndRefresh()<CR>
 
@@ -54,7 +57,9 @@ vnoremap <silent> <leader>f zf
 nnoremap <silent> <leader>a :call ToggleFold()<CR>
 """" Quick save
 map <silent><leader>w :update!<CR>
-
+"""" Gitsigns
+nnoremap <silent><leader>gv :Gitsigns preview_hunk<CR>
+nnoremap <silent><leader>gvv :Gitsigns diffthis<CR>
 """" Telescope
 nnoremap <leader>gvf :Telescope git_bcommits<CR>
 """" Window navigation, normalizing t(tab), s(vsplit), i(hsplit)

@@ -92,6 +92,7 @@ return function()
         color = colors.peach,
         name = "lock"
       }
-    }
+    };
+    default = true;
   }
 end

@@ -11,13 +11,13 @@ return function()
         return
     end
 
+    -- [[ Imports for convenience ]] --
     local actions = require("telescope.actions")
     local pickers = require("telescope.pickers")
-    local finders = require("telescope.finders")
     local previewers = require("telescope.previewers")
-    local action_state = require("telescope.actions.state")
-    local conf = require("telescope.config").values
+    local builtin = require("telescope.builtin")
 
+    -- [[ Main telescope config ]] --
     telescope.setup({
       defaults = {
         prompt_prefix = "  ",
@@ -71,6 +71,5 @@ return function()
         },
       }
     })
-
     require("telescope").load_extension("fzy_native")
 end

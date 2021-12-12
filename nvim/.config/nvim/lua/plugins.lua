@@ -72,7 +72,7 @@ return packer.startup(
     -- NERDCommenter for sweet block comment goodness
     use { "preservim/nerdcommenter" }
     -- Gitsigns for gutter + in-line blame
-    use { 
+    use {
       "lewis6991/gitsigns.nvim",
       config = require("plugin.gitsigns"),
       event = "BufRead"
@@ -94,10 +94,30 @@ return packer.startup(
       -- module = "nvim-tree",
     }
 
+    -- Lualine --
+    use {
+      "nvim-lualine/lualine.nvim",
+      config = require("plugin.lualine"),
+      requires = {"kyazdani42/nvim-web-devicons",
+      opt = true}
+    }
+
+    -- Bufferline --
+    use {
+      "akinsho/bufferline.nvim",
+      config = require("plugin.bufferline")
+    }
+
     -- Dim inactive buffers --
     use {
       "sunjon/shade.nvim",
       config = require("plugin.shade"),
+    }
+
+    -- Indent lines --
+    use {
+      "lukas-reineke/indent-blankline.nvim",
+      event = "BufRead"
     }
 
     -- [[ Misc ]] --
