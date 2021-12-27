@@ -21,7 +21,7 @@ export PYENV_ROOT="$HOME/.pyenv"
 export DOCKER_HOST=tcp://ornstein.cm.local:2375
 
 # GPG
-export GPG_TTY=$(tty)
+export GPG_TTY=$TTY
 
 # K8S
 export KUBE_EDITOR=nvim

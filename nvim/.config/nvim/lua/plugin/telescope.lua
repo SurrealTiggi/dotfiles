@@ -55,8 +55,16 @@ return function()
           'package-lock.json',
           'yarn.lock'
         },
-        mapping = {
-          ["<cr>"] = actions.select_default + actions.center,
+        mappings = {
+          i = {
+            ["<cr>"] = actions.select_default + actions.center,
+            -- Disable default vertical/horizontal selectors
+            -- ["<C-X>"] = false,
+            ["<C-V>"] = false,
+            -- Normalise vertical/horizontal split
+            -- ["<C-I>"] = actions.select_horizontal,
+            ["<C-S>"] = actions.select_vertical,
+          },
         },
       },
       pickers = {

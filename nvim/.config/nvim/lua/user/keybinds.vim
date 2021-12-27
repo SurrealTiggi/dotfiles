@@ -43,7 +43,8 @@ nmap <C-_> <leader>c<Space>
 vmap <C-_> <leader>c<Space>gv
 """" Telescope
 nnoremap <C-f> :Telescope live_grep<CR>
-nnoremap <C-p> :Telescope find_files<CR>
+" nnoremap <C-p> :Telescope find_files<CR>
+nnoremap <silent><C-p> :lua require('telescope.builtin').find_files({layout_strategy='vertical',layout_config={width=0.5}})<CR>
 nnoremap <C-h> :Telescope oldfiles<CR>
 " nnoremap <C-h> <cmd>lua require('telescope.builtin').oldfiles()<cr><CR>
 nnoremap <C-b> :Telescope buffers<CR>
@@ -58,10 +59,17 @@ nnoremap <silent> <leader>a :call ToggleFold()<CR>
 """" Quick save
 map <silent><leader>w :update!<CR>
 """" Gitsigns
-nnoremap <silent><leader>gv :Gitsigns preview_hunk<CR>
-nnoremap <silent><leader>gvv :Gitsigns diffthis<CR>
+" TODO: Need to figure out why `diffthis` closes into the wrong buffer
+nnoremap <silent><leader>gd :Gitsigns preview_hunk<CR>
+" nnoremap <silent><leader>gdf :Gitsigns diffthis<CR>
+"""" gitui
+nnoremap <leader>gg <cmd>lua _gitui_toggle()<CR>
 """" Telescope
+" Ctrl+T to checkout + track remote
+nnoremap <leader>gco :Telescope git_branches<CR>
+" TODO: want to pass --name-only to git_commits
 nnoremap <leader>gvf :Telescope git_bcommits<CR>
+nnoremap <leader>gv :Telescope git_commits<CR>
 """" Window navigation, normalizing t(tab), s(vsplit), i(hsplit)
 " Also use <leader><Arrow> for navigation
 nmap <leader>t :tab new<CR>   " tab split

@@ -1,8 +1,6 @@
 return function()
-
   local g = vim.g
   local tree_cb = require'nvim-tree.config'.nvim_tree_callback
-  -- local colors = require("colors")
 
   g.nvim_tree_gitignore = 1 -- Hide any files specified in .gitignore
   g.nvim_tree_indent_markers = 1
@@ -28,7 +26,7 @@ return function()
       renamed = "➜",
       untracked = "",
       deleted = "",
-      ignored = "◌"
+      ignored = ""
     }
   }
 

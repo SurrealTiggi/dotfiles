@@ -4,11 +4,22 @@ return function()
     return "פּ NvimTree"
   end
 
+  local function term()
+    return "HI"
+  end
+
   local prettier_tree = {
     sections = {
       lualine_a = { tree },
     },
     filetypes = {'NvimTree'}
+  }
+
+  local prettier_term = {
+    sections = {
+      lualine_a = { term },
+    },
+    filetypes = {'toggleterm'}
   }
 
   require'lualine'.setup {
@@ -37,6 +48,6 @@ return function()
       lualine_z = {}
     },
     tabline = {},
-    extensions = {prettier_tree}
+    extensions = {prettier_tree, prettier_toggle}
   }
 end

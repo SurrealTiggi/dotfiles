@@ -12,28 +12,28 @@ vim.lsp.protocol.CompletionItemKind = {
   "   (Text) ", -- \uf52b
   "   (Method)", -- \uf6a6
   "   (Function)", -- \uf794
-  "   (Constructor)", -- \ue20f
-  " ﴲ  (Field)", -- \ufd32
+  " 練 (Constructor)",
+  " ﰠ  (Field)", -- \ufc20
   "   (Variable)", -- \uf292
-  "   (Class)", -- \uf0e8
+  " ﴰ  (Class)", -- \ufd30
   "   (Interface)", -- \uf417
   "   (Module)", -- \uf668
-  "   (Property)", -- \ue624
+  " ﰊ  (Property)", -- \ufc0a
   "   (Unit)", -- \uf475
   "   (Value)", -- \uf89f
-  " 練 (Enum)",
+  "   (Enum)", -- \uf779
   "   (Keyword)", -- \uf805
   "   (Snippet)", -- \uf674
   "   (Color)", -- \ue22b
   "   (File)", -- \uf723
-  " 渚 (Reference)", -- \ufa46
+  "   (Reference)", -- \ufa46
   "   (Folder)", -- \uf114
   "   (EnumMember)",
   "   (Constant)", -- \uf8fe
   "   (Struct)", -- \uf1b3
   "   (Event)", -- \uf0e7
-  "   (Operator)", -- \uf694
-  "   (TypeParameter)", -- \uf783
+  " ﬦ  (Operator)", -- \ufb26
+  "   (TypeParameter)", -- \uf673
 }
 
 -- Global on_attach override
@@ -53,8 +53,8 @@ function lsp_config.common_on_attach(client, bufnr)
   buf_set_keymap('n', 'trn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', 'ta', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   buf_set_keymap('n', 'tr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 end
 
 -- Global capabilities override

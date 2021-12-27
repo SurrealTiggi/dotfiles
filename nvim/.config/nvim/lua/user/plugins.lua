@@ -22,25 +22,32 @@ return packer.startup(
     -------------------------------
     use { "nvim-lua/plenary.nvim" }
     use { "nvim-lua/popup.nvim" }
+    -- NerdIcons
+    use {
+      "kyazdani42/nvim-web-devicons",
+      config = require("plugin.nvim-web-devicons"),
+    }
     --  Ensures we run ftplugin/*.lua at the right time
     use { "tjdevries/astronauta.nvim" , commit = "e69d7bdc4183047c4700427922c4a3cc1e3258c6" }
 
     -- [[ Language Support ]] --
     ----------------------------
     -- Built-in LSP
-    use { 'neovim/nvim-lspconfig' }
+    use {
+      "neovim/nvim-lspconfig"
+    }
     --[[
     use({
-      'neovim/nvim-lspconfig',
-      config = require('modules.config.nvim-lspconfig'),
-      event = 'ColorScheme',
+      "neovim/nvim-lspconfig",
+      config = require("modules.config.nvim-lspconfig"),
+      event = "ColorScheme",
       requires = {
-        { 'kabouzeid/nvim-lspinstall', module = 'lspinstall' },
-        { 'glepnir/lspsaga.nvim', module = 'lspsaga' },
-        { 'ray-x/lsp_signature.nvim', module = 'lsp_signature' },
+        { "kabouzeid/nvim-lspinstall", module = "lspinstall" },
+        { "glepnir/lspsaga.nvim", module = "lspsaga" },
+        { "ray-x/lsp_signature.nvim", module = "lsp_signature" },
         {
-          'jose-elias-alvarez/nvim-lsp-ts-utils',
-          module = 'nvim-lsp-ts-utils',
+          "jose-elias-alvarez/nvim-lsp-ts-utils",
+          module = "nvim-lsp-ts-utils",
         },
       },
     })
@@ -66,58 +73,57 @@ return packer.startup(
     -- Floating terminal
     use {
       "akinsho/nvim-toggleterm.lua",
-      event = "BufWinEnter",
       config = require("plugin.terminal")
     }
     -- NERDCommenter for sweet block comment goodness
     use { "preservim/nerdcommenter" }
-    -- Gitsigns for gutter + in-line blame
-    use {
-      "lewis6991/gitsigns.nvim",
-      config = require("plugin.gitsigns"),
-      event = "BufRead"
-    }
+
 
     -- [[ Functional Aesthetics ]] --
     ---------------------------------
-    -- NerdIcons
-    use {
-      "kyazdani42/nvim-web-devicons",
-      config = require("plugin.nvim-web-devicons"),
-      -- module = "nvim-web-devicons",
-    }
-
     -- File tree with nerdicons
     use {
       "kyazdani42/nvim-tree.lua",
       config = require("plugin.nvim-tree"),
-      -- module = "nvim-tree",
+      requires = "nvim-web-devicons",
+      after = "nvim-web-devicons"
     }
-
+    -- Gitsigns for gutter + in-line blame
+    use {
+      "lewis6991/gitsigns.nvim",
+      config = require("plugin.gitsigns")
+    }
     -- Lualine --
     use {
       "nvim-lualine/lualine.nvim",
       config = require("plugin.lualine"),
-      requires = {"kyazdani42/nvim-web-devicons",
-      opt = true}
+      requires = "nvim-web-devicons",
+      after = "nvim-web-devicons"
     }
-
     -- Bufferline --
     use {
       "akinsho/bufferline.nvim",
-      config = require("plugin.bufferline")
+      config = require("plugin.bufferline"),
+      requires = "nvim-web-devicons",
+      after = "nvim-web-devicons"
     }
-
     -- Dim inactive buffers --
     use {
       "sunjon/shade.nvim",
       config = require("plugin.shade"),
     }
-
     -- Indent lines --
     use {
       "lukas-reineke/indent-blankline.nvim",
+      config = require("plugin.indent-blankline"),
       event = "BufRead"
+    }
+
+    -- Inline color display --
+    use {
+      "rrethy/vim-hexokinase",
+      event = "BufRead",
+      run = "make hexokinase"
     }
 
     -- [[ Misc ]] --
@@ -131,9 +137,9 @@ return packer.startup(
     ------------------
     -- Automatically set up config, always keep this at the end
     if PACKER_BOOTSTRAP then
-      -- require('packer').sync() -- also works but then we get the sync screen on every startup
-      require('packer').install()
-      require('packer').compile()
+      -- require("packer").sync() -- also works but then we get the sync screen on every startup
+      require("packer").install()
+      require("packer").compile()
     end
   end
 )

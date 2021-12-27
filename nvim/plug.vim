@@ -52,7 +52,6 @@ Plug 'itchyny/lightline.vim'                            " [REPLACE] Lightline th
 Plug 'mengelbrecht/lightline-bufferline'                " [REPLACE] Bufferline functionality for lightline
 Plug 'maximbaz/lightline-ale'                           " [REPLACE] Add ale status to lightline
 Plug 'airblade/vim-gitgutter'                           " [REPLACE] Git gutter
-Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' } " [REPLACE] Display colors next to color codes
 """  Make things pretty
 " Plug 'cocopon/iceberg.vim'                              " Iceberg colorscheme
 Plug 'ghifarit53/tokyonight-vim'                        " Tokyo Night colorscheme

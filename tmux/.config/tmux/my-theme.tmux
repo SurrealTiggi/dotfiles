@@ -27,7 +27,7 @@ get_options() {
   upload_speed_icon=$(tmux_get '@my_tmux_upload_speed_icon' '')
   download_speed_icon=$(tmux_get '@my_tmux_download_speed_icon' '')
   session_icon="$(tmux_get '@my_tmux_session_icon' '')"
-  user_icon="$(tmux_get '@my_tmux_user_icon' '')"
+  user_icon="$(tmux_get '@my_tmux_user_icon' 'גּ')"
   time_icon="$(tmux_get '@my_tmux_time_icon' ' ')"
   date_icon="$(tmux_get '@my_tmux_date_icon' ' ')"
   prefix_highlight_pos=$(tmux_get @my_tmux_prefix_highlight_pos)

@@ -1,13 +1,9 @@
--- Global vars
--- CONFIG_PATH = os.getenv "HOME" .. "/.local/share/lunarvim/lvim"
+-- [[ GLOBAL VARS ]] --
+-----------------------
 DATA_PATH = vim.fn.stdpath "data" -- $HOME/.local/share/nvim
 CACHE_PATH = vim.fn.stdpath "cache" -- $HOME/.cache/nvim
 TERMINAL = vim.fn.expand "$TERMINAL"
 USER = vim.fn.expand "$USER"
-
--- Setup plugins
-require "plugins"
-
 
 
 -- TODO: Should move this where it makes sense

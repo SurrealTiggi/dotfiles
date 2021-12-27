@@ -15,6 +15,9 @@
 [rebase]
   autoStash = true
 
+[init]
+  defaultBranch = main
+
 # https://git-scm.com/docs/pretty-formats#Documentation/pretty-formats.txt-emGem for signature status
 [alias]
   lg = log --graph --abbrev-commit --date=iso8601 --pretty=log-default
@@ -52,11 +55,13 @@
 [interactive]
   diffFilter = delta --color-only
 
+[merge "ours"]
+  driver = true
+
 [includeIf "gitdir:~/git/work/"]
 path = ~/.gitconfig_work
 [includeIf "gitdir:~/git/personal/"]
 path = ~/.gitconfig_priv
 [includeIf "gitdir:~/git/dirtypillows/"]
 path = ~/.gitconfig_dp
-[init]
-	defaultBranch = main
+

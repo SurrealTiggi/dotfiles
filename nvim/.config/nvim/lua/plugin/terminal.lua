@@ -22,11 +22,10 @@ return function()
     }
   }
 
-
   local Terminal  = require('toggleterm.terminal').Terminal
-  local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
+  local gitui = Terminal:new({ cmd = "gitui", hidden = true })
 
-  function _lazygit_toggle()
-    lazygit:toggle()
+  function _gitui_toggle()
+    gitui:toggle()
   end
 end

@@ -46,6 +46,7 @@ ngrok
 nmap
 nnn
 pre-commit
+pstree
 rbenv
 ripgrep
 rust
