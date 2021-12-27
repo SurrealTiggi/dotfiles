@@ -1,8 +1,8 @@
 return function()
-  local exists, colors = pcall(require, "user.colors")
+  local colors = COLORS
 
-  if not exists then
-    print("ERROR: No user colors provided, no icon overrides will be set")
+  if colors == nil then
+    print("ERROR: No colors provided, so icon overrides won't be set")
     require "nvim-web-devicons".setup()
   else
     -- @NOTE: nvim-web-devicons only supports filtering by extensions or full file name

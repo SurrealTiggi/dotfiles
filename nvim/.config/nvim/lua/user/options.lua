@@ -49,6 +49,10 @@ for k, v in pairs(options) do
   vim.opt[k] = v
 end
 
+-- Set python globals
+vim.g.python_host_prog = '$HOME/.asdf/shims/python'
+vim.g.python3_host_prog = '$HOME/.asdf/shims/python3'
+
 -- Extra options to apply that only work in vim syntax
 vim.cmd [[set iskeyword+=-]]                  -- Extends keyword actions to include '-'
 

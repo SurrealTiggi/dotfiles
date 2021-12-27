@@ -1,7 +1,6 @@
 -- Folding doesn't work when opening anything via Telescope for some reason
 -- so overriding a bunch of builtins to fix it
 -- https://github.com/nvim-telescope/telescope.nvim/issues/559#issuecomment-934727312
--- Update: Folding seems to be working again so no longer using workaround above
 
 -- syntax adapted from https://github.com/martinsione/dotfiles
 

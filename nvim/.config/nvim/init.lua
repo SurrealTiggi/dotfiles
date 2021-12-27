@@ -7,8 +7,19 @@
 --
 -- https://github.com/surrealtiggi/dotfiles
 
--- [[ Neovim configurations for the ages ]] --
+-- [[ Folder structure ]] --
+----------------------------
+--  lua                      -- Main lua code source folder
+-- │  core                   -- For core config, functions and structs
+-- │  lsp                    -- For all LSP specific config
+-- │ └  settings             -- Settings for individual language servers
+-- │  plugin                 -- Configurations for non-LSP plugins
+-- │  user                   -- Literally verything else
+-- └  init.lua               -- For global variables, or can be used to simplify main init.lua
+--  init.lua                 -- Main entrypoint, neovim loads this first
 
+-- [[ Neovim configurations for the ages ]] --
+----------------------------------------------
 require "init"                -- Any global stuff to bootstrap first
 require "user.options"        -- Vim general options
 require "user.plugins"        -- Plugin management + plugin configs
@@ -16,20 +27,6 @@ require "user.keybinds"       -- Keymap config
 require "user.functions"      -- Utility functions
 
 require "user.autocommands"   -- All autocommands
+require "user.misc"           -- Everything else, eg. colorscheme, vim plugin settings, etc.
 
--- [[ Things I'm too lazy to move ]] --
--- TODO: Move these, obvs...
----------------------------------------
--- Colorscheme
-vim.cmd "colorscheme palenight"
-
--- Random plugin settings
-vim.cmd([[
-  " NERDCommenter
-  let g:NERDSpaceDelims = 1
-  let g:NERDCompactSexyComs = 1
-
-  " Vim-hexokinase
-  let g:Hexokinase_optInPatterns = 'full_hex,rgb,rgba'
-  " let g:Hexokinase_highlighters = ['foregroundfull']
-]])
+require "lsp"                 -- Setup LSP

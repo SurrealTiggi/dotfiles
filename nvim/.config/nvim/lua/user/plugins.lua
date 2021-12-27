@@ -32,26 +32,24 @@ return packer.startup(
 
     -- [[ Language Support ]] --
     ----------------------------
+    -- TODO: lspsaga, lsp_signature, nvim-lsp-ts-utils
     -- Built-in LSP
-    use {
-      "neovim/nvim-lspconfig"
+    use { "neovim/nvim-lspconfig" }
+    -- Simple LSP installer
+    use { "williamboman/nvim-lsp-installer" }
+    -- Completion engine + sources
+    use {                                   -- Main engine
+      "hrsh7th/nvim-cmp",
+      config = require("plugin.nvim-cmp")
     }
-    --[[
-    use({
-      "neovim/nvim-lspconfig",
-      config = require("modules.config.nvim-lspconfig"),
-      event = "ColorScheme",
-      requires = {
-        { "kabouzeid/nvim-lspinstall", module = "lspinstall" },
-        { "glepnir/lspsaga.nvim", module = "lspsaga" },
-        { "ray-x/lsp_signature.nvim", module = "lsp_signature" },
-        {
-          "jose-elias-alvarez/nvim-lsp-ts-utils",
-          module = "nvim-lsp-ts-utils",
-        },
-      },
-    })
-    ]]
+    use { "hrsh7th/cmp-buffer" }            -- Buffer completions
+    use { "hrsh7th/cmp-path" }              -- Path completions
+    use { "saadparwaiz1/cmp_luasnip" }      -- Snippet completions
+    use { "hrsh7th/cmp-nvim-lsp" }          -- LSP completions
+    use { "hrsh7th/cmp-nvim-lua" }          -- Neovim API completions
+    -- Snippets
+    use { "L3MON4D3/LuaSnip" }              -- Snippet engine
+    use { "rafamadriz/friendly-snippets" }  -- A bunch of snippets to use
     -- Treesitter for highlights and AST
     use {
       "nvim-treesitter/nvim-treesitter",
@@ -67,9 +65,7 @@ return packer.startup(
       config = require("plugin.telescope"),
     }
     -- Telescope fzy override
-    use {
-      "nvim-telescope/telescope-fzy-native.nvim",
-    }
+    use { "nvim-telescope/telescope-fzy-native.nvim" }
     -- Floating terminal
     use {
       "akinsho/nvim-toggleterm.lua",

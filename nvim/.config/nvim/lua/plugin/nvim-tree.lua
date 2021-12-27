@@ -37,7 +37,7 @@ return function()
     },
     view = {
       hide_root_folder = true,
-      width = 50,
+      width = 35,
       auto_resize = true,
       mappings = {
         list = {
