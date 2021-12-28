@@ -56,6 +56,7 @@ return packer.startup(
       config = require("plugin.treesitter"),
       run = ":TSUpdate"
     }
+    use { "nvim-treesitter/playground" }
 
     -- [[ IDE Utilities ]] --
     -------------------------
@@ -127,7 +128,7 @@ return packer.startup(
     -- Treesitter compatible with more italics
     use { "folke/tokyonight.nvim" }
     -- A collection of treesitter compatible themes (nvcode,onedark,nord,aurora,gruvbox,palenight,snazzy)
-    use { "christianchiarulli/nvcode-color-schemes.vim", event = "ColorSchemePre" }
+    use { "christianchiarulli/nvcode-color-schemes.vim" }
 
     -- [[ Loader ]] --
     ------------------

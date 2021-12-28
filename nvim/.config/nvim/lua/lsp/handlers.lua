@@ -7,12 +7,10 @@ if not status_ok then
 end
 
 -- Highlight all instances of symbol under cursor
--- FIXME: Doesn't seem to be working
 local function lsp_highlight_document(client)
-  -- Set autocommands conditional on server_capabilities
+  -- Only enable if the active LSP supports it
   if client.resolved_capabilities.document_highlight then
-    vim.api.nvim_exec(
-      [[
+    vim.api.nvim_exec([[
       augroup lsp_document_highlight
         autocmd! * <buffer>
         autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
@@ -26,6 +24,7 @@ end
 
 -- Setup basic keybinds
 -- TODO: Tweak diagnostics to use something else (maybe lsp-saga, or folke/trouble?)
+-- TODO: Can we configure these elsewhere?
 local function lsp_keymaps(bufnr)
   -- Quick function to keep things more readable
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end

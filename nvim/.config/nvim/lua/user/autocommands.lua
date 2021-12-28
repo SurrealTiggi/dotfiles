@@ -36,3 +36,12 @@ vim.cmd([[
   autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
   autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
 ]])
+
+-- Load vim-dadbod-completion for SQL files
+-- TODO: not installed yet
+-- vim.cmd([[
+  -- augroup DadBodSQL
+    -- au!
+    -- autocmd FileType sql,mysql,plsql lua require("cmp").setup.buffer { sources = { { name = "vim-dadbod-completion" } } }
+  -- augroup END
+-- ]])

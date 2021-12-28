@@ -28,6 +28,7 @@ return function()
     mapping = {
       -- ["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-1), { "i", "c" }),
       -- ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(1), { "i", "c" }),
+      -- FIXME: <C-Space> not working
       ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
       ["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
       ["<C-e>"] = cmp.mapping {
@@ -65,26 +66,26 @@ return function()
       }),
     },
     formatting = {
-      fields = { "kind", "abbr", "menu" },
+      fields = { "abbr", "kind", "menu" },
       format = function(entry, vim_item)
-        vim_item.kind = string.format("%s", cmp_symbols[vim_item.kind])
+        vim_item.kind = string.format("%s %s", cmp_symbols[vim_item.kind], vim_item.kind)
         vim_item.menu = ({
           nvim_lsp = "[LSP]",
-          nvim_lua = "[LUA]",
-          luasnip = "[Luasnip]",
-          buffer = "[Buffer]",
-          path = "[Path]",
+          nvim_lua = "[api]",
+          luasnip = "[snip]",
+          buffer = "[buf]",
+          path = "[path]",
         })[entry.source.name]
         return vim_item
       end,
     },
     -- Force the order in which completion items are shown
     sources = {
-      { name = "nvim_lsp" },
       { name = "nvim_lua" },
-      { name = "luasnip" },
-      { name = "buffer" },
+      { name = "nvim_lsp" },
       { name = "path" },
+      { name = "luasnip", max_item_count = 10 },
+      { name = "buffer", keyword_length = 5 },
     },
     confirm_opts = {
       behavior = cmp.ConfirmBehavior.Replace,
@@ -94,7 +95,7 @@ return function()
       border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
     },
     experimental = {
-      ghost_text = false,
+      ghost_text = true,
       native_menu = false,
     },
   }

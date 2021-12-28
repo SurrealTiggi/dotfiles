@@ -6,6 +6,7 @@ return function()
       "css",
       "go",
       "graphql",
+      "query",
       "hcl",
       "html",
       "javascript",
@@ -19,6 +20,9 @@ return function()
       "toml",
       "vue",
       "yaml",
+    },
+    playground = {
+      enable = true,
     },
     highlight = {
       enable = true

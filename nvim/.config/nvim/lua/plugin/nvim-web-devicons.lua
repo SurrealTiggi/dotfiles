@@ -5,7 +5,7 @@ return function()
     print("ERROR: No colors provided, so icon overrides won't be set")
     require "nvim-web-devicons".setup()
   else
-    -- @NOTE: nvim-web-devicons only supports filtering by extensions or full file name
+    -- @SurrealTiggi: nvim-web-devicons only supports filtering by extensions or full file name
     -- filetype support https://github.com/kyazdani42/nvim-web-devicons/issues/29
     -- regex support https://github.com/kyazdani42/nvim-web-devicons/issues/36
     require "nvim-web-devicons".setup {

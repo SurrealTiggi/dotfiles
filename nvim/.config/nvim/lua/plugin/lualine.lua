@@ -25,7 +25,7 @@ return function()
   require'lualine'.setup {
     options = {
       icons_enabled = true,
-      theme = 'wombat',
+      theme = 'tokyonight',
       component_separators = { left = '', right = ''},
       section_separators = { left = '', right = ''},
       disabled_filetypes = {},
@@ -48,6 +48,6 @@ return function()
       lualine_z = {}
     },
     tabline = {},
-    extensions = {prettier_tree, prettier_toggle}
+    extensions = {prettier_tree, prettier_term}
   }
 end

@@ -15,6 +15,19 @@ return function()
     local pickers = require("telescope.pickers")
     local previewers = require("telescope.previewers")
     local builtin = require("telescope.builtin")
+    local actions_set = require("telescope.actions.set")
+
+    local fixfolds = {
+      hidden = true,
+      attach_mappings = function(_)
+        actions_set.select:enhance({
+          post = function()
+            vim.cmd(":normal! zx")
+          end,
+        })
+        return true
+      end,
+    }
 
     -- [[ Main telescope config ]] --
     telescope.setup({
@@ -67,9 +80,15 @@ return function()
         },
       },
       pickers = {
-        find_files = {
-          find_command = { "fd", "--type=file", "--hidden" }
-        }
+        find_files = fixfolds,
+        buffers = fixfolds,
+        git_files = fixfolds,
+        grep_string = fixfolds,
+        live_grep = fixfolds,
+        oldfiles = fixfolds,
+        -- find_files = {
+          -- find_command = { "fd", "--type=file", "--hidden" }
+        -- }
       },
       extensions = {
         fzy_native = {
