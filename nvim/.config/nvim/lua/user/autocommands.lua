@@ -10,7 +10,10 @@ vim.cmd([[
 
 -- Automatically reload current file if buffer changes
 vim.cmd([[
-  au FocusGained,BufEnter * :checktime
+  augroup refresh_buffer
+    autocmd!
+    autocmd FocusGained,BufEnter * :checktime
+  augroup END
 ]])
 
 -- vimrc folding (https://vi.stackexchange.com/questions/3814/is-there-a-best-practice-to-fold-a-vimrc-file)
@@ -33,8 +36,19 @@ vim.cmd([[
 
 -- Force a rescan for js/ts buffers
 vim.cmd([[
-  autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
-  autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
+  augroup rescan_ts_js_buffer
+    autocmd!
+    autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
+    autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
+  augroup END
+]])
+
+-- Disable completion in navigator floating windows
+vim.cmd([[
+  augroup navigator_no_cmp
+    autocmd FileType guihua lua require('cmp').setup.buffer { enabled = false }")
+    autocmd FileType guihua_rust lua require('cmp').setup.buffer { enabled = false }
+  augroup END
 ]])
 
 -- Load vim-dadbod-completion for SQL files

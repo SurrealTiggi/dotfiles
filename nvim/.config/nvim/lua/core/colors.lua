@@ -1,8 +1,15 @@
 local colors = {
+  -- elements
   line = "#2a2e36", -- for lines like vertsplit
   statusline_bg = "#22262e",
   lightbg = "#2d3139",
   lightbg2 = "#262a32",
+  -- diagnostics
+  error = "#db4b4b",
+  warning = "#e0af68",
+  information = "#0db9d7",
+  hint = "#10B981",
+  -- colors
   white = "#abb2bf",
   darker_black = "#1b1f27",
   black = "#1e222a",
@@ -19,11 +26,11 @@ local colors = {
   deep_yellow = "#fbcc2c",
   sun = "#fde016",
   yellow = "#e7c787",
-  -- sun = "#ebcb8b",
   orange = "#e2a478",
   peach = "#d47d85",
   baby_pink = "#de8c92",
   pink = "#ff75a0",
+  red = "#e74125",
   purple = "#b4bbc8",
   dark_purple = "#c882e7",
   nord_blue = "#81a1c1",

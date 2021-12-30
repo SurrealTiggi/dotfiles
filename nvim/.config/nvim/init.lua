@@ -11,7 +11,7 @@
 ----------------------------
 --  lua                      -- Main lua code source folder
 -- │  core                   -- For core config, functions and structs
--- │  lsp                    -- For all LSP specific config
+-- │  lsp                    -- For all LSP specific config
 -- │ └  settings             -- Settings for individual language servers
 -- │  plugin                 -- Configurations for non-LSP plugins
 -- │  user                   -- Literally verything else

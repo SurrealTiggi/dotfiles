@@ -1,4 +1,5 @@
 local M = {}
+-- TODO: Ensure we're using this module instead of definining icons separately
 -- Extra random icons
 --   פּ ﯟ      
 
@@ -33,10 +34,17 @@ M.lsp_symbols = {
 
 -- LSP Diagnostic Signs
 M.diagnostic_signs = {
-  { name = "DiagnosticSignError", text = "" },
-  { name = "DiagnosticSignWarn", text = "" },
-  { name = "DiagnosticSignHint", text = "" },
-  { name = "DiagnosticSignInfo", text = "" },
+  Error = " ",
+  Warn = " ",
+  Hint = " ",
+  Info= " ",
+}
+
+-- Misc (until I refactor this)
+-- see https://github.com/CosmicNvim/CosmicNvim/blob/main/lua/cosmic/theme/icons.lua
+M.misc = {
+  debug = " ",
+  ghost = "",
 }
 
 return M

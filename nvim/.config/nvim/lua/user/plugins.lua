@@ -28,11 +28,11 @@ return packer.startup(
       config = require("plugin.nvim-web-devicons"),
     }
     --  Ensures we run ftplugin/*.lua at the right time
-    use { "tjdevries/astronauta.nvim" , commit = "e69d7bdc4183047c4700427922c4a3cc1e3258c6" }
+    -- use { "tjdevries/astronauta.nvim" , commit = "e69d7bdc4183047c4700427922c4a3cc1e3258c6" }
 
     -- [[ Language Support ]] --
     ----------------------------
-    -- TODO: lspsaga, lsp_signature, nvim-lsp-ts-utils
+    -- TODO: null-ls, nvim-lsp-ts-utils
     -- Built-in LSP
     use { "neovim/nvim-lspconfig" }
     -- Simple LSP installer
@@ -57,6 +57,46 @@ return packer.startup(
       run = ":TSUpdate"
     }
     use { "nvim-treesitter/playground" }
+    -- Show function signature while typing
+    use { "ray-x/lsp_signature.nvim" }
+    -- Nicer Rename
+    use {
+      "CosmicNvim/cosmic-ui",
+      config = require("plugin.cosmic-ui"),
+      requires = { "MunifTanjim/nui.nvim"}
+    }
+    -- Trouble
+    -- TODO: Explore config
+    use {
+      "folke/trouble.nvim",
+      requires = "nvim-web-devicons",
+      config = function()
+        require("trouble").setup {auto_close=true, height=25}
+      end
+    }
+    -- LSPSaga
+    -- TODO: Explore config
+    use { "tami5/lspsaga.nvim" }
+    -- GoToDefinition previewer
+    -- TODO: Explore config
+    use {
+      "rmagatti/goto-preview",
+      config = function()
+        require("goto-preview").setup({})
+      end
+    }
+    -- Symbol outline tree
+    -- TODO: Explore config
+    use {
+      "simrat39/symbols-outline.nvim"
+    }
+
+    -- Nicer code actions w/diff
+    -- FIXME: No diff, wait for https://github.com/weilbith/nvim-code-action-menu/issues/35
+    -- use {
+      -- "weilbith/nvim-code-action-menu",
+      -- cmd = "CodeActionMenu"
+    -- }
 
     -- [[ IDE Utilities ]] --
     -------------------------
@@ -74,7 +114,8 @@ return packer.startup(
     }
     -- NERDCommenter for sweet block comment goodness
     use { "preservim/nerdcommenter" }
-
+    -- General purpose async notifications
+    use { "rcarriga/nvim-notify" }
 
     -- [[ Functional Aesthetics ]] --
     ---------------------------------
@@ -91,6 +132,8 @@ return packer.startup(
       config = require("plugin.gitsigns")
     }
     -- Lualine --
+    -- TODO: Add LSP info see https://github.com/nvim-lualine/lualine.nvim#screenshots
+    -- TODO: Check feline-nvim/feline.nvim for inspiration
     use {
       "nvim-lualine/lualine.nvim",
       config = require("plugin.lualine"),
@@ -105,17 +148,24 @@ return packer.startup(
       after = "nvim-web-devicons"
     }
     -- Dim inactive buffers --
-    use {
-      "sunjon/shade.nvim",
-      config = require("plugin.shade"),
-    }
+    -- FIXME: Disabled as it breaks some floating windows such as Rename and GoToPreview
+    -- use {
+      -- "sunjon/shade.nvim",
+      -- config = require("plugin.shade"),
+    -- }
     -- Indent lines --
     use {
       "lukas-reineke/indent-blankline.nvim",
       config = require("plugin.indent-blankline"),
       event = "BufRead"
     }
-
+    -- Dashboard
+    -- FIXME: Only loads manually by calling :Alpha. Possibly related to startup screen disappearing
+    use {
+      "goolord/alpha-nvim",
+      config = require("plugin.alpha-nvim"),
+      requires = "nvim-web-devicons",
+    }
     -- Inline color display --
     use {
       "rrethy/vim-hexokinase",

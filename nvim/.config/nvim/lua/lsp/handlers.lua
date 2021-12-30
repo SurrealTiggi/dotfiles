@@ -1,5 +1,10 @@
 -- [[ LSP HANDLERS ]] --
 ------------------------
+-- Load in our config
+local exists, my_cfg = pcall(require, "lsp.lsp-config")
+if not exists then
+  return
+end
 -- Ensure completion engine is installed
 local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 if not status_ok then
@@ -23,25 +28,13 @@ local function lsp_highlight_document(client)
 end
 
 -- Setup basic keybinds
--- TODO: Tweak diagnostics to use something else (maybe lsp-saga, or folke/trouble?)
--- TODO: Can we configure these elsewhere?
+-- @SurrealTiggi moved to user.keybinds
 local function lsp_keymaps(bufnr)
   -- Quick function to keep things more readable
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
 
   -- General keybind options
   local opts = { noremap = true, silent = true }
-
-  -- Code navitation keybinds
-  buf_set_keymap("n", "gd",         "<cmd>lua vim.lsp.buf.definition()<CR>", opts)                    -- Go to definition
-  buf_set_keymap("n", "K",          "<cmd>lua vim.lsp.buf.hover()<CR>", opts)                         -- Hoverdoc
-  buf_set_keymap("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)                        -- Rename under cursor
-  buf_set_keymap("n", "gr",         "<cmd>lua vim.lsp.buf.references()<CR>", opts)                    -- Get references
-  buf_set_keymap("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)                   -- Code action
-  buf_set_keymap("n", "<C-k>",      "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)                  -- Go to previous diagnostic
-  buf_set_keymap("n", "<C-j>",      "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)                  -- Go to next diagnostic
-  buf_set_keymap("n", "gl",         "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", opts)  -- Show line diagnostics
-  -- vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
 end
 
 -- Bring in default LSP capabilities
@@ -51,37 +44,21 @@ local M = {}
 
 -- Initial setup
 M.setup = function()
-  local signs = SYMBOLS.diagnostic_signs
 
-  for _, sign in ipairs(signs) do
-    vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
+  -- Setup diagnostic signs
+  for type, icon in pairs(SYMBOLS.diagnostic_signs) do
+    local hl = "DiagnosticSign" .. type
+    vim.fn.sign_define(hl, { texthl = hl, text = icon, numhl = hl })
   end
 
-  -- Diagnostics config
-  local diagnostics_config = {
-    virtual_text = false,
-    signs = {
-      active = signs,
-    },
-    update_in_insert = true,
-    underline = true,
-    severity_sort = true,
-    float = {
-      focusable = false,
-      style = "minimal",
-      border = "rounded",
-      source = "always",
-      header = "",
-      prefix = "",
-    },
-  }
+  vim.diagnostic.config(my_cfg.diagnostics_config)
 
-  vim.diagnostic.config(diagnostics_config)
-
+  -- Setup hoverdoc
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
     border = "rounded",
   })
 
+  -- Setup signatureHelp
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
     border = "rounded",
   })
@@ -89,6 +66,8 @@ end
 
 -- Setup on-attach
 M.on_attach = function(client, bufnr)
+  -- Add lsp_signature
+  require "lsp_signature".on_attach(my_cfg.lsp_signature_opts)
   -- Remove formatting for TS/JS since we'll use prettier
   if client.name == "tsserver" then
     client.resolved_capabilities.document_formatting = false
@@ -97,7 +76,11 @@ M.on_attach = function(client, bufnr)
   if client.name == "pyright" then
     client.resolved_capabilities.document_formatting = false
   end
-  lsp_keymaps(bufnr)
+  -- Explicitly enable highlight for golang
+  if client.name == "gopls" then
+    client.resolved_capabilities.document_highlight = true
+  end
+  -- lsp_keymaps(bufnr)
   lsp_highlight_document(client)
 end
 

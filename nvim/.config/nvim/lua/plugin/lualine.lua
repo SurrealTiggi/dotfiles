@@ -4,8 +4,8 @@ return function()
     return "פּ NvimTree"
   end
 
-  local function term()
-    return "HI"
+  local function symbol_tree()
+    return " Symbols"
   end
 
   local prettier_tree = {
@@ -15,11 +15,16 @@ return function()
     filetypes = {'NvimTree'}
   }
 
-  local prettier_term = {
+  local prettier_symbols = {
     sections = {
-      lualine_a = { term },
+      lualine_z = { symbol_tree },
     },
-    filetypes = {'toggleterm'}
+    filetypes = {'Outline'}
+  }
+
+  local alpha_hide = {
+    sections = {},
+    filetypes = {'alpha'}
   }
 
   require'lualine'.setup {
@@ -36,8 +41,8 @@ return function()
       lualine_b = {'branch', 'diff', 'diagnostics'},
       lualine_c = {'filename'},
       lualine_x = {'encoding', 'fileformat', 'filetype'},
-      lualine_y = {'progress'},
-      lualine_z = {'location'}
+      lualine_y = {},
+      lualine_z = {'progress', 'location'}
     },
     inactive_sections = {
       lualine_a = {},
@@ -48,6 +53,6 @@ return function()
       lualine_z = {}
     },
     tabline = {},
-    extensions = {prettier_tree, prettier_term}
+    extensions = { prettier_tree, prettier_symbols, alpha_hide }
   }
 end

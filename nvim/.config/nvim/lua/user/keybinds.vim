@@ -1,11 +1,10 @@
 ""  KEY BINDINGS
-""" Set leader
-nnoremap <SPACE> <Nop>
-let mapleader=" "
-
 """ Simple bindings
 """" Make Y behave
 noremap Y y$
+"""" Always paste from the first register, because I'm lazy
+nnoremap p "0p
+vnoremap p "0p
 """" Stay centered when jumping around
 nnoremap n nzzzv
 nnoremap N Nzzzv
@@ -15,14 +14,9 @@ vnoremap < <gv
 vnoremap > >gv
 """" Quick hack in case you forgot to sudo
 cnoremap w!! execute 'silent! write !sudo tee % > /dev/null' <bar> edit!
-"""" Telescope navigation
-nmap <silent> gr :Telescope coc references<CR>
-nmap <silent> fs :Telescope coc workspace_symbols<CR>
-nmap <silent> fd :Telescope coc workspace_diagnostics<CR>
+"""" Telescope
 nmap <silent> fb :Telescope file_browser<CR>
 nmap <silent> ff :Telescope current_buffer_fuzzy_find<CR>
-" nnoremap <silent> <space>s       :<C-u>CocFzfList symbols<CR>
-" nnoremap <silent> <space>d       :<C-u>CocFzfList diagnostics<CR>
 """" Use visual K|J to move a single line up|down
 vnoremap <silent>K :m '<-2<CR>gv=gv
 vnoremap <silent>J :m '>+1<CR>gv=gv

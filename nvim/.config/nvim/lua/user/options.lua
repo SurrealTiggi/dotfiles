@@ -15,8 +15,7 @@ local options = {
   ignorecase = true,                           -- case-insensitive search
   incsearch = true,                            -- start searching immediately as you type
   list = true,                                 -- show trailing whitespace
-  listchars = {                                -- special chars to show (leaving out eol:¬ as it gets noisy)
-    eol = '⤶',
+  listchars = {                                -- special chars to show (extras: ⤶ ¬)
     tab = "• ",
     trail = "▫",
     precedes = "«",
@@ -55,7 +54,3 @@ vim.g.python3_host_prog = '$HOME/.asdf/shims/python3'
 
 -- Extra options to apply that only work in vim syntax
 vim.cmd [[set iskeyword+=-]]                  -- Extends keyword actions to include '-'
-
--- TODO: Remove if they're not needed with neovim
--- vim.cmd "syntax on"
--- vim.cmd "filetype plugin indent on"
