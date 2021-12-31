@@ -7,4 +7,4 @@ end
 
 require "lsp.lsp-installer"
 require("lsp.handlers").setup()
--- require "user.lsp.null-ls"
+require "lsp.null-ls"

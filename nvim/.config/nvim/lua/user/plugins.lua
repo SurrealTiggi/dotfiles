@@ -70,9 +70,7 @@ return packer.startup(
     use {
       "folke/trouble.nvim",
       requires = "nvim-web-devicons",
-      config = function()
-        require("trouble").setup {auto_close=true, height=25}
-      end
+      config = require("plugin.trouble")
     }
     -- LSPSaga
     -- TODO: Explore config
@@ -90,6 +88,8 @@ return packer.startup(
     use {
       "simrat39/symbols-outline.nvim"
     }
+    -- Formatter and linter engine
+    use { "jose-elias-alvarez/null-ls.nvim" }
 
     -- Nicer code actions w/diff
     -- FIXME: No diff, wait for https://github.com/weilbith/nvim-code-action-menu/issues/35
@@ -116,6 +116,11 @@ return packer.startup(
     use { "preservim/nerdcommenter" }
     -- General purpose async notifications
     use { "rcarriga/nvim-notify" }
+    -- Autopairs
+    use {
+      "windwp/nvim-autopairs",
+      config = require("plugin.autopairs")
+    }
 
     -- [[ Functional Aesthetics ]] --
     ---------------------------------
@@ -133,6 +138,7 @@ return packer.startup(
     }
     -- Lualine --
     -- TODO: Add LSP info see https://github.com/nvim-lualine/lualine.nvim#screenshots
+    -- FIXME: Use same symbols as SYMBOLS.diagnostic_signs
     -- TODO: Check feline-nvim/feline.nvim for inspiration
     use {
       "nvim-lualine/lualine.nvim",

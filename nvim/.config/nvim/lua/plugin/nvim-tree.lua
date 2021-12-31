@@ -2,7 +2,6 @@ return function()
   local g = vim.g
   local tree_cb = require'nvim-tree.config'.nvim_tree_callback
 
-  g.nvim_tree_gitignore = 1 -- Hide any files specified in .gitignore
   g.nvim_tree_indent_markers = 1
   g.nvim_tree_quit_on_open = 1
   g.nvim_tree_width_allow_resize = 1
@@ -16,21 +15,12 @@ return function()
   g.nvim_tree_special_files = "" -- Don't highlight any files
 
   -- Purely for aesthetics
-  g.nvim_tree_icons = {
-    default = "",
-    symlink = "",
-    git = {
-      unstaged = "✗",
-      staged = "●",
-      unmerged = "",
-      renamed = "➜",
-      untracked = "",
-      deleted = "",
-      ignored = ""
-    }
-  }
+  g.nvim_tree_icons = SYMBOLS.git_symbols
 
   require"nvim-tree".setup{
+    git = {
+      ignore = true                 -- Hide any files specified in .gitignore
+    },
     hijack_cursor = true,
     diagnostics = {
       enable = true
@@ -49,6 +39,7 @@ return function()
     },
     filters = {
       dotfiles = false,
+      -- TODO: Move this to a central config
       custom = {
         "\\~$", "bower_components", "node_modules", ".cache", "__pycache__", ".pytest_cache", ".mypy_cache", ".vim",
         ".DS_Store",

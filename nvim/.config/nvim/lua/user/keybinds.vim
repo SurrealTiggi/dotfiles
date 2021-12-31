@@ -23,8 +23,8 @@ vnoremap <silent>J :m '>+1<CR>gv=gv
 """" Window resizing (Left|Right use Alt+arrow escape sequence)
 nnoremap <silent><M-Up> :resize -2<CR>
 nnoremap <silent><M-Down> :resize +2<CR>
-nnoremap <silent><Esc>b :vertical resize -2<CR>
-nnoremap <silent><Esc>f :vertical resize +2<CR>
+nnoremap <silent><Esc>f :vertical resize -2<CR>
+nnoremap <silent><Esc>b :vertical resize +2<CR>
 """ [Ctrl] bindings
 """" Toggleterm
 nnoremap <silent><c-z> <Cmd>exe v:count . "ToggleTerm"<CR>

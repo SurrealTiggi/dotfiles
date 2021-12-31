@@ -1,7 +1,36 @@
 local M = {}
 -- TODO: Ensure we're using this module instead of definining icons separately
 -- Extra random icons
---   פּ ﯟ      
+-- 
+--   \uf52b
+-- 
+-- פּ
+-- ﯟ
+--   \ue624
+--   \ue20f
+--   \uf0e8
+-- 
+-- 
+-- 
+-- 
+-- 
+-- 
+-- 
+
+-- Git symbols
+M.git_symbols = {
+  default = "",
+  symlink = "",
+  git = {
+    unstaged = "✗",
+    staged = "●",
+    unmerged = "",
+    renamed = "➜",
+    untracked = "",
+    deleted = "",
+    ignored = ""
+  }
+}
 
 -- LSP Type Symbols
 M.lsp_symbols = {
@@ -34,10 +63,11 @@ M.lsp_symbols = {
 
 -- LSP Diagnostic Signs
 M.diagnostic_signs = {
-  Error = " ",
+  Error = " ﯇",
   Warn = " ",
   Hint = " ",
-  Info= " ",
+  Info = " ",
+  Other = " ",
 }
 
 -- Misc (until I refactor this)
