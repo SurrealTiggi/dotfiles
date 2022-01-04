@@ -16,7 +16,6 @@ return function()
     return col == 0 or vim.fn.getline("."):sub(col, col):match "%s"
   end
 
-  -- TODO: Ensure we only attempt to set symbols if they exist
   local cmp_symbols = SYMBOLS.lsp_symbols
 
   cmp.setup {
@@ -92,7 +91,7 @@ return function()
       select = false,
     },
     documentation = {
-      border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+      border = SYMBOLS.borders,
     },
     experimental = {
       ghost_text = true,

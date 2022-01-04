@@ -1,11 +1,11 @@
 return function()
 
   local function tree()
-    return "פּ NvimTree"
+    return SYMBOLS.misc.nav_tree .. " NvimTree"
   end
 
   local function symbol_tree()
-    return " Symbols"
+    return SYMBOLS.misc.symbol_tree .. " Symbols"
   end
 
   local prettier_tree = {
@@ -31,8 +31,8 @@ return function()
     options = {
       icons_enabled = true,
       theme = 'tokyonight',
-      component_separators = { left = '', right = ''},
-      section_separators = { left = '', right = ''},
+      component_separators = { left = SYMBOLS.misc.left_separator_light, right = SYMBOLS.misc.right_separator_light },
+      section_separators = { left = SYMBOLS.misc.left_separator_heavy, right = SYMBOLS.misc.right_separator_heavy },
       disabled_filetypes = {},
       always_divide_middle = true,
     },

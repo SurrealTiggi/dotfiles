@@ -66,20 +66,20 @@ end
 
 -- Setup on-attach
 M.on_attach = function(client, bufnr)
+
   -- Add lsp_signature
   require "lsp_signature".on_attach(my_cfg.lsp_signature_opts)
-  -- Remove formatting for TS/JS since we'll use prettier
-  if client.name == "tsserver" then
-    client.resolved_capabilities.document_formatting = false
-  end
+
   -- Remove formatting for Py since we'll use black
   if client.name == "pyright" then
     client.resolved_capabilities.document_formatting = false
   end
+
   -- Explicitly enable highlight for golang
   if client.name == "gopls" then
     client.resolved_capabilities.document_highlight = true
   end
+
   -- lsp_keymaps(bufnr)
   lsp_highlight_document(client)
 end

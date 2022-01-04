@@ -31,6 +31,11 @@ null_ls.setup({
     formatting.trim_newlines,
     formatting.trim_whitespace,
     formatting.prettier,
+    -- formatting.prettier.with({
+      -- prefer_local = "node_modules/.bin",
+      -- command = "prettier-standard",
+      -- extra_args = { "--format" }
+    -- }),
     formatting.isort,
     formatting.black,
     formatting.gofumpt,
@@ -42,10 +47,12 @@ null_ls.setup({
     diagnostics.staticcheck,
     diagnostics.golangci_lint,
     diagnostics.eslint,
+    diagnostics.standardjs,
     diagnostics.mdl,
     diagnostics.write_good,
     diagnostics.stylelint,
     diagnostics.shellcheck,
+    diagnostics.yamllint,
 
     -- Code Actions
     -- TODO: Could add git + refactoring.nvim

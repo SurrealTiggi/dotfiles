@@ -1,7 +1,6 @@
 -- [[ MISCELLANEOUS ]] --
 -------------------------
 -- Set nvim-notify as main notifier
--- TODO: Explore nvim-notify documentation
 vim.notify = require("notify")
 
 -- Colorscheme
@@ -52,6 +51,42 @@ vim.cmd([[
 -- ]])
 
 -- Random plugin settings
+-- Outline tree
+-- FIXME: Would prefer to stick this in plugin settings
+-- see https://github.com/simrat39/symbols-outline.nvim/issues/19
+vim.g.symbols_outline = {
+  auto_preview = false,
+  auto_close = true,
+  symbols = {
+    File = {icon = SYMBOLS.lsp_symbols["File"], hl = "TSURI"},
+    Module = {icon = SYMBOLS.lsp_symbols["Module"], hl = "TSNamespace"},
+    Namespace = {icon = SYMBOLS.lsp_symbols["Namespace"], hl = "TSNamespace"},
+    Package = {icon = SYMBOLS.lsp_symbols["Package"], hl = "TSNamespace"},
+    Class = {icon = SYMBOLS.lsp_symbols["Class"], hl = "TSType"},
+    Method = {icon = SYMBOLS.lsp_symbols["Method"], hl = "TSMethod"},
+    Property = {icon = SYMBOLS.lsp_symbols["Property"], hl = "TSMethod"},
+    Field = {icon = SYMBOLS.lsp_symbols["Field"], hl = "TSField"},
+    Constructor = {icon = SYMBOLS.lsp_symbols["Constructor"], hl = "TSConstructor"},
+    Enum = {icon = SYMBOLS.lsp_symbols["Enum"], hl = "TSType"},
+    Interface = {icon = SYMBOLS.lsp_symbols["Interface"], hl = "TSType"},
+    Function = {icon = SYMBOLS.lsp_symbols["Function"], hl = "TSFunction"},
+    Variable = {icon = SYMBOLS.lsp_symbols["Variable"], hl = "TSConstant"},
+    Constant = {icon = SYMBOLS.lsp_symbols["Constant"], hl = "TSConstant"},
+    String = {icon = SYMBOLS.lsp_symbols["String"], hl = "TSString"},
+    Number = {icon = SYMBOLS.lsp_symbols["Number"], hl = "TSNumber"},
+    Boolean = {icon = SYMBOLS.lsp_symbols["Boolean"], hl = "TSBoolean"},
+    Array = {icon = SYMBOLS.lsp_symbols["Array"], hl = "TSConstant"},
+    Object = {icon = SYMBOLS.lsp_symbols["Object"], hl = "TSType"},
+    Key = {icon = SYMBOLS.lsp_symbols["Key"], hl = "TSType"},
+    Null = {icon = SYMBOLS.lsp_symbols["Null"], hl = "TSType"},
+    EnumMember = {icon = SYMBOLS.lsp_symbols["EnumMember"], hl = "TSField"},
+    Struct = {icon = SYMBOLS.lsp_symbols["Struct"], hl = "TSType"},
+    Event = {icon = SYMBOLS.lsp_symbols["Event"], hl = "TSType"},
+    Operator = {icon = SYMBOLS.lsp_symbols["Operator"], hl = "TSOperator"},
+    TypeParameter = {icon = SYMBOLS.lsp_symbols["TypeParameter"], hl = "TSParameter"}
+  }
+}
+
 vim.cmd([[
   " NERDCommenter
   let g:NERDSpaceDelims = 1

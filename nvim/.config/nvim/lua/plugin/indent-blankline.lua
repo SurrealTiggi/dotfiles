@@ -1,6 +1,6 @@
 return function()
   require('indent_blankline').setup {
-    char = '', -- ┆ ┊ 
+    char = SYMBOLS.misc.indent_line,
     show_foldtext = false,
     show_current_context = true,
     show_current_context_start = true,

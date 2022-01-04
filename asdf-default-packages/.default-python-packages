@@ -27,3 +27,4 @@ pytest >= 6.1.1
 pytest-mock >= 3.3.1
 pytz >= 2020.1
 requests-aws4auth >= 1.0
+yamllint >= 1.26

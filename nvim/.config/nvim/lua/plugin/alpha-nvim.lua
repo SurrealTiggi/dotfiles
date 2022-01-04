@@ -16,8 +16,8 @@ return function ()
 
   local function footer()
     local total_plugins = #vim.tbl_keys(packer_plugins)
-    local datetime = os.date("%d-%m-%Y  %H:%M:%S")
-    return total_plugins .. " plugins  " .. datetime
+    local datetime = os.date("%d-%m-%Y " .. SYMBOLS.misc.plugin .. "%H:%M:%S")
+    return total_plugins .. " plugins " .. SYMBOLS.misc.plugin .. datetime
   end
 
   -- Set header
@@ -35,11 +35,11 @@ return function ()
 
   -- Set menu
   dashboard.section.buttons.val = {
-    button( "e", "  > New file" ,    ":ene <BAR> startinsert <CR>"),
-    button( "f", "  > Find file",    ":Telescope find_files<CR>"),
-    button( "r", "  > Recent Files", ":Telescope oldfiles cwd_only=true<CR>"),
-    button( "s", "  > Settings" ,    ":e $MYVIMRC | :cd %:p:h | split . | wincmd k | pwd<CR>"),
-    button( "q", "  > Quit NVIM",    ":qa<CR>"),
+    button( "e", SYMBOLS.misc.file .. " > New file" ,    ":ene <BAR> startinsert <CR>"),
+    button( "f", SYMBOLS.misc.finder .. " > Find file",    ":Telescope find_files<CR>"),
+    button( "r", SYMBOLS.misc.recent .. " > Recent Files", ":Telescope oldfiles cwd_only=true<CR>"),
+    button( "s", SYMBOLS.misc.settings .. " > Settings" ,    ":e $MYVIMRC | :cd %:p:h | split . | wincmd k | pwd<CR>"),
+    button( "q", SYMBOLS.misc.close .. " > Quit NVIM",    ":qa<CR>"),
   }
 
   dashboard.section.footer.val = footer()

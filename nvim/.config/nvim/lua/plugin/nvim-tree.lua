@@ -23,7 +23,7 @@ return function()
     },
     hijack_cursor = true,
     diagnostics = {
-      enable = true
+      enable = false,
     },
     view = {
       hide_root_folder = true,
@@ -39,7 +39,6 @@ return function()
     },
     filters = {
       dotfiles = false,
-      -- TODO: Move this to a central config
       custom = {
         "\\~$", "bower_components", "node_modules", ".cache", "__pycache__", ".pytest_cache", ".mypy_cache", ".vim",
         ".DS_Store",

@@ -32,8 +32,8 @@ return function()
     -- [[ Main telescope config ]] --
     telescope.setup({
       defaults = {
-        prompt_prefix = "  ",
-        selection_caret = " ",
+        prompt_prefix = SYMBOLS.misc.search .. " ",
+        selection_caret = SYMBOLS.misc.selector .. " ",
         layout_config = {
           height = 0.9,
           width = 0.75,

@@ -1,10 +1,7 @@
 local M = {}
--- TODO: Ensure we're using this module instead of definining icons separately
 -- Extra random icons
--- 
---   \uf52b
+--   \uf5cf
 -- 
--- פּ
 -- ﯟ
 --   \ue624
 --   \ue20f
@@ -12,7 +9,6 @@ local M = {}
 -- 
 -- 
 -- 
--- 
 -- 
 -- 
 -- 
@@ -59,6 +55,16 @@ M.lsp_symbols = {
   Event = "",          -- \uf0e7
   Operator = "ﬦ",       -- \ufb26
   TypeParameter = "",  -- \uf673
+  -- The rest were added for the outline tree
+  Boolean = "",        -- \uf53c
+  Package = "",        -- \uf8d6
+  Namespace = "",      -- \uf5c6
+  String = "",         -- \uf52b
+  Number = "",         -- \uf89f
+  Array = "",          -- \uf669
+  Object = "",         -- \uf6a1
+  Key = "",            -- \uf805
+  Null = "",           -- \uf8dc
 }
 
 -- LSP Diagnostic Signs
@@ -70,11 +76,54 @@ M.diagnostic_signs = {
   Other = " ",
 }
 
+-- Borders
+M.borders = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
+
 -- Misc (until I refactor this)
 -- see https://github.com/CosmicNvim/CosmicNvim/blob/main/lua/cosmic/theme/icons.lua
 M.misc = {
+  nav_tree = "פּ",
+  symbol_tree = "", -- \uf487
+  left = "",
+  right = "",
+  left_separator_light = "",
+  right_separator_light = "",
+  left_separator_heavy = "",
+  right_separator_heavy = "",
+  indicator = "▎",
+  file = "",
+  finder = "",
+  recent = "",
+  settings = "",
+  close = "",
+  close_heavy = "",
+  close_light = "",
+  indent_line = "", -- ┆ ┊ 
+  plugin = " ",
   debug = " ",
-  ghost = "",
+  ghost = " ",
+  github = "",
+  tree = "",
+  lock = "",
+  search = "",
+  selector = ""
+}
+
+M.files = {
+  package_json = "",
+  makefile = "",
+  yaml = "ﬥ",
+  terraform = "",
+  shell = "",
+  python = "",
+  golang = "",
+  html = "",
+  css = "",
+  javascript = "",
+  typescript = "",
+  docker = "",
+  vue = "﵂",
+  toml = ""
 }
 
 return M

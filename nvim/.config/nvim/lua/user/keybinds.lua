@@ -14,7 +14,8 @@ vim.g.maplocalleader = " "
 -- [[ Code Navigation ]] --
 ---------------------------
 keymap("n", "gd",     "<cmd>lua vim.lsp.buf.definition()<CR>", opts)                          -- ✓ Go to definition
-keymap("n", "gpd",    "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", opts) -- ✓ Preview definition
+keymap("n", "gp",     "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", opts) -- ✓ Preview definition
+keymap("n", "gP",     "<cmd>lua require('goto-preview').close_all_win()<CR>", opts)           -- ✓ Close all previews
 keymap("n", "K",      "<cmd>Lspsaga hover_doc<CR>", opts)                                     -- ✓ Hoverdoc
 keymap("n", "grn",    "<cmd>lua require('cosmic-ui').rename()<CR>", opts)                     -- ✓ Rename under cursor
 keymap("n", "<C-j>",  "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)                          -- ✓ Next diagnostic

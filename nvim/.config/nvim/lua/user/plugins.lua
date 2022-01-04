@@ -27,12 +27,9 @@ return packer.startup(
       "kyazdani42/nvim-web-devicons",
       config = require("plugin.nvim-web-devicons"),
     }
-    --  Ensures we run ftplugin/*.lua at the right time
-    -- use { "tjdevries/astronauta.nvim" , commit = "e69d7bdc4183047c4700427922c4a3cc1e3258c6" }
 
     -- [[ Language Support ]] --
     ----------------------------
-    -- TODO: null-ls, nvim-lsp-ts-utils
     -- Built-in LSP
     use { "neovim/nvim-lspconfig" }
     -- Simple LSP installer
@@ -50,6 +47,8 @@ return packer.startup(
     -- Snippets
     use { "L3MON4D3/LuaSnip" }              -- Snippet engine
     use { "rafamadriz/friendly-snippets" }  -- A bunch of snippets to use
+    -- Formatter and linter engine
+    use { "jose-elias-alvarez/null-ls.nvim" }
     -- Treesitter for highlights and AST
     use {
       "nvim-treesitter/nvim-treesitter",
@@ -74,22 +73,19 @@ return packer.startup(
     }
     -- LSPSaga
     -- TODO: Explore config
+    -- TODO: Add which LSP is throwing diagnostic to next/previous window
     use { "tami5/lspsaga.nvim" }
     -- GoToDefinition previewer
-    -- TODO: Explore config
     use {
       "rmagatti/goto-preview",
       config = function()
-        require("goto-preview").setup({})
+        require("goto-preview").setup {}
       end
     }
     -- Symbol outline tree
-    -- TODO: Explore config
-    use {
-      "simrat39/symbols-outline.nvim"
-    }
-    -- Formatter and linter engine
-    use { "jose-elias-alvarez/null-ls.nvim" }
+    use { "simrat39/symbols-outline.nvim" }
+    -- TS/JS LSP improvements
+    use { "jose-elias-alvarez/nvim-lsp-ts-utils" }
 
     -- Nicer code actions w/diff
     -- FIXME: No diff, wait for https://github.com/weilbith/nvim-code-action-menu/issues/35
@@ -119,7 +115,10 @@ return packer.startup(
     -- Autopairs
     use {
       "windwp/nvim-autopairs",
-      config = require("plugin.autopairs")
+      config = function ()
+        require("nvim-autopairs").setup {}
+      end
+      -- config = require("plugin.autopairs")
     }
 
     -- [[ Functional Aesthetics ]] --

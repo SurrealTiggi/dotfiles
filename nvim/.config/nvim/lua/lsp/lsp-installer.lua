@@ -6,7 +6,7 @@ if not status_ok then
 end
 
 -- Register a handler that will be called for all installed servers.
--- Can also be used to set options for specific language servers
+-- Can also be used to set options and overrides for specific language servers
 lsp_installer.on_server_ready(function(server)
 	local opts = {
 		on_attach = require("lsp.handlers").on_attach,
@@ -17,6 +17,14 @@ lsp_installer.on_server_ready(function(server)
   if server.name == "pyright" then
     local pyright_opts = require("lsp.settings.pyright")
     opts = vim.tbl_deep_extend("force", pyright_opts, opts)
+  end
+
+  -- JS/TS (using nvim-lsp-ts-utils for a better experience)
+  -- @SurrealTiggi note that we override `on_attach` via the "keep" keyword
+  -- see h: vim.tbl_deep_extend
+  if server.name == "tsserver" then
+    local tsserver_opts = require("lsp.settings.tsserver")
+    opts = vim.tbl_deep_extend("keep", tsserver_opts, opts)
   end
 
   -- JSON

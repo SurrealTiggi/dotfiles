@@ -4,6 +4,7 @@ htmlhint
 markdownlint
 neovim
 prettier
+standard
 stylelint
 ts-node
 typescript

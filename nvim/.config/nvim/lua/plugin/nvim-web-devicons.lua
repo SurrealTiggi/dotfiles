@@ -11,102 +11,102 @@ return function()
     require "nvim-web-devicons".setup {
       override = {
         ["package.json"] = {
-          icon = "",
+          icon = SYMBOLS.files.package_json,
           color = colors.green,
           name = "PackageJson"
         },
         ["Makefile"] = {
-          icon = "",
+          icon = SYMBOLS.files.makefile,
           color = colors.peach,
           name = "Makefile"
         },
         ["CODEOWNERS"] = {
-          icon = "",
+          icon = SYMBOLS.misc.github,
           color = colors.darker_black,
           name = "CODEOWNERS"
         },
         [".env"] = {
-          icon = "",
+          icon = SYMBOLS.misc.tree,
           color = colors.vibrant_green,
           name = "env"
         },
         yaml = {
-          icon = "ﬥ",
+          icon = SYMBOLS.files.yaml,
           color = colors.yellow,
           name = "yaml"
         },
         yml = {
-          icon = "ﬥ",
+          icon = SYMBOLS.files.yaml,
           color = colors.yellow,
           name = "yml"
         },
         tf = {
-          icon = "",
+          icon = SYMBOLS.files.terraform,
           color = colors.dark_purple,
           name = "tf"
         },
         hcl = {
-          icon = "",
+          icon = SYMBOLS.files.terraform,
           color = colors.dark_purple,
           name = "hcl"
         },
         sh = {
-          icon = "",
+          icon = SYMBOLS.files.shell,
           color = colors.green,
           name = "sh"
         },
         [".gitignore"] = {
-          icon = "",
+          icon = SYMBOLS.git_symbols.git["unmerged"],
           color = colors.vibrant_green,
           name = "GitIgnore"
         };
         py = {
-          icon = "",
+          icon = SYMBOLS.files.python,
           color = colors.orange,
           name = "py"
         },
         ["go.mod"] = {
-          icon = "",
+          icon = SYMBOLS.files.golang,
           color = colors.teal,
           name = "GoMod"
         },
         html = {
-          icon = "",
+          icon = SYMBOLS.files.html,
           color = colors.orange,
           name = "html"
         },
         css = {
-          icon = "",
+          icon = SYMBOLS.files.css,
           color = colors.blue,
           name = "css"
         },
         js = {
-          icon = "",
+          icon = SYMBOLS.files.javascript,
           color = colors.sun,
           name = "js"
         },
         ts = {
-          icon = "",
+          icon = SYMBOLS.files.typescript,
           color = colors.teal,
           name = "ts"
         },
         Dockerfile = {
-          icon = "",
+          icon = SYMBOLS.files.docker,
           color = colors.cyan,
           name = "Dockerfile"
         },
         vue = {
-          icon = "﵂",
+          icon = SYMBOLS.files.vue,
           color = colors.vibrant_green,
           name = "vue"
         },
         toml = {
-          icon = "",
+          icon = SYMBOLS.files.toml,
           color = colors.blue,
           name = "toml"
         },
         lock = {
-          icon = "",
+          icon = SYMBOLS.misc.lock,
           color = colors.peach,
           name = "lock"
         }
