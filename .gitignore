@@ -1,0 +1,8 @@
+# Neovim
+nvim/plugged*
+nvim/autoload
+
+# Env
+.env.*
+
+.ctagsrc

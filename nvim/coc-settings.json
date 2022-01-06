@@ -10,10 +10,12 @@
   "suggest.floatEnable": true,
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
   "css.validate": false,
+  "go.goplsArgs": ["-remote", "auto"],
+  "go.goplsPath": "/Users/tbaptista/go/bin/gopls",
   "suggest.completionItemKindLabels": {
     "keyword": "\uf805",
     "constructor": "\ue20f",
-    "variable": "\ufc5f",
+    "variable": " ",
     "value": "\uf89f",
     "operator": "\uf694",
     "function": "\uf794",
@@ -34,7 +36,7 @@
     "event": "\uf0e7",
     "file": "\uf723",
     "folder": "\uf114",
-    "snippet": "\uf674",
+    "snippet": "",
     "typeParameter": "\uf783",
     "default": "\uf29c"
   },

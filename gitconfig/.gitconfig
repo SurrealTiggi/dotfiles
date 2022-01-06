@@ -1,0 +1,67 @@
+[user]
+  name = Tiago Baptista
+
+[core]
+  editor = nvim
+	excludesFile = ~/.gitignore_global
+  pager = delta
+
+[push]
+  default = current
+
+[pull]
+  rebase = true
+
+[rebase]
+  autoStash = true
+
+[init]
+  defaultBranch = main
+
+# https://git-scm.com/docs/pretty-formats#Documentation/pretty-formats.txt-emGem for signature status
+[alias]
+  lg = log --graph --abbrev-commit --date=iso8601 --pretty=log-default
+  lgs = log --graph --abbrev-commit --date=relative --pretty=single-line
+
+[pretty]
+  single-line = format:%C(yellow)%h%Creset -%C(green)%d%Creset %s %C(241)-- %an (%G?)-- %Creset%C(cyan)(%cr)%Creset
+  log-default = format:%C(auto)%h%C(reset) %C(blue)%ad%C(reset) %C(cyan)(%ar)%C(reset)%C(auto)%d%C(reset)%n %C(yellow)●%C(reset) %s %C(241)%aN (%G?)<%aE>%C(reset)%n%w(0,7,7)%+(trailers:only,unfold)
+
+[diff]
+  algorithm = histogram
+  tool = nvimdiff
+  renames = copies
+  submodule = log
+
+[difftool "nvimdiff"]
+  cmd = nvim -d $LOCAL $REMOTE
+  trustexitcode = true
+
+[merge]
+  tool = nvimmerge
+  keepBackup = false
+  log = true
+
+[mergetool "nvimmerge"]
+  cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c '$wincmd J'
+
+[delta]
+  line-numbers = true
+  syntax-theme = gruvbox-dark
+  side-by-side = false
+
+  file-modified-label = modified:
+
+[interactive]
+  diffFilter = delta --color-only
+
+[merge "ours"]
+  driver = true
+
+[includeIf "gitdir:~/git/work/"]
+path = ~/.gitconfig_work
+[includeIf "gitdir:~/git/personal/"]
+path = ~/.gitconfig_priv
+[includeIf "gitdir:~/git/dirtypillows/"]
+path = ~/.gitconfig_dp
+

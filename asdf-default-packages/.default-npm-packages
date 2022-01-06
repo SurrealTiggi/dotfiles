@@ -1,0 +1,12 @@
+@types/node
+eslint
+htmlhint
+markdownlint
+neovim
+prettier
+standard
+stylelint
+ts-node
+typescript
+write-good
+yarn
