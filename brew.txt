@@ -23,6 +23,7 @@ fzy
 git-delta
 git-quick-stats
 gitui
+golangci-lint
 google-cloud-sdk
 gotop
 gpg-suite

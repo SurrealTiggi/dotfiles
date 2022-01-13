@@ -18,43 +18,43 @@ local code_actions = null_ls.builtins.code_actions
 -- [[ Setup ]] --
 -----------------
 null_ls.setup({
-  -- Attach to active LSP and run auto-format on save
-  on_attach = function(client)
-    if client.resolved_capabilities.document_formatting then
-      vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
-    end
-  end,
-
+	-- Attach to active LSP and run auto-format on save
+	on_attach = function(client)
+		if client.resolved_capabilities.document_formatting then
+			vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
+		end
+	end,
 	debug = false,
 	sources = {
-    -- Formatters
-    formatting.trim_newlines,
-    formatting.trim_whitespace,
-    formatting.prettier,
-    -- formatting.prettier.with({
-      -- prefer_local = "node_modules/.bin",
-      -- command = "prettier-standard",
-      -- extra_args = { "--format" }
-    -- }),
-    formatting.isort,
-    formatting.black,
-    formatting.gofumpt,
-    formatting.stylua,
-    formatting.shfmt,
+		-- Formatters
+		formatting.trim_newlines,
+		formatting.trim_whitespace,
+		formatting.prettier,
+		-- formatting.prettier.with({
+		-- prefer_local = "node_modules/.bin",
+		-- command = "prettier-standard",
+		-- extra_args = { "--format" }
+		-- }),
+		formatting.isort,
+		formatting.black,
+		formatting.gofumpt,
+		formatting.stylua,
+		formatting.shfmt,
+		formatting.terraform_fmt,
 
-    -- Diagnostics
-    diagnostics.flake8.with({ extra_args = {"--max-line-length", "88"} }),
-    diagnostics.staticcheck,
-    diagnostics.golangci_lint,
-    diagnostics.eslint,
-    diagnostics.standardjs,
-    diagnostics.mdl,
-    diagnostics.write_good,
-    diagnostics.stylelint,
-    diagnostics.shellcheck,
-    diagnostics.yamllint,
+		-- Diagnostics
+		diagnostics.flake8.with({ extra_args = { "--max-line-length", "88" } }),
+		-- diagnostics.staticcheck,
+		diagnostics.golangci_lint,
+		diagnostics.eslint,
+		diagnostics.standardjs,
+		diagnostics.mdl,
+		diagnostics.write_good,
+		diagnostics.stylelint,
+		diagnostics.shellcheck,
+		diagnostics.yamllint.with({ extra_args = { "-d", "relaxed" } }),
 
-    -- Code Actions
-    -- TODO: Could add git + refactoring.nvim
+		-- Code Actions
+		-- TODO: Could add git + refactoring.nvim
 	},
 })

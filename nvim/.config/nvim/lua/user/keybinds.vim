@@ -2,6 +2,9 @@
 """ Simple bindings
 """" Make Y behave
 noremap Y y$
+"""" Maintain cursor position with visual yank
+vnoremap y myy`y
+vnoremap Y myY`y
 """" Always paste from the first register, because I'm lazy
 nnoremap p "0p
 vnoremap p "0p
@@ -61,7 +64,8 @@ nnoremap <leader>gg <cmd>lua _gitui_toggle()<CR>
 """" Telescope
 " Ctrl+T to checkout + track remote
 nnoremap <leader>gco :Telescope git_branches<CR>
-" TODO: want to pass --name-only to git_commits
+" TODO: want to pass --name-only to git_commits see https://github.com/LinArcX/telescope-env.nvim
+" TODO: Or try https://github.com/sindrets/diffview.nvim as replacement for this and <leader>gdf
 nnoremap <leader>gvf :Telescope git_bcommits<CR>
 nnoremap <leader>gv :Telescope git_commits<CR>
 """" Window navigation, normalizing t(tab), s(vsplit), i(hsplit)
