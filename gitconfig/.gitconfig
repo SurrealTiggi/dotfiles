@@ -56,7 +56,7 @@
   diffFilter = delta --color-only
 
 [merge "ours"]
-  driver = true
+	driver = true
 
 [includeIf "gitdir:~/git/work/"]
 path = ~/.gitconfig_work
@@ -64,4 +64,3 @@ path = ~/.gitconfig_work
 path = ~/.gitconfig_priv
 [includeIf "gitdir:~/git/dirtypillows/"]
 path = ~/.gitconfig_dp
-

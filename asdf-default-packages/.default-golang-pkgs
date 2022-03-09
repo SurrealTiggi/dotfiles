@@ -1,0 +1,9 @@
+github.com/cespare/reflex                      // For hot-reload
+github.com/fzipp/gocyclo/cmd/gocyclo           // Calculates cyclomatic complexities
+github.com/go-critic/go-critic/cmd/gocritic    // Even more static analysis
+github.com/rhysd/actionlint/cmd/actionlint     // Github Action workflow linter
+github.com/spf13/cobra/cobra                   // For generating cli based apps
+golang.org/x/tools/cmd/goimports               // Import linter
+honnef.co/go/tools/cmd/staticcheck             // Code static analysis
+mvdan.cc/gofumpt                               // A better formatter
+mvdan.cc/sh/v3/cmd/shfmt                       // Bash formatter

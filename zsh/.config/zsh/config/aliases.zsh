@@ -6,8 +6,8 @@ alias dots="cd $MY_GIT/personal/public/dotfiles"
 alias map="cat $HOME/vgs.aws.md"
 # alias ruby="$HOME/.rbenv/shims/ruby"
 # alias gem="$HOME/.rbenv/shims/gem"
-alias ll='colorls --sd'
 alias ls='colorls --sd -1'
+alias ll='n -Hde'
 alias tree='colorls --tree'
 alias cat='bat'
 
@@ -16,10 +16,11 @@ alias k='kubecolor'
 alias kcx='kubectx'
 alias kns='kubens'
 alias kvu="k view-utilization -h"
-alias kdebug='k run --generator=run-pod/v1 -it tiago-debug --rm --image=surrealtiggi/kube-helper --image-pull-policy=Always /bin/sh'
+alias kdebug='k run -i --tty --rm tiago-debug --image=surrealtiggi/kube-helper --image-pull-policy=Always -- /bin/sh'
+alias kneat="kubectl neat | vim -c 'set ft=yaml' -"
 
 ## JQ
-alias jqs='jiq' # jq compatible shell (github.com/fiatjaf/jiq)
+alias jqs='jless' # A nicer terminal json viewer https://github.com/PaulJuliusMartinez/jless
 alias jqi='fx' # interactive JSON shell viewer (github.com/antonmedv/fx)
 
 ## Vim

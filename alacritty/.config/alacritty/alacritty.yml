@@ -1,11 +1,11 @@
 # shell:
-  # program: /usr/local/bin/tmux
-  # args:
-  #   - new-session
-  #   - -A
-  #   - -D
-  #   - -s
-  #   - scratch
+# program: /bin/zsh
+# args:
+#   - new-session
+#   - -A
+#   - -D
+#   - -s
+#   - scratch
 
 window:
   dynamic_title: true
@@ -16,8 +16,8 @@ window:
   opacity: 0.9
 
   # position:
-    # x: 0
-    # y: 0
+  # x: 0
+  # y: 0
 
   startup_mode: Windowed
 
@@ -68,98 +68,97 @@ cursor:
 # Nord #
 ########
 # colors:
-  # primary:
-    # background: '#2e3440'
-    # foreground: '#d8dee9'
-    # dim_foreground: '#a5abb6'
-  # cursor:
-    # text: '#2e3440'
-    # cursor: '#d8dee9'
-  # vi_mode_cursor:
-    # text: '#2e3440'
-    # cursor: '#d8dee9'
-  # selection:
-    # text: CellForeground
-    # background: '#4c566a'
-  # search:
-    # matches:
-      # foreground: CellBackground
-      # background: '#88c0d0'
-    # bar:
-      # background: '#434c5e'
-      # foreground: '#d8dee9'
-  # normal:
-    # black: '#3b4252'
-    # red: '#bf616a'
-    # green: '#a3be8c'
-    # yellow: '#ebcb8b'
-    # blue: '#81a1c1'
-    # magenta: '#b48ead'
-    # cyan: '#88c0d0'
-    # white: '#e5e9f0'
-  # bright:
-    # black: '#4c566a'
-    # red: '#bf616a'
-    # green: '#a3be8c'
-    # yellow: '#ebcb8b'
-    # blue: '#81a1c1'
-    # magenta: '#b48ead'
-    # cyan: '#8fbcbb'
-    # white: '#eceff4'
-  # dim:
-    # black: '#373e4d'
-    # red: '#94545d'
-    # green: '#809575'
-    # yellow: '#b29e75'
-    # blue: '#68809a'
-    # magenta: '#8c738c'
-    # cyan: '#6d96a5'
-    # white: '#aeb3bb'
+# primary:
+# background: '#2e3440'
+# foreground: '#d8dee9'
+# dim_foreground: '#a5abb6'
+# cursor:
+# text: '#2e3440'
+# cursor: '#d8dee9'
+# vi_mode_cursor:
+# text: '#2e3440'
+# cursor: '#d8dee9'
+# selection:
+# text: CellForeground
+# background: '#4c566a'
+# search:
+# matches:
+# foreground: CellBackground
+# background: '#88c0d0'
+# bar:
+# background: '#434c5e'
+# foreground: '#d8dee9'
+# normal:
+# black: '#3b4252'
+# red: '#bf616a'
+# green: '#a3be8c'
+# yellow: '#ebcb8b'
+# blue: '#81a1c1'
+# magenta: '#b48ead'
+# cyan: '#88c0d0'
+# white: '#e5e9f0'
+# bright:
+# black: '#4c566a'
+# red: '#bf616a'
+# green: '#a3be8c'
+# yellow: '#ebcb8b'
+# blue: '#81a1c1'
+# magenta: '#b48ead'
+# cyan: '#8fbcbb'
+# white: '#eceff4'
+# dim:
+# black: '#373e4d'
+# red: '#94545d'
+# green: '#809575'
+# yellow: '#b29e75'
+# blue: '#68809a'
+# magenta: '#8c738c'
+# cyan: '#6d96a5'
+# white: '#aeb3bb'
 
 # OneDark #
 ###########
 colors:
   primary:
-    background: '#1e222a'
-    foreground: '#d8dee9'
+    background: "#1e222a"
+    foreground: "#d8dee9"
 
   normal:
-    black: '#5c6370'
-    red: '#be5046'
-    green: '#98c379'
+    black: "#5c6370"
+    red: "#be5046"
+    green: "#98c379"
     orange: "#d19a66"
-    yellow: '#e5c07b'
-    blue: '#61afef'
-    magenta: '#c678dd'
-    cyan: '#56b6c2'
-    white: '#d8dee9'
+    yellow: "#e5c07b"
+    blue: "#61afef"
+    magenta: "#c678dd"
+    cyan: "#56b6c2"
+    white: "#d8dee9"
 
   bright:
-    black: '#4b5263'
-    red: '#e06c75'
-    green: '#98c379'
+    black: "#4b5263"
+    red: "#e06c75"
+    green: "#98c379"
     orange: "#d19a66"
-    yellow: '#e5c07b'
-    blue: '#61afef'
-    magenta: '#c678dd'
-    cyan: '#56b6c2'
-    white: '#d8dee9'
-
+    yellow: "#e5c07b"
+    blue: "#61afef"
+    magenta: "#c678dd"
+    cyan: "#56b6c2"
+    white: "#d8dee9"
 
 # For reference https://www.eso.org/~ndelmott/ascii.html
 key_bindings:
-  - { key: Slash,   mods: Control,  chars: "\x1f" }        # ^_
-  - { key: R,       mods: Control,  chars: "\x12" }        # ^R
+  - { key: Slash, mods: Control, chars: "\x1f" } # ^_
+  - { key: R, mods: Control, chars: "\x12" } # ^R
   # - { key: W,       mods: Control,  chars: "\x17" }        # ^W
-  - { key: Period,  mods: Alt,      chars: "\x1b\x2e" }    # ^[.
-  - { key: Left,    mods: Alt,      chars: "\x1b\x62" }    # ^[b
-  - { key: Right,   mods: Alt,      chars: "\x1b\x66" }    # ^[f
-  - { key: V,       mods: Control,  action: Paste }
-  - { key: N,       mods: Command,  action: CreateNewWindow }
-  - { key: Home,    chars: "\x1bOH",   mode: AppCursor   }
-  - { key: Home,    chars: "\x1b[H",   mode: ~AppCursor  }
-  - { key: End,     chars: "\x1bOF",   mode: AppCursor   }
-  - { key: End,     chars: "\x1b[F",   mode: ~AppCursor  }
-  - { key: Back,    chars: "\x7f"}
+  - { key: Period, mods: Alt, chars: "\x1b\x2e" } # ^[.
+  - { key: Left, mods: Alt, chars: "\x1b\x62" } # ^[b
+  - { key: Right, mods: Alt, chars: "\x1b\x66" } # ^[f
+  - { key: V, mods: Control, action: Paste }
+  - { key: N, mods: Command, action: CreateNewWindow }
+  - { key: Home, chars: "\x1bOH", mode: AppCursor }
+  - { key: Home, chars: "\x1b[H", mode: ~AppCursor }
+  - { key: End, chars: "\x1bOF", mode: AppCursor }
+  - { key: End, chars: "\x1b[F", mode: ~AppCursor }
+  - { key: Back, chars: "\x7f" }
   # - { key: Home,     mods: Shift, action: ScrollToTop,    mode: ~Alt       }
   # - { key: End,      mods: Shift, action: ScrollToBottom, mode: ~Alt       }

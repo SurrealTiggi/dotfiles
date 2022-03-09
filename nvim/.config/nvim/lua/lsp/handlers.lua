@@ -30,15 +30,15 @@ end
 
 -- Setup basic keybinds
 -- @SurrealTiggi moved to user.keybinds
-local function lsp_keymaps(bufnr)
-	-- Quick function to keep things more readable
-	local function buf_set_keymap(...)
-		vim.api.nvim_buf_set_keymap(bufnr, ...)
-	end
+-- local function lsp_keymaps(bufnr)
+-- -- Quick function to keep things more readable
+-- local function buf_set_keymap(...)
+-- vim.api.nvim_buf_set_keymap(bufnr, ...)
+-- end
 
-	-- General keybind options
-	local opts = { noremap = true, silent = true }
-end
+-- -- General keybind options
+-- local opts = { noremap = true, silent = true }
+-- end
 
 -- Bring in default LSP capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -90,6 +90,11 @@ M.on_attach = function(client, bufnr)
 
 	-- [Terraform] Remove LSP formatting so null-ls controls it
 	if client.name == "terraformls" then
+		client.resolved_capabilities.document_formatting = false
+	end
+
+	-- [JSON] Remove LSP formatting since we'll use null-ls
+	if client.name == "jsonls" then
 		client.resolved_capabilities.document_formatting = false
 	end
 

@@ -1,4 +1,7 @@
 ## General exports
+# Editor
+export EDITOR="nvim"
+
 # Tmux
 [[ -n $TMUX ]] || export TERM="xterm-256color"
 
@@ -32,6 +35,9 @@ export FZF_DEFAULT_OPTS="--no-mouse --height 30% -1 --reverse --multi --inline-i
 
 # Sensitive vars
 [ -f $ZSH_CONFIG/.env.secret ] && source $ZSH_CONFIG/.env.secret
+
+# Github CLI
+export GH_PAGER=""  # Disables pager
 
 ## Path stuff
 # Putting aws v2 first to override pyenv shim

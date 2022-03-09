@@ -17,13 +17,12 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 ## Plugins
-# NOTE: Disabling kubectl since we load completion already, and it just adds some aliases https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
 plugins=(
   git
   aws
   asdf
   gcloud
-  # kubectl
+  kubectl
 )
 
 ## Oh-my-zsh

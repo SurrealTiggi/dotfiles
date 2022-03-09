@@ -7,6 +7,7 @@ end
 
 -- [[ Local configs ]] --
 -------------------------
+-- TODO: Register a custom source to format terragrunt files
 -- TODO: Add local configs for plugins that need more TLC
 -- eg. https://github.com/vuki656/nvim-config/blob/117bc9a21e23fb8f217f761dfb5b9fb8362dcaa7/lua/plugins/formatter-linter/init.lua
 
@@ -29,7 +30,9 @@ null_ls.setup({
 		-- Formatters
 		formatting.trim_newlines,
 		formatting.trim_whitespace,
-		formatting.prettier,
+		formatting.prettier.with({
+			disabled_filetypes = { "yaml" },
+		}),
 		-- formatting.prettier.with({
 		-- prefer_local = "node_modules/.bin",
 		-- command = "prettier-standard",
@@ -38,6 +41,7 @@ null_ls.setup({
 		formatting.isort,
 		formatting.black,
 		formatting.gofumpt,
+		formatting.goimports,
 		formatting.stylua,
 		formatting.shfmt,
 		formatting.terraform_fmt,
@@ -48,7 +52,8 @@ null_ls.setup({
 		diagnostics.golangci_lint,
 		diagnostics.eslint,
 		diagnostics.standardjs,
-		diagnostics.mdl,
+		-- TODO: Tweak config for markdownlint as defaults are super noisy
+		-- diagnostics.mdl,
 		diagnostics.write_good,
 		diagnostics.stylelint,
 		diagnostics.shellcheck,

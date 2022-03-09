@@ -1,6 +1,7 @@
 --HEAD neovim
 --HEAD universal-ctags/universal-ctags/universal-ctags
 --cask amethyst
+--cask cron
 --cask font-fira-code-nerd-font
 --cask font-fira-mono-nerd-font
 --cask font-iosevka-nerd-font
@@ -14,12 +15,15 @@ asdf
 aws-sam-cli
 bat
 brew-gem
+derailed/k9s/k9s
 docutils
 dty1er/tap/kubecolor
 fd
+fluxcd/tap/flux
 fx
 fzf
 fzy
+gh
 git-delta
 git-quick-stats
 gitui
@@ -35,13 +39,14 @@ iftop
 infracost
 ipcalc
 iproute2mac
-jawshooah/pyenv/pyenv-default-packages
-jesseduffield/lazydocker/lazydocker
-jid
+itchyny/tap/mmv
+jless
 jq
 kube-ns
 kubectl
 kubectx
+kustomize
+lazydocker
 mtr
 neofetch
 ngrok
@@ -55,9 +60,11 @@ rust
 shellcheck
 speedtest-cli
 stow
+teleport
+terraform-docs
 terragrunt
-the_silver_searcher
 tfenv
+the_silver_searcher
 tidy-html5
 tmux
 trashhalo/homebrew-brews/imgcat

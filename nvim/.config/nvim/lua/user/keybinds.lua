@@ -22,6 +22,7 @@ keymap("n", "<C-j>",  "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)            
 keymap("n", "<C-k>",  "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)                          -- ✓ Previous diagnostic
 keymap("n", "gr",     "<cmd>Lspsaga lsp_finder<CR>", opts)                                    -- ✓ Get references
 keymap("n", "gl",     "<cmd>TroubleToggle workspace_diagnostics<CR>", opts)                   -- ✓ Get workspace diagnostics
+-- TODO: Show lightbulb in gutter when a code-action is available
 keymap("n", "ga",     "<cmd>Lspsaga code_action<CR>", opts)                                   -- ✓ Code actions
 keymap("n", "gs",     "<cmd>SymbolsOutline<CR>", opts)                                        -- ✓ Get document symbols
 

@@ -82,9 +82,13 @@ return packer.startup(function()
 		end,
 	})
 	-- Symbol outline tree
-	use({ "simrat39/symbols-outline.nvim" })
+	-- @SurrealTiggi need to use external fork due to https://github.com/simrat39/symbols-outline.nvim/issues/98
+	-- use({ "simrat39/symbols-outline.nvim" })
+	use({ "zeertzjq/symbols-outline.nvim", branch = "patch-1" })
 	-- TS/JS LSP improvements
 	use({ "jose-elias-alvarez/nvim-lsp-ts-utils" })
+	-- Mustache/Handlebars
+	use({ "mustache/vim-mustache-handlebars" })
 
 	-- Nicer code actions w/diff
 	-- FIXME: No diff, wait for https://github.com/weilbith/nvim-code-action-menu/issues/35
