@@ -70,7 +70,7 @@ return function()
 			},
 			mappings = {
 				i = {
-					["<cr>"] = actions.select_default + actions.center,
+					-- ["<Right>"] = actions.select_default,
 					-- Disable default vertical/horizontal selectors
 					-- ["<C-X>"] = false,
 					["<C-V>"] = false,

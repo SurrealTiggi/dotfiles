@@ -23,6 +23,7 @@ plugins=(
   asdf
   gcloud
   kubectl
+  poetry
 )
 
 ## Oh-my-zsh

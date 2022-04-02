@@ -3,7 +3,7 @@ return function()
 	local tree_cb = require("nvim-tree.config").nvim_tree_callback
 
 	g.nvim_tree_indent_markers = 1
-	g.nvim_tree_quit_on_open = 1
+	-- g.nvim_tree_quit_on_open = 1
 	g.nvim_tree_width_allow_resize = 1
 
 	g.nvim_tree_show_icons = {
@@ -20,6 +20,11 @@ return function()
 	require("nvim-tree").setup({
 		git = {
 			ignore = true, -- Hide any files specified in .gitignore
+		},
+		actions = {
+			open_file = {
+				quit_on_open = true,
+			},
 		},
 		hijack_cursor = true,
 		diagnostics = {

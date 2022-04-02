@@ -51,7 +51,6 @@ mtr
 neofetch
 ngrok
 nmap
-nnn
 pre-commit
 pstree
 rbenv

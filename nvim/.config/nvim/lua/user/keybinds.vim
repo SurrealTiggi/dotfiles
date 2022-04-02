@@ -18,7 +18,7 @@ vnoremap > >gv
 """" Quick hack in case you forgot to sudo
 cnoremap w!! execute 'silent! write !sudo tee % > /dev/null' <bar> edit!
 """" Telescope
-nmap <silent> fb :Telescope file_browser<CR>
+nmap <silent> ll :Telescope file_browser<CR>
 nmap <silent> ff :Telescope current_buffer_fuzzy_find<CR>
 """" Use visual K|J to move a single line up|down
 vnoremap <silent>K :m '<-2<CR>gv=gv
@@ -33,9 +33,8 @@ nnoremap <silent><Esc>f :vertical resize +2<CR>
 nnoremap <silent><c-z> <Cmd>exe v:count . "ToggleTerm"<CR>
 tnoremap <silent><c-z> <Esc><Cmd>exe v:count . "ToggleTerm"<CR>
 """" NvimTree
-" NOTE: disabling our own since a refresh is causing duplicates to show up
-" nnoremap <silent> <C-n> :call NvimTreeToggleAndRefresh()<CR>
-nnoremap <silent> <C-n> :NvimTreeToggle<CR>
+nnoremap <silent> <C-n> :call NvimTreeToggleAndRefresh()<CR>
+" nnoremap <silent> <C-n> :NvimTreeToggle<CR>
 
 """" NERDCommenter
 nmap <C-_> <leader>c<Space>
@@ -63,6 +62,9 @@ nnoremap <silent><leader>gd :Gitsigns preview_hunk<CR>
 " nnoremap <silent><leader>gdf :Gitsigns diffthis<CR>
 """" gitui
 nnoremap <leader>gg <cmd>lua _gitui_toggle()<CR>
+"""" b64.nvim
+vnoremap <silent> <leader>be :<c-u>lua require("b64").encode()<CR>
+vnoremap <silent> <leader>bd :<c-u>lua require("b64").decode()<CR>
 """" Telescope
 " Ctrl+T to checkout + track remote
 nnoremap <leader>gco :Telescope git_branches<CR>

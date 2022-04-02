@@ -1,8 +1,8 @@
-## Aliases
-# Dots
+# Aliases
+## Dots
 alias dots="cd $MY_GIT/personal/public/dotfiles"
 
-# Handy map
+## Handy map
 alias map="cat $HOME/vgs.aws.md"
 # alias ruby="$HOME/.rbenv/shims/ruby"
 # alias gem="$HOME/.rbenv/shims/gem"
