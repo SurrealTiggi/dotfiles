@@ -1,8 +1,6 @@
 return function()
 	local g = vim.g
-	local tree_cb = require("nvim-tree.config").nvim_tree_callback
 
-	g.nvim_tree_indent_markers = 1
 	-- g.nvim_tree_quit_on_open = 1
 	g.nvim_tree_width_allow_resize = 1
 
@@ -36,10 +34,17 @@ return function()
 			auto_resize = true,
 			mappings = {
 				list = {
-					{ key = "<C-s>", cb = tree_cb("vsplit") },
-					{ key = "<C-i>", cb = tree_cb("split") },
-					{ key = "<C-t>", cb = tree_cb("tabnew") },
+					{ key = "<C-s>", action = "vsplit" },
+					{ key = "<C-i>", action = "split" },
+					{ key = "<C-t>", action = "tabnew" },
+					{ key = "I", action = "toggle_git_ignored" },
+					{ key = "H", action = "toggle_dotfiles" },
 				},
+			},
+		},
+		renderer = {
+			indent_markers = {
+				enable = true,
 			},
 		},
 		filters = {
@@ -52,13 +57,12 @@ return function()
 				"__pycache__",
 				".pytest_cache",
 				".mypy_cache",
-				".vim",
+				"^.vim$",
 				".DS_Store",
 				".terragrunt-cache",
-				".git",
+				".git$",
 				".aws-sam",
 				"dist",
-				".terraform",
 				"resources$[[dir]]",
 				"go.sum",
 				"build$[[dir]]",
@@ -66,6 +70,9 @@ return function()
 				"yarn.lock",
 				".nuxt$[[dir]]",
 				".next$[[dir]]",
+			},
+			exclude = {
+				"nvim",
 			},
 		},
 	})

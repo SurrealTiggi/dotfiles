@@ -19,7 +19,8 @@ vnoremap > >gv
 cnoremap w!! execute 'silent! write !sudo tee % > /dev/null' <bar> edit!
 """" Telescope
 nmap <silent> ll :Telescope file_browser<CR>
-nmap <silent> ff :Telescope current_buffer_fuzzy_find<CR>
+" nmap <silent> ff :Telescope current_buffer_fuzzy_find<CR>
+nmap <silent> ff :lua require("user.functions").curr_buf()<CR>
 """" Use visual K|J to move a single line up|down
 vnoremap <silent>K :m '<-2<CR>gv=gv
 vnoremap <silent>J :m '>+1<CR>gv=gv

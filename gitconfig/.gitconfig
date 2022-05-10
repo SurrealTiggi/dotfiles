@@ -58,7 +58,12 @@
 [merge "ours"]
 	driver = true
 
+[tag]
+	sort = version:refname
+
 [includeIf "gitdir:~/git/work/"]
+path = ~/.gitconfig_work
+[includeIf "gitdir:~/ghq/github.com/conduktor/"]
 path = ~/.gitconfig_work
 [includeIf "gitdir:~/git/personal/"]
 path = ~/.gitconfig_priv

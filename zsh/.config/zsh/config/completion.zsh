@@ -18,6 +18,9 @@ source <(flux completion zsh)
 # Helm
 source <(helm completion zsh)
 
+# Kind
+source <(kind completion zsh)
+
 # Kustomize
 source <(kustomize completion zsh)
 compdef _kustomize kustomize
@@ -31,3 +34,6 @@ if [ ! -f $ZSH_CUSTOM/plugins/poetry/_poetry ] && command -v poetry >/dev/null; 
   mkdir -p $ZSH_CUSTOM/plugins/poetry/
   poetry completions zsh > $ZSH_CUSTOM/plugins/poetry/_poetry
 fi
+
+# Vault
+complete -o nospace -C /opt/homebrew/bin/vault vault

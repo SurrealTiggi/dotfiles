@@ -30,7 +30,7 @@ export GPG_TTY=$TTY
 export KUBE_EDITOR=nvim
 
 ## FZF | Ctrl+T
-export FZF_DEFAULT_COMMAND="rg --follow --no-ignore-vcs --hidden -g '!{**/node_modules/*,.git/*,go.sum,package-lock.json}'"
+export FZF_DEFAULT_COMMAND="rg --follow --no-ignore-vcs --hidden -g '!{**/node_modules/*,.git/*,go.sum,package-lock.json,**/.terraform/*}'"
 export FZF_DEFAULT_OPTS="--no-mouse --height 30% -1 --reverse --multi --inline-info"
 
 ## Sensitive vars
@@ -39,9 +39,12 @@ export FZF_DEFAULT_OPTS="--no-mouse --height 30% -1 --reverse --multi --inline-i
 ## Github CLI
 export GH_PAGER=""  # Disables pager
 
+## Bat
+export BAT_THEME=Nord
+
 ## NNN
-# export NNN_FIFO=/tmp/nnn.fifo
-# export NNN_PLUG='d:diffs;p:preview-tui'
+export NNN_FIFO=/tmp/nnn.fifo
+export NNN_PLUG='d:diffs;p:preview-tui'
 # export NNN_FCOLORS='0000E6310000000000000000'
 
 # Path stuff

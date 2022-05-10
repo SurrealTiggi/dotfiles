@@ -1,0 +1,4 @@
+#!/bin/sh
+# Credit: https://github.com/rwxrob/dot
+
+exec gh issue list "$@"

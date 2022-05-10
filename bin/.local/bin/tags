@@ -1,0 +1,18 @@
+#!/bin/sh
+# List local and remote git tags
+# Generally sorted via `git config --global tag.sort version:refname`
+
+# Credit: https://github.com/rwxrob/dot
+
+echo "
+#########
+# Local #
+#########
+"
+git tag
+echo "
+##########
+# Remote #
+##########
+"
+git ls-remote --tags

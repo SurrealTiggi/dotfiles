@@ -19,8 +19,7 @@ vim.cmd([[
 -- Refresh NvimTree on open
 vim.cmd([[
   function! NvimTreeToggleAndRefresh()
-    :NvimTreeToggle
-    :NvimTreeRefresh
+    lua require'user.functions'.nvim_toggle()
   endfunction
 ]])
 
@@ -28,6 +27,20 @@ vim.cmd([[
 -------------------------
 -- General purpose util function table
 local M = {}
+
+-- NvimTree conditional toggle if a buffer is open or not
+M.nvim_toggle = function()
+	local nvim_tree = require("nvim-tree")
+	local nvim_tree_actions = require("nvim-tree.actions.reloaders")
+	local b = vim.api.nvim_buf_get_name(0)
+
+	if b == nil or b == "" then
+		nvim_tree.toggle(false)
+	else
+		nvim_tree.toggle(true)
+	end
+	nvim_tree_actions.reload_explorer()
+end
 
 -- LSP Symbols for outline tree
 M.outline_symbols = function()
@@ -46,6 +59,12 @@ M.outline_symbols = function()
 	end
 
 	return outline_symbols
+end
+
+-- Telescope current buffer fuzzy finder
+M.curr_buf = function()
+	local opt = require("telescope.themes").get_dropdown({ height = 10, previewer = false })
+	require("telescope.builtin").current_buffer_fuzzy_find(opt)
 end
 
 return M

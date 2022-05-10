@@ -16,6 +16,7 @@ return function()
 	local previewers = require("telescope.previewers")
 	local builtin = require("telescope.builtin")
 	local actions_set = require("telescope.actions.set")
+	local fb_actions = require("telescope").extensions.file_browser.actions
 
 	local fixfolds = {
 		hidden = true,
@@ -62,6 +63,7 @@ return function()
 				"--smart-case",
 			},
 			file_ignore_patterns = {
+				"^.terraform/",
 				"^.git/",
 				"go.sum",
 				"go.mod",
@@ -77,6 +79,7 @@ return function()
 					-- Normalise vertical/horizontal split
 					-- ["<C-I>"] = actions.select_horizontal,
 					["<C-S>"] = actions.select_vertical,
+					["<S-i>"] = fb_actions.toggle_hidden,
 				},
 			},
 		},

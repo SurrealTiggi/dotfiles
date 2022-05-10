@@ -54,7 +54,7 @@ null_ls.setup({
 		diagnostics.standardjs,
 		-- TODO: Tweak config for markdownlint as defaults are super noisy
 		-- diagnostics.mdl,
-		diagnostics.write_good,
+		-- diagnostics.write_good,
 		diagnostics.stylelint,
 		diagnostics.shellcheck,
 		diagnostics.yamllint.with({ extra_args = { "-d", "relaxed" } }),

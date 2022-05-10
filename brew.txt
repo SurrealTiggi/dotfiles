@@ -16,6 +16,7 @@ aws-sam-cli
 bat
 brew-gem
 derailed/k9s/k9s
+dict
 docutils
 dty1er/tap/kubecolor
 fd
@@ -42,6 +43,7 @@ iproute2mac
 itchyny/tap/mmv
 jless
 jq
+kind
 kube-ns
 kubectl
 kubectx
@@ -67,6 +69,9 @@ the_silver_searcher
 tidy-html5
 tmux
 trashhalo/homebrew-brews/imgcat
+tree
+vault
+viu
 wget
 yarn
 zsh-completions
