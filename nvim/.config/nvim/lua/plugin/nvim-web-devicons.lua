@@ -6,7 +6,7 @@ return function()
 		require("nvim-web-devicons").setup()
 	else
 		-- @SurrealTiggi: nvim-web-devicons only supports filtering by extensions or full file name
-		-- filetype support https://github.com/kyazdani42/nvim-web-devicons/issues/29
+		-- TODO: by filetype https://github.com/kyazdani42/nvim-web-devicons/pull/125
 		-- regex support https://github.com/kyazdani42/nvim-web-devicons/issues/36
 		require("nvim-web-devicons").setup({
 			override = {
@@ -20,6 +20,11 @@ return function()
 					color = colors.peach,
 					name = "Makefile",
 				},
+				["Justfile"] = {
+					icon = SYMBOLS.files.makefile,
+					color = colors.orange,
+					name = "Justfile",
+				},
 				["CODEOWNERS"] = {
 					icon = SYMBOLS.misc.github,
 					color = colors.darker_black,
@@ -29,6 +34,11 @@ return function()
 					icon = SYMBOLS.misc.tree,
 					color = colors.vibrant_green,
 					name = "env",
+				},
+				md = {
+					icon = SYMBOLS.files.markdown,
+					colors = colors.blue,
+					name = "markdown",
 				},
 				yaml = {
 					icon = SYMBOLS.files.yaml,
@@ -85,6 +95,11 @@ return function()
 					color = colors.blue,
 					name = "css",
 				},
+				cjs = {
+					icon = SYMBOLS.files.javascript,
+					color = colors.sun,
+					name = "js",
+				},
 				js = {
 					icon = SYMBOLS.files.javascript,
 					color = colors.sun,
@@ -115,8 +130,13 @@ return function()
 					color = colors.peach,
 					name = "lock",
 				},
+				prisma = {
+					icon = SYMBOLS.files.prisma,
+					color = colors.cyan,
+					name = "prisma",
+				},
 			},
-			default = true,
+			default = false,
 		})
 	end
 end

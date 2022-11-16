@@ -13,6 +13,7 @@ local color_light_blue=39
 local color_dark_blue=27
 local color_purple=135
 local color_orange=172
+local color_dark_red=168
 
 ## Prompt elements + overrides https://github.com/romkatv/powerlevel10k#batteries-included
 typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
@@ -53,7 +54,9 @@ typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
 typeset -g POWERLEVEL9K_VCS_BRANCH_ICON="\uf126 "
 
 ###############[ asdf: asdf version manager (https://github.com/asdf-vm/asdf) ]###############
-# NOTE: should hide it if the local version matches `asdf global <tool> <version>`
+# NOTE: show prompt even if the local version matches `asdf global <tool> <version>`
+typeset -g POWERLEVEL9K_ASDF_PROMPT_ALWAYS_SHOW=true
+
 # Python version from asdf
 typeset -g POWERLEVEL9K_ASDF_PYTHON_FOREGROUND=$color_light_blue
 typeset -g POWERLEVEL9K_ASDF_PYTHON_VISUAL_IDENTIFIER_EXPANSION=' '
@@ -68,6 +71,32 @@ typeset -g POWERLEVEL9K_ASDF_GOLANG_SHOW_ON_UPGLOB='go.sum|go.mod'
 typeset -g POWERLEVEL9K_ASDF_NODEJS_FOREGROUND=$color_light_green
 typeset -g POWERLEVEL9K_ASDF_NODEJS_VISUAL_IDENTIFIER_EXPANSION=' '
 typeset -g POWERLEVEL9K_ASDF_NODEJS_SHOW_ON_UPGLOB='package.json'
+
+# Ruby version from asdf
+typeset -g POWERLEVEL9K_ASDF_RUBY_FOREGROUND=$color_dark_red
+typeset -g POWERLEVEL9K_ASDF_RUBY_VISUAL_IDENTIFIER_EXPANSION=' '
+typeset -g POWERLEVEL9K_ASDF_RUBY_SHOW_ON_UPGLOB='*.rb'
+
+# Rust version from asdf
+typeset -g POWERLEVEL9K_ASDF_RUST_FOREGROUND=$color_orange
+typeset -g POWERLEVEL9K_ASDF_RUST_VISUAL_IDENTIFIER_EXPANSION=' '
+typeset -g POWERLEVEL9K_ASDF_RUST_SHOW_ON_UPGLOB='*.rs|Cargo.toml'
+
+# Terraform version from asdf
+typeset -g POWERLEVEL9K_ASDF_TERRAFORM_FOREGROUND=$color_purple
+typeset -g POWERLEVEL9K_ASDF_TERRAFORM_VISUAL_IDENTIFIER_EXPANSION=' '
+typeset -g POWERLEVEL9K_ASDF_TERRAFORM_SHOW_ON_UPGLOB='*.tf|*.hcl'
+
+# Disable other annoying versions
+# NOTE: not sure if there's a better way to do this?
+typeset -g POWERLEVEL9K_ASDF_POETRY_SHOW_ON_UPGLOB='DISABLED'
+typeset -g POWERLEVEL9K_ASDF_AWSCLI_SHOW_ON_UPGLOB='DISABLED'
+typeset -g POWERLEVEL9K_ASDF_PACKER_SHOW_ON_UPGLOB='DISABLED'
+typeset -g POWERLEVEL9K_ASDF_GCLOUD_SHOW_ON_UPGLOB='DISABLED'
+typeset -g POWERLEVEL9K_ASDF_TANKA_SHOW_ON_UPGLOB='DISABLED'
+typeset -g POWERLEVEL9K_ASDF_JB_SHOW_ON_UPGLOB='DISABLED'
+typeset -g POWERLEVEL9K_ASDF_JSONNET_SHOW_ON_UPGLOB='DISABLED'
+
 
 #########################[ virtualenv: python virtual environment ]###########################
 typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_WITH_PYENV=false
@@ -98,4 +127,3 @@ typeset -g POWERLEVEL9K_AWS_DEFAULT_FOREGROUND=$color_orange
 typeset -g POWERLEVEL9K_GCLOUD_SHOW_ON_COMMAND='gcloud|gcp'
 typeset -g POWERLEVEL9K_GCLOUD_VISUAL_IDENTIFIER_EXPANSION=' '
 typeset -g POWERLEVEL9K_GCLOUD_FOREGROUND=$color_light_blue
-

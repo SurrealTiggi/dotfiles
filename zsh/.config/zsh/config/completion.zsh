@@ -9,9 +9,6 @@ complete -C kubectx kubectx
 ## Helper to load individual kubeconfigs
 source $HOME/.local/bin/load-k8s-configs.sh
 
-# Azure
-source $HOME/.local/etc/bash.completion.d/az.completion
-
 # FluxCD
 source <(flux completion zsh)
 
@@ -20,6 +17,7 @@ source <(helm completion zsh)
 
 # Kind
 source <(kind completion zsh)
+compdef _kind kind
 
 # Kustomize
 source <(kustomize completion zsh)
@@ -28,6 +26,13 @@ compdef _kustomize kustomize
 # Github CLI
 source <(gh completion -s zsh)
 compdef _gh gh
+
+# Gitlab CLI
+source <(glab completion -s zsh)
+compdef _glab glab
+
+# Azure
+source $HOME/.local/etc/bash.completion.d/az.completion
 
 # Poetry
 if [ ! -f $ZSH_CUSTOM/plugins/poetry/_poetry ] && command -v poetry >/dev/null; then

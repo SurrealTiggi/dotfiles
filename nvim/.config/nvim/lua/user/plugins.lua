@@ -1,5 +1,6 @@
 -- Ensure plugin manager is installed
 local PACKER_BOOTSTRAP, _ = pcall(require, "core.packerInit")
+local colors = require("core.colors")
 local packer
 
 if PACKER_BOOTSTRAP then
@@ -55,6 +56,7 @@ return packer.startup(function()
 		run = ":TSUpdate",
 	})
 	use({ "nvim-treesitter/playground" })
+	use({ "nvim-treesitter/nvim-treesitter-context" })
 	-- Show function signature while typing
 	use({ "ray-x/lsp_signature.nvim" })
 	-- Nicer Rename
@@ -82,13 +84,18 @@ return packer.startup(function()
 		end,
 	})
 	-- Symbol outline tree
-	use({ "simrat39/symbols-outline.nvim" })
+	use({
+		"simrat39/symbols-outline.nvim",
+		config = require("plugin.symbols"),
+	})
 	-- TS/JS LSP improvements
 	use({ "jose-elias-alvarez/nvim-lsp-ts-utils" })
 	-- Mustache/Handlebars
 	use({ "mustache/vim-mustache-handlebars" })
 	-- Helm
 	use({ "towolf/vim-helm" })
+	-- Prisma
+	use({ "pantharshit00/vim-prisma" })
 
 	-- Nicer code actions w/diff
 	-- FIXME: No diff, wait for https://github.com/weilbith/nvim-code-action-menu/issues/35
@@ -127,6 +134,15 @@ return packer.startup(function()
 	})
 	-- b64.nvim
 	use({ "taybart/b64.nvim" })
+	-- scope.nvim for hidding buffers in tabs
+	use({
+		"tiagovla/scope.nvim",
+		config = function()
+			require("scope").setup()
+		end,
+	})
+	-- Github Copilot
+	-- use({ "github/copilot.vim" })
 
 	-- [[ Functional Aesthetics ]] --
 	---------------------------------
@@ -160,18 +176,18 @@ return packer.startup(function()
 		after = "nvim-web-devicons",
 	})
 	-- Dim inactive buffers --
-	-- FIXME: Disabled as it breaks some floating windows such as Rename and GoToPreview
-	-- use {
-	-- "sunjon/shade.nvim",
-	-- config = require("plugin.shade"),
-	-- }
+	-- FIXME: Causes some highlight issues with indent-blankline
+	-- use({
+	-- "levouh/tint.nvim",
+	-- config = require("plugin.tint"),
+	-- })
 	-- Indent lines --
 	use({
 		"lukas-reineke/indent-blankline.nvim",
 		config = require("plugin.indent-blankline"),
 		event = "BufRead",
 	})
-	-- Dashboard
+	-- Dashboard --
 	-- FIXME: Only loads manually by calling :Alpha. Possibly related to startup screen disappearing
 	use({
 		"goolord/alpha-nvim",
@@ -184,12 +200,12 @@ return packer.startup(function()
 		event = "BufRead",
 		run = "make hexokinase",
 	})
-	-- Nicer folds
+	-- Nicer folds --
 	use({
 		"anuvyklack/pretty-fold.nvim",
 		config = require("plugin.pretty-fold"),
 	})
-	-- Diagnostics in scrollbar
+	-- Diagnostics in scrollbar --
 	use({
 		"petertriho/nvim-scrollbar",
 		config = require("plugin.scrollbar"),

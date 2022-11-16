@@ -13,6 +13,7 @@ local M = {}
 -- 
 -- 
 --  \uf52a
+--  \ue27e
 
 -- Git symbols
 M.git_symbols = {
@@ -112,6 +113,7 @@ M.misc = {
 }
 
 M.files = {
+	markdown = "",
 	package_json = "",
 	makefile = "",
 	yaml = "ﬥ",
@@ -126,6 +128,7 @@ M.files = {
 	docker = "",
 	vue = "﵂",
 	toml = "",
+	prisma = "喝",
 }
 
 return M

@@ -26,6 +26,14 @@ lsp_installer.on_server_ready(function(server)
 		opts = vim.tbl_deep_extend("force", pyright_opts, opts)
 	end
 
+	-- Rust
+	-- TODO: Try https://github.com/simrat39/rust-tools.nvim
+	-- TODO: See https://github.com/simrat39/rust-tools.nvim/pull/139
+	if server.name == "rust_analyzer" then
+		local rust_analyzer_opts = require("lsp.settings.rust_analyzer")
+		opts = vim.tbl_deep_extend("force", rust_analyzer_opts, opts)
+	end
+
 	-- JS/TS (using nvim-lsp-ts-utils for a better experience)
 	-- @SurrealTiggi note that we override `on_attach` via the "keep" keyword
 	-- see h: vim.tbl_deep_extend
@@ -44,6 +52,12 @@ lsp_installer.on_server_ready(function(server)
 	if server.name == "sumneko_lua" then
 		local sumneko_opts = require("lsp.settings.sumneko_lua")
 		opts = vim.tbl_deep_extend("force", sumneko_opts, opts)
+	end
+
+	-- CSS
+	if server.name == "cssls" then
+		local css_opts = require("lsp.settings.cssls")
+		opts = vim.tbl_deep_extend("force", css_opts, opts)
 	end
 
 	-- This setup() function is exactly the same as lspconfig's setup function.

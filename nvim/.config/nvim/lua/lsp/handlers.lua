@@ -12,19 +12,26 @@ if not status_ok then
 end
 
 -- Highlight all instances of symbol under cursor
-local function lsp_highlight_document(client)
+local function lsp_highlight_document(client, bufnr)
+	local augroup = vim.api.nvim_create_augroup("LspDocumentHighlight", {})
+
 	-- Only enable if the active LSP supports it
-	if client.resolved_capabilities.document_highlight then
-		vim.api.nvim_exec(
-			[[
-      augroup lsp_document_highlight
-        autocmd! * <buffer>
-        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-      augroup END
-    ]],
-			false
-		)
+	if client.supports_method("textDocument/documentHighlight") then
+		vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+		vim.api.nvim_create_autocmd("CursorHold", {
+			group = augroup,
+			buffer = bufnr,
+			callback = function()
+				vim.lsp.buf.document_highlight()
+			end,
+		})
+		vim.api.nvim_create_autocmd("CursorMoved", {
+			group = augroup,
+			buffer = bufnr,
+			callback = function()
+				vim.lsp.buf.clear_references()
+			end,
+		})
 	end
 end
 
@@ -71,35 +78,35 @@ M.on_attach = function(client, bufnr)
 	-- Add lsp_signature
 	require("lsp_signature").on_attach(my_cfg.lsp_signature_opts)
 
+	-- :lua =vim.lsp.get_active_clients()[1].server_capabilities -- lists object
 	-- [Python] Remove LSP formatting since we'll use black
 	if client.name == "pyright" then
-		client.resolved_capabilities.document_formatting = false
+		client.server_capabilities.documentFormattingProvider = false
 	end
 
-	-- [Golang] Remove LSP formatting since we'll use gofumpt and explicitly enable highlight
+	-- [Golang] Remove LSP formatting since we'll use gofumpt
 	if client.name == "gopls" then
-		client.resolved_capabilities.document_highlight = true
-		client.resolved_capabilities.document_formatting = false
-		client.resolved_capabilities.document_range_formatting = false
+		client.server_capabilities.documentFormattingProvider = false
+		client.server_capabilities.documentRangeFormattingProvider = false
 	end
 
 	-- [Lua] Remove LSP formatting since we'll use stylua
 	if client.name == "sumneko_lua" then
-		client.resolved_capabilities.document_formatting = false
+		client.server_capabilities.documentFormattingProvider = false
 	end
 
 	-- [Terraform] Remove LSP formatting so null-ls controls it
 	if client.name == "terraformls" then
-		client.resolved_capabilities.document_formatting = false
+		client.server_capabilities.documentFormattingProvider = false
 	end
 
 	-- [JSON] Remove LSP formatting since we'll use null-ls
 	if client.name == "jsonls" then
-		client.resolved_capabilities.document_formatting = false
+		client.server_capabilities.documentFormattingProvider = false
 	end
 
 	-- lsp_keymaps(bufnr)
-	lsp_highlight_document(client)
+	lsp_highlight_document(client, bufnr)
 end
 
 -- Merge LSP capabilities with completion engine

@@ -4,7 +4,9 @@ return function()
 			numbers = "none",
 			close_command = "bdelete! %d",
 
-			indicator_icon = SYMBOLS.misc.indicator,
+			indicator = {
+				icon = SYMBOLS.misc.indicator,
+			},
 			buffer_close_icon = SYMBOLS.misc.close_light,
 			modified_icon = SYMBOLS.git_symbols.git["staged"],
 			close_icon = SYMBOLS.misc.close_heavy,

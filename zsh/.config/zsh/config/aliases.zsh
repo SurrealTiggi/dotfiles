@@ -16,7 +16,7 @@ alias k='kubecolor'
 alias kcx='kubectx'
 alias kns='kubens'
 alias kvu="k view-utilization -h"
-alias kdebug='k run -i --tty --rm tiago-debug --image=surrealtiggi/kube-helper --image-pull-policy=Always --overrides='{"spec": {"serviceAccountName": "default"}}' -- /bin/sh'
+alias kdebug="k run -i --tty --rm tiago-debug --image=surrealtiggi/kube-helper --image-pull-policy=Always --overrides='{\"spec\": {\"serviceAccountName\": \"default\"}}' -- /bin/sh"
 alias kneat="kubectl neat | vim -c 'set ft=yaml' -"
 
 ## JQ

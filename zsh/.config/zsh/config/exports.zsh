@@ -47,6 +47,9 @@ export NNN_FIFO=/tmp/nnn.fifo
 export NNN_PLUG='d:diffs;p:preview-tui'
 # export NNN_FCOLORS='0000E6310000000000000000'
 
+## AWS
+export AWS_PAGER=""
+
 # Path stuff
 # Putting aws v2 first to override pyenv shim
 export PATH="$(brew --prefix awscli)/bin:$PATH"
@@ -55,7 +58,7 @@ export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 export PATH="$GOPATH/bin:$PATH"
 export PATH=./node_modules/.bin:$PATH
 # export PATH="$HOME/node_modules/.bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
+# export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="/Applications/Postgres.app/Contents/Versions/13/bin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"

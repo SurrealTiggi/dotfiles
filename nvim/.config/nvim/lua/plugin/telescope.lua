@@ -69,6 +69,7 @@ return function()
 				"go.mod",
 				"package-lock.json",
 				"yarn.lock",
+				"poetry.lock",
 			},
 			mappings = {
 				i = {
@@ -77,7 +78,7 @@ return function()
 					-- ["<C-X>"] = false,
 					["<C-V>"] = false,
 					-- Normalise vertical/horizontal split
-					-- ["<C-I>"] = actions.select_horizontal,
+					-- ["<C-x>"] = actions.select_horizontal,
 					["<C-S>"] = actions.select_vertical,
 					["<S-i>"] = fb_actions.toggle_hidden,
 				},

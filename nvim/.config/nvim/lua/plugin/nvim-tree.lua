@@ -2,22 +2,14 @@ return function()
 	local g = vim.g
 
 	-- g.nvim_tree_quit_on_open = 1
-	g.nvim_tree_width_allow_resize = 1
-
-	g.nvim_tree_show_icons = {
-		git = 1,
-		folders = 1,
-		files = 1,
-	}
-
-	g.nvim_tree_special_files = "" -- Don't highlight any files
-
-	-- Purely for aesthetics
-	g.nvim_tree_icons = SYMBOLS.git_symbols
+	-- g.nvim_tree_width_allow_resize = 1
 
 	require("nvim-tree").setup({
 		git = {
 			ignore = true, -- Hide any files specified in .gitignore
+		},
+		filesystem_watchers = { -- Disabling since it's not refreshing the tree as intented *shrug*
+			enable = false,
 		},
 		actions = {
 			open_file = {
@@ -31,11 +23,11 @@ return function()
 		view = {
 			hide_root_folder = true,
 			width = 35,
-			auto_resize = true,
+			adaptive_size = true,
 			mappings = {
 				list = {
 					{ key = "<C-s>", action = "vsplit" },
-					{ key = "<C-i>", action = "split" },
+					{ key = "<C-x>", action = "split" },
 					{ key = "<C-t>", action = "tabnew" },
 					{ key = "I", action = "toggle_git_ignored" },
 					{ key = "H", action = "toggle_dotfiles" },
@@ -43,6 +35,15 @@ return function()
 			},
 		},
 		renderer = {
+			icons = {
+				glyphs = SYMBOLS.git_symbols,
+				show = {
+					git = true,
+					folder = true,
+					file = true,
+				},
+			},
+			special_files = {}, -- Don't highlight any files
 			indent_markers = {
 				enable = true,
 			},

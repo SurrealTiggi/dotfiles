@@ -90,9 +90,11 @@ return function()
 			behavior = cmp.ConfirmBehavior.Replace,
 			select = false,
 		},
-		documentation = {
-			border = SYMBOLS.borders,
-		},
+    window = {
+      documentation = {
+        border = SYMBOLS.borders,
+      },
+    },
 		view = {
 			entries = "native",
 		},
