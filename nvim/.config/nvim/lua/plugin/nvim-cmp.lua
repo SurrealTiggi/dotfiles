@@ -35,7 +35,8 @@ return function()
 				c = cmp.mapping.close(),
 			}),
 			["<CR>"] = cmp.mapping.confirm({ select = true }),
-			["<Tab>"] = cmp.mapping(function(fallback)
+			-- Leave <Tab> available for Copilot
+			["<C-e>"] = cmp.mapping(function(fallback)
 				if cmp.visible() then
 					cmp.select_next_item()
 				elseif luasnip.expandable() then
@@ -90,11 +91,11 @@ return function()
 			behavior = cmp.ConfirmBehavior.Replace,
 			select = false,
 		},
-    window = {
-      documentation = {
-        border = SYMBOLS.borders,
-      },
-    },
+		window = {
+			documentation = {
+				border = SYMBOLS.borders,
+			},
+		},
 		view = {
 			entries = "native",
 		},

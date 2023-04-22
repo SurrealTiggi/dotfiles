@@ -33,6 +33,7 @@ return packer.startup(function()
 	-- Built-in LSP
 	use({ "neovim/nvim-lspconfig" })
 	-- Simple LSP installer
+	-- TODO: migrate to mason.nvim
 	use({ "williamboman/nvim-lsp-installer" })
 	-- Completion engine + sources
 	use({ -- Main engine
@@ -75,7 +76,12 @@ return packer.startup(function()
 	-- LSPSaga
 	-- TODO: Explore config
 	-- TODO: Add which LSP is throwing diagnostic to next/previous window
-	use({ "tami5/lspsaga.nvim" })
+	use({
+		"glepnir/lspsaga.nvim",
+		config = function()
+			require("lspsaga").setup({})
+		end,
+	})
 	-- GoToDefinition previewer
 	use({
 		"rmagatti/goto-preview",
@@ -142,7 +148,7 @@ return packer.startup(function()
 		end,
 	})
 	-- Github Copilot
-	-- use({ "github/copilot.vim" })
+	use({ "github/copilot.vim" })
 
 	-- [[ Functional Aesthetics ]] --
 	---------------------------------
@@ -162,6 +168,7 @@ return packer.startup(function()
 	-- TODO: Add LSP info see https://github.com/nvim-lualine/lualine.nvim#screenshots
 	-- FIXME: Use same symbols as SYMBOLS.diagnostic_signs
 	-- TODO: Check feline-nvim/feline.nvim for inspiration
+	-- TODO: Check https://github.com/windwp/windline.nvim
 	use({
 		"nvim-lualine/lualine.nvim",
 		config = require("plugin.lualine"),
@@ -177,10 +184,10 @@ return packer.startup(function()
 	})
 	-- Dim inactive buffers --
 	-- FIXME: Causes some highlight issues with indent-blankline
-	-- use({
-	-- "levouh/tint.nvim",
-	-- config = require("plugin.tint"),
-	-- })
+	use({
+		"levouh/tint.nvim",
+		config = require("plugin.tint"),
+	})
 	-- Indent lines --
 	use({
 		"lukas-reineke/indent-blankline.nvim",
@@ -215,6 +222,10 @@ return packer.startup(function()
 	----------------
 	-- Treesitter compatible with more italics
 	use({ "folke/tokyonight.nvim" })
+	-- Kanagawa theme
+	use({ "rebelot/kanagawa.nvim" })
+	-- Catppuccin theme
+	use({ "catppuccin/nvim" })
 	-- A collection of treesitter compatible themes (nvcode,onedark,nord,aurora,gruvbox,palenight,snazzy)
 	use({ "christianchiarulli/nvcode-color-schemes.vim" })
 

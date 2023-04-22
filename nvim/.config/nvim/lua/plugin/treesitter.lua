@@ -21,6 +21,8 @@ return function()
 			"toml",
 			"vue",
 			"yaml",
+			"markdown",
+			"markdown_inline",
 		},
 		playground = {
 			enable = true,

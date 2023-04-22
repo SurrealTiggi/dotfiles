@@ -17,9 +17,6 @@ vnoremap < <gv
 vnoremap > >gv
 """" Quick hack in case you forgot to sudo
 cnoremap w!! execute 'silent! write !sudo tee % > /dev/null' <bar> edit!
-"""" Telescope
-nmap <silent> ll :Telescope file_browser<CR>
-" nmap <silent> ff :Telescope current_buffer_fuzzy_find<CR>
 nmap <silent> ff :lua require("user.functions").curr_buf()<CR>
 """" Use visual K|J to move a single line up|down
 vnoremap <silent>K :m '<-2<CR>gv=gv
@@ -34,8 +31,7 @@ nnoremap <silent><Esc>f :vertical resize +2<CR>
 nnoremap <silent><c-z> <Cmd>exe v:count . "ToggleTerm"<CR>
 tnoremap <silent><c-z> <Esc><Cmd>exe v:count . "ToggleTerm"<CR>
 """" NvimTree
-nnoremap <silent> <C-n> :call NvimTreeToggleAndRefresh()<CR>
-" nnoremap <silent> <C-n> :NvimTreeToggle<CR>
+nnoremap <silent> <C-n> :NvimTreeFindFileToggle<CR>
 
 """" NERDCommenter
 nmap <C-_> <leader>c<Space>
@@ -69,6 +65,8 @@ vnoremap <silent> <leader>bd :<c-u>lua require("b64").decode()<CR>
 """" Telescope
 " Ctrl+T to checkout + track remote
 nnoremap <leader>gco :Telescope git_branches<CR>
+nnoremap <silent> <leader>ll :Telescope file_browser<CR>
+" nmap <silent> ff :Telescope current_buffer_fuzzy_find<CR>
 " TODO: want to pass --name-only to git_commits see https://github.com/LinArcX/telescope-env.nvim
 " TODO: Or try https://github.com/sindrets/diffview.nvim as replacement for this and <leader>gdf
 nnoremap <leader>gvf :Telescope git_bcommits<CR>
@@ -77,7 +75,7 @@ nnoremap <leader>gv :Telescope git_commits<CR>
 " Also use <leader><Arrow> for navigation
 nmap <leader>t :tab new<CR>   " tab split
 nmap <leader>s <C-w>v<CR>       " vertical split
-nmap <leader>i <C-w>s<CR>       " horizontal split
+nmap <leader>x <C-w>s<CR>       " horizontal split
 nmap <leader><Left> <C-w><Left>
 nmap <leader><Right> <C-w><Right>
 nmap <leader><Up> <C-w><Up>

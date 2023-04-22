@@ -136,6 +136,7 @@ return function()
 					name = "prisma",
 				},
 			},
+			-- strict = true,
 			default = false,
 		})
 	end

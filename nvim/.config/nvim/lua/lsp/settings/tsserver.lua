@@ -1,8 +1,10 @@
 return {
 	on_attach = function(client, bufnr)
 		-- @SurrealTiggi Since we're overriding lsp.handlers.on_attach, we have to duplicate some of the settings
-		client.server_capabilities.document_formatting = false
-		client.server_capabilities.document_range_formatting = false
+		-- client.server_capabilities.document_formatting = false
+		-- client.server_capabilities.document_range_formatting = false
+		client.server_capabilities.documentFormattingProvider = false
+		client.server_capabilities.documentRangeFormattingProvider = false
 
 		-- Add lsp_signature
 		require("lsp_signature").on_attach(require("lsp.lsp-config").lsp_signature_opts)

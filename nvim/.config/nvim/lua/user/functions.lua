@@ -28,20 +28,6 @@ vim.cmd([[
 -- General purpose util function table
 local M = {}
 
--- NvimTree conditional toggle if a buffer is open or not
-M.nvim_toggle = function()
-	local nvim_tree = require("nvim-tree")
-	local nvim_tree_actions = require("nvim-tree.actions.reloaders.reloaders")
-	local b = vim.api.nvim_buf_get_name(0)
-
-	if b == nil or b == "" then
-		nvim_tree.toggle(false)
-	else
-		nvim_tree.toggle(true)
-	end
-	nvim_tree_actions.reload_explorer()
-end
-
 -- LSP Symbols for outline tree
 M.outline_symbols = function()
 	local installed, pkg_symbols = pcall(require, "symbols-outline.config")

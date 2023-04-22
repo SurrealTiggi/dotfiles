@@ -91,7 +91,7 @@ M.on_attach = function(client, bufnr)
 	end
 
 	-- [Lua] Remove LSP formatting since we'll use stylua
-	if client.name == "sumneko_lua" then
+	if client.name == "lua_ls" then
 		client.server_capabilities.documentFormattingProvider = false
 	end
 
@@ -105,11 +105,18 @@ M.on_attach = function(client, bufnr)
 		client.server_capabilities.documentFormattingProvider = false
 	end
 
+	-- [JS/TS] Remove LSP formatting since we'll use null-ls
+	-- NOTE: Check lsp.settings.tsserver as well, since this is largely ignored
+	if client.name == "tsserver" then
+		client.server_capabilities.documentFormattingProvider = false
+		client.server_capabilities.documentRangeFormattingProvider = false
+	end
+
 	-- lsp_keymaps(bufnr)
 	lsp_highlight_document(client, bufnr)
 end
 
 -- Merge LSP capabilities with completion engine
-M.capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
+M.capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
 
 return M

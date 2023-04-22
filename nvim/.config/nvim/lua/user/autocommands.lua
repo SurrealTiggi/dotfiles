@@ -1,12 +1,12 @@
 -- [[ AUTOCOMMANDS ]] --
 ---------------------------------------
 -- Reload neovim whenever plugins file changes
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerSync
-  augroup end
-]])
+-- vim.cmd([[
+-- augroup packer_user_config
+-- autocmd!
+-- autocmd BufWritePost plugins.lua source <afile> | PackerSync
+-- augroup end
+-- ]])
 
 -- Automatically reload current file if buffer changes
 vim.cmd([[
@@ -51,11 +51,21 @@ vim.cmd([[
   augroup END
 ]])
 
+-- Terraform
+vim.cmd([[silent! autocmd! filetypedetect BufRead,BufNewFile *.tf]])
+vim.cmd([[autocmd BufRead,BufNewFile *.hcl set filetype=hcl]])
+vim.cmd([[autocmd BufRead,BufNewFile .terraformrc,terraform.rc set filetype=hcl]])
+vim.cmd([[autocmd BufRead,BufNewFile *.tf,*.tfvars set filetype=terraform]])
+vim.cmd([[autocmd BufRead,BufNewFile *.tfstate,*.tfstate.backup set filetype=json]])
+
+-- JSONNET
+vim.cmd([[autocmd BufRead,BufNewFile *.libsonnet set filetype=jsonnet]])
+
 -- Load vim-dadbod-completion for SQL files
 -- TODO: not installed yet
 -- vim.cmd([[
-  -- augroup DadBodSQL
-    -- au!
-    -- autocmd FileType sql,mysql,plsql lua require("cmp").setup.buffer { sources = { { name = "vim-dadbod-completion" } } }
-  -- augroup END
+-- augroup DadBodSQL
+-- au!
+-- autocmd FileType sql,mysql,plsql lua require("cmp").setup.buffer { sources = { { name = "vim-dadbod-completion" } } }
+-- augroup END
 -- ]])
