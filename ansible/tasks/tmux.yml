@@ -1,0 +1,25 @@
+---
+- name: Register tmux directory
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.tmux/plugins"
+  register: tmux
+  check_mode: false
+
+- name: Create tmux plugins directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.tmux/plugins"
+    state: directory
+  when: not tmux.stat.exists
+
+- name: Setup tmux plugin manager
+  ansible.builtin.git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
+    clone: true
+    update: true
+  when: tmux.stat.exists
+
+- name: Update tmux plugins
+  ansible.builtin.command:
+    cmd: "{{ ansible_env.HOME }}/.tmux/plugins/tpm/bin/install_plugins"
+    creates: ~/.tmux/plugins/(tmux-continuum|tmux-fzf|tmux-resurrect|tpm)/

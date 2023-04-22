@@ -54,12 +54,8 @@ export AWS_PAGER=""
 # Putting aws v2 first to override pyenv shim
 export PATH="$(brew --prefix awscli)/bin:$PATH"
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-# TODO: Do we still need explicit bin dirs with asdf?
-export PATH="$GOPATH/bin:$PATH"
 export PATH=./node_modules/.bin:$PATH
-# export PATH="$HOME/node_modules/.bin:$PATH"
-# export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="/Applications/Postgres.app/Contents/Versions/13/bin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-export PATH="$HOME/.poetry/bin:$PATH"
+# export PATH="$HOME/.poetry/bin:$PATH"

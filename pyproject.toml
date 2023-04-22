@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "ansible-bootstrap"
+version = "0.1.0"
+description = "Bootstrap configuration via Ansible"
+authors = ["Tiago Baptista <surrealtiggi@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+ansible = "^6.5.0"
+molecule-docker = "^2.1.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

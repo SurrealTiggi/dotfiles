@@ -1,0 +1,48 @@
+---
+- name: Ensure homebrew is available
+  import_tasks: tasks/homebrew.yml
+
+- name: Determine asdf ownership and path
+  ansible.builtin.set_fact:
+    asdf_user: '{{ asdf_user | default(ansible_user_id) }}'
+    asdf_group: '{{ asdf_group | default(ansible_user_gid) }}'
+    asdf_dir: '{{ ansible_env.HOME }}/.asdf'
+
+- name: Register asdf binary
+  ansible.builtin.stat: "path={{ homebrew_brew_bin_path }}/asdf"
+  register: asdf_binary
+  check_mode: false
+
+- name: Exit if asdf is missing
+  fail: msg="asdf not installed!"
+  when: not asdf_binary.stat.exists
+
+- name: Install asdf plugins
+  ansible.builtin.command: "bash -lc 'asdf plugin-add {{ item.name }}'"
+  args:
+    creates: "{{ asdf_dir }}/plugins/{{ item.name }}"
+  with_items: "{{ asdf_plugins }}"
+  when: asdf_plugins | length > 0
+  become: True
+  become_user: "{{ asdf_user }}"
+  ignore_errors: True
+
+- name: Install asdf plugin versions
+  ansible.builtin.command: "bash -lc 'asdf install {{ item.0.name }} {{ item.1 }}'"
+  args:
+    creates: "{{ asdf_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
+  with_subelements:
+    - "{{ asdf_plugins }}"
+    - versions
+    - flags:
+      skip_missing: True
+  when: asdf_plugins | length > 0
+  become: True
+  become_user: "{{ asdf_user }}"
+
+- name: Set asdf global plugin versions
+  ansible.builtin.command: "bash -lc 'asdf global {{ item.name }} {{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}'"
+  when: item.versions is defined
+  with_items: "{{ asdf_plugins }}"
+  become: True
+  become_user: "{{ asdf_user }}"

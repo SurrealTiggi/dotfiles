@@ -1,4 +1,5 @@
 @types/node
+@bitnami/readme-generator-for-helm
 eslint
 htmlhint
 markdownlint

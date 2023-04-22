@@ -1,4 +1,8 @@
 #!/bin/sh
 # Credit: https://github.com/rwxrob/dot
 
-exec gh issue list "$@"
+if [[ $(git remote -v | grep -c github) -gt 0 ]]; then
+	exec gh issue list "$@"
+elif [[ $(git remote -v | grep -c gitlab) -gt 0 ]]; then
+	exec glab issue list "$@"
+fi

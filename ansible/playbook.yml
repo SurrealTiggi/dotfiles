@@ -1,0 +1,49 @@
+# TODO:
+# - doppler config for secrets
+# - fetch and configure ssh key
+# - fetch and configure gpg keys
+# - fetch and configure .env.secrets accordingly
+# Apps to still install:
+# * Beardie (https://github.com/Stillness-2/beardie/)
+---
+- hosts: all
+  name: Bootstrap
+
+  vars_files:
+    config.yml
+
+  pre_tasks:
+    - name: Include playbook configuration.
+      ansible.builtin.include_vars: "{{ item }}"
+      with_fileglob:
+        - "{{ playbook_dir }}/config.yml"
+      tags: ['always']
+
+  roles:
+    - role: elliotweiser.osx-command-line-tools
+    - role: geerlingguy.mac.homebrew
+      tags: ['homebrew']
+    - role: geerlingguy.mac.dock
+      when: configure_dock
+      tags: ['dock']
+
+  tasks:
+    - name: Setup terminal
+      import_tasks: tasks/terminal.yml
+      when: configure_terminal
+      tags: ['terminal']
+    - name: Setup dotfiles
+      import_tasks: tasks/dotfiles.yml
+      when: configure_dotfiles
+      tags: ['dotfiles']
+    - name: Setup tmux
+      import_tasks: tasks/tmux.yml
+      when: configure_tmux
+      tags: ['tmux']
+    - name: Setup asdf
+      import_tasks: tasks/asdf.yml
+      when: configure_asdf
+      tags: ['asdf']
+    - import_tasks: tasks/osx.yml
+      when: configure_osx
+      tags: ['osx']

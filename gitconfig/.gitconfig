@@ -18,6 +18,12 @@
 [init]
   defaultBranch = main
 
+[rerere]
+	enabled = true
+
+[remote "origin"]
+  prune = true
+
 # https://git-scm.com/docs/pretty-formats#Documentation/pretty-formats.txt-emGem for signature status
 [alias]
   lg = log --graph --abbrev-commit --date=iso8601 --pretty=log-default
@@ -61,11 +67,22 @@
 [tag]
 	sort = version:refname
 
+# CM
+[includeIf "gitdir:~/git/cm/"]
+path = ~/.gitconfig_priv
+[includeIf "gitdir:~/ghq/github.com/CrypticMonsters/"]
+path = ~/.gitconfig_priv
+
+# Work
 [includeIf "gitdir:~/git/work/"]
 path = ~/.gitconfig_work
 [includeIf "gitdir:~/ghq/github.com/conduktor/"]
 path = ~/.gitconfig_work
-[includeIf "gitdir:~/git/personal/"]
+
+# Everything else
+[includeIf "gitdir:~/git/github.com/"]
+path = ~/.gitconfig_priv
+[includeIf "gitdir:~/git/gitlab.com/"]
 path = ~/.gitconfig_priv
 [includeIf "gitdir:~/git/dirtypillows/"]
 path = ~/.gitconfig_dp

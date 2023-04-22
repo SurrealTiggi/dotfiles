@@ -1,0 +1,59 @@
+# Use tall and fullscreen layouts
+layouts:
+    - fullscreen
+    - two-pane
+    - 3column-left
+
+# Enable focus-follows-mouse
+mouse-follows-focus: false
+focus-follows-mouse: false
+mouse-resizes-windows: true
+
+# Add 10px margin between windows
+window-margins: true
+window-margin-size: 5
+
+floating: []
+
+# Modify the amethyst relaunch to use x and not z
+relaunch-amethyst:
+    mod:
+      - option
+    key: r
+
+cycle-layout:
+  mod:
+    - option
+  key: space
+
+cycle-layout-backwards:
+  mod:
+    - option
+    - shift
+  key: space
+
+swap-screen-ccw:
+  mod:
+    - option
+  key: h
+
+swap-screen-cw:
+  mod:
+    - option
+  key: l
+
+swap-ccw:
+  mod:
+    - option
+  key: j
+
+swap-cw:
+  mod:
+    - option
+  key: k
+
+reevaluate-windows:
+  mod:
+    - option
+    - shift
+  key: z

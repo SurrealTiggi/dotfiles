@@ -1,0 +1,105 @@
+# TODO: Refresh terminal at the end (exec zsh)
+# TODO: run nvim +PackerSync
+---
+- name: Ensure homebrew is available
+  import_tasks: tasks/homebrew.yml
+
+- name: Register stow binary path
+  stat:
+    path: "{{ homebrew_brew_bin_path }}/stow"
+  register: stow_binary
+  check_mode: false
+
+- name: Register ghq binary path
+  stat:
+    path: "{{ homebrew_brew_bin_path }}/ghq"
+  register: ghq_binary
+  check_mode: false
+
+- name: Register ghq root
+  command:
+    cmd: ghq root
+  register: ghq_root
+  when: ghq_binary.stat.exists
+  check_mode: false
+
+- name: Register ghq directories
+  stat:
+    path: "{{ ghq_root.stdout }}/{{ item.user }}"
+  register: ghq_git_dirs
+  loop: "{{ git_link }}"
+  when: ghq_binary.stat.exists
+  check_mode: false
+
+- name: Register .zshrc directory
+  stat:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+  register: zshrc
+  check_mode: false
+
+- name: Register git directory
+  stat:
+    path: "{{ ansible_env.HOME }}/{{ main_git_dir | default('git') }}"
+  register: git_dir
+  check_mode: false
+
+- name: Register dotfiles source
+  stat:
+    path: "{{ ansible_env.DOTFILES | default(ghq_root.stdout + '/' + dotfiles_repo) }}"
+  register: dotfiles_src
+  check_mode: false
+
+- debug:
+    msg: "Dotfiles source at {{ ansible_env.DOTFILES | default(ghq_root.stdout + '/' + dotfiles_repo) }}"
+
+- name: Exit if ghq or stow are missing
+  fail:
+    msg: ghq or stow not installed!
+  when: not stow_binary.stat.exists or not ghq_binary.stat.exists
+
+- name: Clone if dotfiles repo is missing
+  command:
+    cmd: ghq get {{ dotfiles_repo }}
+  when: |
+    not dotfiles_src.stat.exists and
+    (dotfiles_repo is defined and (dotfiles_repo | length > 0)) and
+    ghq_binary.stat.exists
+
+- name: Remove default zshrc if not a symlink
+  file:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    state: absent
+  when: zshrc.stat.exists and zshrc.stat.islnk == "false"
+
+- name: Create main git dir
+  file:
+    path: "{{ git_dir.stat.path }}"
+    state: directory
+  when: not git_dir.stat.exists
+
+# NOTE: it's fine if sources don't exist, provided it works when we clone something manually as we need it
+- name: Symlink git dirs for convenience
+  file:
+    src: "{{ ghq_root.stdout }}/{{ item.item.user }}"
+    dest: "{{ git_dir.stat.path }}/{{ item.item.dest }}"
+    state: link
+    force: yes
+  with_items:  "{{ ghq_git_dirs.results }}"
+  when: not item.stat.exists and ghq_binary.stat.exists and (item.item.user | length > 0)
+
+- debug:
+    msg: "Linking {{ ghq_root.stdout }}/{{ item.item.user }}[{{ item.item.user | length }}] to {{ git_dir.stat.path }}/{{ item.item.dest }}"
+  with_items: "{{ ghq_git_dirs.results }}"
+  when: item.stat.exists and ghq_binary.stat.exists and (item.item.user | length > 0)
+
+- name: Stow directories
+  command:
+    cmd: stow --restow --target {{ ansible_env.HOME }} {{ item }}
+    chdir: "{{ dotfiles_src.stat.path }}"
+  with_items: "{{ dotfiles_pkgs }}"
+  when: stow_binary.stat.exists and dotfiles_src.stat.exists
+
+- debug:
+    msg: "Stowing {{ dotfiles_src.stat.path }}/{{ item }} into {{ ansible_env.HOME }}"
+  with_items: "{{ dotfiles_pkgs }}"
+  when: stow_binary.stat.exists and dotfiles_src.stat.exists

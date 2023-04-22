@@ -21,9 +21,16 @@ plugins=(
   git
   aws
   asdf
+  brew
   gcloud
+  git-extras
   kubectl
   poetry
+  web-search
+  yarn
+  z
+  zsh-autosuggestions
+  zsh-syntax-highlighting
 )
 
 ## Oh-my-zsh

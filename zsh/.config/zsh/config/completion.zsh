@@ -15,6 +15,9 @@ source <(flux completion zsh)
 # Helm
 source <(helm completion zsh)
 
+# Doppler
+source <(doppler completion zsh)
+
 # Kind
 source <(kind completion zsh)
 compdef _kind kind
@@ -30,6 +33,10 @@ compdef _gh gh
 # Gitlab CLI
 source <(glab completion -s zsh)
 compdef _glab glab
+
+# Steampipe
+source <(steampipe completion zsh)
+compdef _steampipe steampipe
 
 # Azure
 source $HOME/.local/etc/bash.completion.d/az.completion

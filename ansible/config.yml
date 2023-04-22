@@ -1,0 +1,254 @@
+---
+##################################################
+### Homebrew                                   ###
+##################################################
+homebrew_taps:
+  - homebrew/bundle
+  - homebrew/core
+  - homebrew/cask
+  - homebrew/cask-fonts
+  - aws/tap
+  - charmbracelet/tap
+  - derailed/k9s
+  - dopplerhq/cli
+  - fluxcd/tap
+  - helm/tap
+  - hidetatz/tap
+  - itchyny/tap
+  - pulumi/tap
+  - sigstore/tap
+  - trashhalo/brews
+  - weaveworks/tap
+
+homebrew_cask_appdir: /Applications
+homebrew_cask_apps:
+  - amethyst                        # A simple tiling window manager
+  - alt-tab                         # Windows style switcher
+  - bitwarden                       # Password manager
+  - brave-browser                   # Browser of choice
+  - cron                            # Calendar client
+  - docker                          # Docker client
+  - firefox                         # Alternative browser
+  - font-fira-code-nerd-font        # Nerd font
+  - font-fira-mono-nerd-font        # Nerd font
+  - font-hack-nerd-font             # Nerd font
+  - font-iosevka-nerd-font          # Nerd font
+  - font-jetbrains-mono-nerd-font   # Nerd font
+  - font-victor-mono-nerd-font      # Nerd font
+  - hazeover                        # Dims inactive window
+  - itsycal                         # A simple menubar calendar
+  - karabiner-elements              # Keyboard keymapping
+  - linear-linear                   # Linear Project Management
+  - neat                            # Github menubar notifications
+  - notion                          # Organize your life
+  - shottr                          # Screenshot tool
+  - slack                           # Messaging app
+  - spotify                         # For the soul
+  - stats                           # A simple stats client
+
+# Some other funs ones to check out
+# https://github.com/Lissy93/Brewfile/blob/master/Brewfile
+homebrew_installed_packages:
+  - act                               # Run github actions locally
+  - alacritty                         # Terminal of choice
+  - asdf                              # Extendable version manager for *all the things*
+  - aws-sam-cli                       # AWS Serverless Application Model cli
+  - awscli                            # Official AWS cli
+  - bat                               # A better cat
+  - brew-gem                          # Manage ruby gems via homebrew
+  - dict                              # A dictionary cli
+  - dockutil                          # Manage MacOS dock
+  - docutils                          # Text processing for reStructured Text
+  - doppler                           # SecretOps cli
+  - fd                                # A faster find
+  - ffmpeg                            # Audio & video utility
+  - flux                              # Flux GitOps cli
+  - fx                                # Terminal JSON viewer
+  - fzf                               # Fuzzy finder
+  - fzy                               # Optimized fuzzy finder
+  - gh                                # Github cli
+  - ghq                               # Git repo manager
+  - git                               # Git, obviously
+  - git-delta                         # Syntax highlighting pager for git diffs
+  - git-extras                        # Little git extras
+  - git-quick-stats                   # Simple statistics about a git repo
+  - gitui                             # Git TUI written in Rust
+  - glab                              # Gitlab cli
+  - golangci-lint                     # Golang linter utility
+  - google-cloud-sdk                  # GCP cli
+  - gotop                             # Graphical activity monitor TUI
+  - gpg-suite                         # GPG Suite and cli
+  - gron                              # Grep for JSON
+  - helm                              # Kubernetes package manager cli
+  - htop                              # Another graphical activity monitor TUI
+  - httpie                            # cURL replacement cli
+  - iftop                             # Network usage cli
+  - imgcat                            # Output images in a terminal
+  - infracost                         # Cost estimates for terraform
+  - ipcalc                            # Calculate network ranges and masks
+  - iperf                             # Tool to measure network performance
+  - iproute2mac                       # MacOS network utils
+  - jless                             # JSON cli pager
+  - jq                                # JSON processor cli
+  - k9s                               # Kubernetes TUI client
+  - kind                              # Kubernetes in docker
+  - krew                              # Kubernetes plugin manager
+  - kube-ns                           # Kubernetes namespace switcher
+  - kubecolor                         # Colored output for kubectl
+  - kubectl                           # Kubernetes cli
+  - kubectx                           # Kubernetes context switcher
+  - kustomize                         # Kubernetes manifest customizer
+  - lazydocker                        # Docker management
+  - mas                               # Mac App Store cli
+  - mmv                               # File operation cli
+  - mtr                               # Network tracing cli
+  - neofetch                          # Graphical system info TUI
+  - neovim                            # Neovim
+  - ngrok                             # Reverse proxy tunnels to localhost
+  - nmap                              # Network port scanner
+  - okteto                            # Okteto cli
+  - poetry                            # Python package management tool
+  - pre-commit                        # Pre-commit cli for git repos
+  - pstree                            # Process output as a tree
+  - pulumi                            # IaC cloud development framework
+  - ripgrep                           # Fast search cli
+  - s3cmd                             # AWS S3 cli
+  - shellcheck                        # Shell script linter
+  - skate                             # Personal key/value store
+  - speedtest-cli                     # Speedtest cli
+  - ssh-copy-id                       # Copy your SSH key to a remote host
+  - stow                              # Simple symlink management
+  - teleport                          # Identity aware reverse-proxy for VM's, K8s, DB's, etc
+  - terraform-docs                    # Generate docs from terraform modules
+  - terragrunt                        # Terraform DRY wrapper
+  - the_silver_searcher               # (Arguably) faster search cli
+  - tidy-html5                        # HTML linter and other tools
+  - tmux                              # Terminal multiplexer
+  - tree                              # File listing as a tree
+  - vault                             # Hashicorp vault cli
+  - viu                               # Terminal image viewer written in Rust
+  - wget                              # Internet file retriever
+  - yarn                              # Node package management
+  - zsh-completions                   # A collection of completions for ZSH
+  - zsh-history-substring-search      # ZSH port of Fish shell history search
+  - zsh-syntax-highlighting           # Syntax highlighting for ZSH
+
+##################################################
+### Dock                                       ###
+##################################################
+configure_dock: true
+dockitems_remove: []
+# - Launchpad
+# - TV
+# - Podcasts
+# - 'App Store'
+dockitems_persist:
+  - name: "Brave Browser"
+    path: "/Applications/Brave Browser.app/"
+    pos: 1
+  - name: "Alacritty"
+    path: "/Applications/Alacritty.app/"
+    pos: 2
+  - name: "Slack"
+    path: "/Applications/Spotify.app/"
+    pos: 3
+  - name: "Spotify"
+    path: "/Applications/Spotify.app/"
+    pos: 4
+  - name: "Notion"
+    path: "/Applications/Notion.app/"
+    pos: 5
+  - name: "Linear"
+    path: "/Applications/Linear.app/"
+    pos: 6
+  - name: "Screen Sharing"
+    path: "/System/Library/CoreServices/Applications/Screen Sharing.app/"
+    pos: 7
+  - name: "Cron"
+    path: "/Applications/Cron.app/"
+    pos: 8
+  - name: "Notes"
+    path: "/System/Applications/Notes.app/"
+    pos: 9
+  - name: "System Settings"
+    path: "/System/Applications/System Settings.app/"
+    pos: 10
+
+##################################################
+### Terminal                                   ###
+##################################################
+configure_terminal: true
+users:
+  - username: "{{ ansible_user | default('tiago') }}"
+terminal_extra_plugins:
+  - { plugin: "zsh-autosuggestions", source: "github.com/zsh-users/zsh-autosuggestions" }
+  - { plugin: "zsh-syntax-highlighting", source: "github.com/zsh-users/zsh-syntax-highlighting"}
+krew_plugins:
+  - access-matrix       # Show an access matrix for server resources
+  - deprecations        # Shows all the deprecated objects in a cluster
+  - get-all             # *Actually* gets all resources
+  - graph               # Generates a visual representation of resources
+  - images              # Show container images as a table
+  - krew                # Krew plugin management self-manage
+  - neat                # Cleans up `kubectl get ...`
+  - pod-lens            # Finds related workloads and displays in a tree
+  - view-utilization    # Show resource utilization based on cpu/memory
+
+##################################################
+### Dotfiles                                   ###
+##################################################
+configure_dotfiles: true
+dotfiles_repo: github.com/SurrealTiggi/dotfiles
+dotfiles_pkgs:
+  - alacritty
+  - amethyst
+  - asdf-default-packages
+  - bin
+  - gitconfig
+  - nvim
+  - tflint
+  - tmux
+  - zsh
+git_link:
+  - { user: "github.com/SurrealTiggi", dest: "personal" }
+  - { user: "{{ ansible_env.WORK_GIT_ORG1 | default('')}}", dest: "work" }
+  - { user: "github.com", dest: "github.com" }
+  - { user: "github.com/crypticmonsters", dest: "cm" }
+  # - { user: gitlab.com/dirtypillows, dest: dp }
+
+##################################################
+### Tmux                                       ###
+##################################################
+configure_tmux: true
+
+##################################################
+### ASDF
+##################################################
+configure_asdf: true
+asdf_plugins:
+  - name: golang
+    versions: ["1.17.2", "1.18", "1.19"]
+    global: "1.19"
+  - name: jsonnet
+    versions: ["0.18.0"]
+  - name: nodejs
+    versions: ["16.13.2", "17.1.0", "18.12.1"]
+    global: "18.12.1"
+  - name: python
+    versions: ["2.7.18", "3.9.6", "3.10.5"]
+    global: "3.10.5"
+  - name: ruby
+    versions: ["3.0.2"]
+    global: "3.0.2"
+  - name: rust
+    versions: ["1.64.0", "stable"]
+    global: "1.64.0"
+  - name: terraform
+    versions: ["1.0.10"]
+    global: "1.0.10"
+
+##################################################
+### MacOS                                      ###
+##################################################
+configure_osx: true
+osx_script: "{{ playbook_dir }}/scripts/osx_settings.sh"

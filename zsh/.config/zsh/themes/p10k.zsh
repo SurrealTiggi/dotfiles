@@ -1,4 +1,4 @@
-## Powerlevel10k settings
+## Custom Powerlevel10k settings
 # load p10k itself
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
@@ -49,6 +49,7 @@ typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_VIINS_CONTENT_EXPANSION=$my_error_prom
 
 ##################################[ dir: current directory ]##################################
 typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
+typeset -g POWERLEVEL9K_DIR_MAX_LENGTH=20
 
 #####################################[ vcs: git status ]######################################
 typeset -g POWERLEVEL9K_VCS_BRANCH_ICON="\uf126 "
