@@ -20,13 +20,14 @@
 
 -- [[ Neovim configurations for the ages ]] --
 ----------------------------------------------
-require "init"                -- Any global stuff to bootstrap first
-require "user.options"        -- Vim general options
-require "user.plugins"        -- Plugin management + plugin configs
-require "user.keybinds"       -- Keymap config
-require "user.functions"      -- Utility functions
+require("init") -- Any global stuff to bootstrap first
+require("user.options") -- Vim general options
+-- require("user.plugins") -- [DEPRECATED] Plugin management + plugin configs
+require("user.lazyplugins") -- Lazy.nvim plugin management + plugin configs
+require("user.keybinds") -- Keymap config
+require("user.functions") -- Utility functions
 
-require "user.autocommands"   -- All autocommands
-require "user.misc"           -- Everything else, eg. colorscheme, vim plugin settings, etc.
+require("user.autocommands") -- All autocommands
+require("user.misc") -- Everything else, eg. colorscheme, vim plugin settings, etc.
 
-require "lsp"                 -- Setup LSP
+require("lsp") -- Setup LSP

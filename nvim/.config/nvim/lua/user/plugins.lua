@@ -40,7 +40,7 @@ return packer.startup(function()
 		"hrsh7th/nvim-cmp",
 		config = require("plugin.nvim-cmp"),
 	})
-	use({ "hrsh7th/cmp-buffer" }) -- Buffer completions
+	-- use({ "hrsh7th/cmp-buffer" }) -- Buffer completions
 	use({ "hrsh7th/cmp-path" }) -- Path completions
 	use({ "saadparwaiz1/cmp_luasnip" }) -- Snippet completions
 	use({ "hrsh7th/cmp-nvim-lsp" }) -- LSP completions

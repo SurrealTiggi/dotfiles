@@ -34,8 +34,8 @@ tnoremap <silent><c-z> <Esc><Cmd>exe v:count . "ToggleTerm"<CR>
 nnoremap <silent> <C-n> :NvimTreeFindFileToggle<CR>
 
 """" NERDCommenter
-nmap <C-_> <leader>c<Space>
-vmap <C-_> <leader>c<Space>gv
+nmap <C-_> <leader>\c<Space>
+vmap <C-_> <leader>\c<Space>gv
 """" Telescope
 nnoremap <C-f> :Telescope live_grep<CR>
 " nnoremap <C-p> :Telescope find_files<CR>

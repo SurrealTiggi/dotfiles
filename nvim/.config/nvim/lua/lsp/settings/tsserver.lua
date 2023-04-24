@@ -7,7 +7,7 @@ return {
 		client.server_capabilities.documentRangeFormattingProvider = false
 
 		-- Add lsp_signature
-		require("lsp_signature").on_attach(require("lsp.lsp-config").lsp_signature_opts)
+		require("lsp_signature").on_attach(require("lsp.misc-config").lsp_signature_opts)
 
 		local ts_utils = require("nvim-lsp-ts-utils")
 

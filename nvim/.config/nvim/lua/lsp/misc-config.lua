@@ -1,6 +1,6 @@
--- [[ LSP CONFIG ]] --
+-- [[ MISC CONFIG ]] --
 ----------------------
--- Random LSP config to keep things neat
+-- Random LSP configurations to keep things neat
 local M = {}
 
 -- Diagnostics

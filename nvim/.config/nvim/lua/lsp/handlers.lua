@@ -1,7 +1,7 @@
 -- [[ LSP HANDLERS ]] --
 ------------------------
 -- Load in our config
-local exists, my_cfg = pcall(require, "lsp.lsp-config")
+local exists, my_cfg = pcall(require, "lsp.misc-config")
 if not exists then
 	return
 end
@@ -34,18 +34,6 @@ local function lsp_highlight_document(client, bufnr)
 		})
 	end
 end
-
--- Setup basic keybinds
--- @SurrealTiggi moved to user.keybinds
--- local function lsp_keymaps(bufnr)
--- -- Quick function to keep things more readable
--- local function buf_set_keymap(...)
--- vim.api.nvim_buf_set_keymap(bufnr, ...)
--- end
-
--- -- General keybind options
--- local opts = { noremap = true, silent = true }
--- end
 
 -- Bring in default LSP capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
