@@ -32,7 +32,6 @@ nnoremap <silent><c-z> <Cmd>exe v:count . "ToggleTerm"<CR>
 tnoremap <silent><c-z> <Esc><Cmd>exe v:count . "ToggleTerm"<CR>
 """" NvimTree
 nnoremap <silent> <C-n> :NvimTreeFindFileToggle<CR>
-
 """" NERDCommenter
 nmap <C-_> <leader>\c<Space>
 vmap <C-_> <leader>\c<Space>gv

@@ -6,3 +6,5 @@ nvim/autoload
 .env.*
 
 .ctagsrc
+
+.luarc.json
