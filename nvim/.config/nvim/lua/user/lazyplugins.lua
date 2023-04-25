@@ -24,7 +24,6 @@ local plugins = {
 		"kyazdani42/nvim-web-devicons",
 		config = require("plugin.nvim-web-devicons"),
 	},
-
 	-- [[ Language Support ]] --
 	----------------------------
 	-- LSP Configuration & Plugins
@@ -113,7 +112,7 @@ local plugins = {
 	-- Prisma
 	{ "pantharshit00/vim-prisma" },
 
-	-- ✅ [[ IDE Utilities ]] --
+	-- [[ IDE Utilities ]] --
 	-------------------------
 	-- Telescope fuzzy finder
 	{
@@ -158,7 +157,7 @@ local plugins = {
 	-- Github Copilot
 	{ "github/copilot.vim" },
 
-	-- ✅ [[ Functional Aesthetics ]] --
+	-- [[ Functional Aesthetics ]] --
 	---------------------------------
 	-- File tree with nerdicons
 	{
@@ -224,15 +223,19 @@ local plugins = {
 		config = require("plugin.scrollbar"),
 	},
 
-	-- ✅ [[ Misc ]] --
+	-- [[ Misc ]] --
 	----------------
-	-- Catppuccin theme
-	{ "catppuccin/nvim" },
-	-- Treesitter compatible with more italics
+	-- Colorschemes
+	{
+		"catppuccin/nvim",
+		lazy = false,
+		priority = 1000,
+		config = function()
+			vim.cmd([[colorscheme catppuccin]])
+		end,
+	},
 	{ "folke/tokyonight.nvim" },
-	-- Kanagawa theme
 	{ "rebelot/kanagawa.nvim" },
-	-- A collection of treesitter compatible themes (nvcode,onedark,nord,aurora,gruvbox,palenight,snazzy)
 	{ "christianchiarulli/nvcode-color-schemes.vim" },
 }
 

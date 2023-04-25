@@ -21,7 +21,7 @@ return function()
 				if context.buffer:current() then
 					return ""
 				else
-					return "(" .. count .. ")"
+					return "[" .. count .. "]"
 				end
 			end,
 

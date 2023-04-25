@@ -3,12 +3,6 @@
 -- Set nvim-notify as main notifier
 vim.notify = require("notify")
 
--- Colorscheme
--- vim.cmd("colorscheme palenight")
--- vim.cmd("colorscheme kanagawa")
-vim.cmd("colorscheme catppuccin")
--- vim.cmd "colorscheme aurora"
-
 -- [[ Highlight Groups ]] --
 ----------------------------
 -- @SurrealTiggi could move all these to COLORS and initialise in lua/init.lua?

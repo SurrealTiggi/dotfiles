@@ -1,5 +1,6 @@
 return function()
 	require("nvim-treesitter.configs").setup({
+		auto_install = false,
 		ensure_installed = {
 			"bash",
 			"comment",
@@ -30,7 +31,7 @@ return function()
 		highlight = {
 			enable = true,
 		},
-		indent = { enable = false },
+		indent = { enable = true, disable = { "python" } },
 		autopairs = { enable = true },
 		rainbow = { enable = true },
 		autotag = { enable = true },
