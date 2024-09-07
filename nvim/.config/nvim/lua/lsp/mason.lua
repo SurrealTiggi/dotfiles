@@ -19,8 +19,8 @@ local servers = {
 	"bashls",
 	"html",
 	"jsonnet_ls",
+	"tailwindcss",
 	"terraformls",
-	"tflint",
 	-- LSPs we override
 	"gopls",
 	"pyright",

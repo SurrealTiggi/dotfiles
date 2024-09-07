@@ -29,7 +29,7 @@ vim.cmd([[
 
 -- Make the cursorline brighter
 vim.cmd([[
-  hi! CursorLine term=bold cterm=bold guibg=#1b1f27
+  hi! CursorLine term=bold cterm=bold guibg=#2a303c
 ]])
 
 -- Make floating windows the same color as the background

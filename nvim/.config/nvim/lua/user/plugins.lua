@@ -1,240 +1,282 @@
--- Ensure plugin manager is installed
-local PACKER_BOOTSTRAP, _ = pcall(require, "core.packerInit")
-local colors = require("core.colors")
-local packer
-
-if PACKER_BOOTSTRAP then
-	packer = require("packer")
-else
-	return false
-end
-
-local use = packer.use
-
 -- Plugins
--- Docs: https://github.com/wbthomason/packer.nvim#specifying-plugins
-return packer.startup(function()
-	-- [[ Plugin manager ]] --
-	--------------------------
-	use({ "wbthomason/packer.nvim" })
-
+-- Docs: https://github.com/folke/lazy.nvim#examples
+local common = {
 	-- [[ Common dependencies ]] --
 	-------------------------------
-	use({ "nvim-lua/plenary.nvim" })
-	use({ "nvim-lua/popup.nvim" })
+	{ "nvim-lua/plenary.nvim" },
+	{ "nvim-lua/popup.nvim" },
 	-- NerdIcons
-	use({
-		"kyazdani42/nvim-web-devicons",
-		config = require("plugin.nvim-web-devicons"),
-	})
+	{
+		"nvim-tree/nvim-web-devicons",
+		config = require("plugins.nvim-web-devicons"),
+	},
+}
 
-	-- [[ Language Support ]] --
-	----------------------------
-	-- Built-in LSP
-	use({ "neovim/nvim-lspconfig" })
-	-- Simple LSP installer
-	-- TODO: migrate to mason.nvim
-	use({ "williamboman/nvim-lsp-installer" })
-	-- Completion engine + sources
-	use({ -- Main engine
-		"hrsh7th/nvim-cmp",
-		config = require("plugin.nvim-cmp"),
-	})
-	-- use({ "hrsh7th/cmp-buffer" }) -- Buffer completions
-	use({ "hrsh7th/cmp-path" }) -- Path completions
-	use({ "saadparwaiz1/cmp_luasnip" }) -- Snippet completions
-	use({ "hrsh7th/cmp-nvim-lsp" }) -- LSP completions
-	use({ "hrsh7th/cmp-nvim-lua" }) -- Neovim API completions
-	-- Snippets
-	use({ "L3MON4D3/LuaSnip" }) -- Snippet engine
-	use({ "rafamadriz/friendly-snippets" }) -- A bunch of snippets to use
-	-- Formatter and linter engine
-	use({ "jose-elias-alvarez/null-ls.nvim" })
-	-- Treesitter for highlights and AST
-	use({
-		"nvim-treesitter/nvim-treesitter",
-		config = require("plugin.treesitter"),
-		run = ":TSUpdate",
-	})
-	use({ "nvim-treesitter/playground" })
-	use({ "nvim-treesitter/nvim-treesitter-context" })
-	-- Show function signature while typing
-	use({ "ray-x/lsp_signature.nvim" })
-	-- Nicer Rename
-	use({
-		"CosmicNvim/cosmic-ui",
-		config = require("plugin.cosmic-ui"),
-		requires = { "MunifTanjim/nui.nvim" },
-	})
+local ide = {
+	-- [[ IDE Utilities ]] --
+	-------------------------
+	-- Telescope fuzzy finder
+	{
+		"nvim-telescope/telescope.nvim",
+		config = require("plugins.telescope"),
+		dependencies = {
+			"nvim-telescope/telescope-fzy-native.nvim",
+			"nvim-telescope/telescope-file-browser.nvim",
+		},
+	},
+	-- Floating terminal
+	{
+		"akinsho/nvim-toggleterm.lua",
+		config = require("plugins.terminal"),
+	},
+	-- File tree with nerdicons
+	{
+		"nvim-tree/nvim-tree.lua",
+		config = require("plugins.nvim-tree"),
+	},
+	-- Gitsigns for gutter + in-line blame
+	{
+		"lewis6991/gitsigns.nvim",
+		config = require("plugins.gitsigns"),
+	},
 	-- Trouble
-	-- TODO: Explore config
-	use({
+	{
 		"folke/trouble.nvim",
-		requires = "nvim-web-devicons",
-		config = require("plugin.trouble"),
-	})
+		opts = {
+			focus = true,
+		},
+		config = require("plugins.trouble"),
+		dependencies = "nvim-web-devicons",
+	},
 	-- LSPSaga
-	-- TODO: Explore config
-	-- TODO: Add which LSP is throwing diagnostic to next/previous window
-	use({
+	{
 		"glepnir/lspsaga.nvim",
 		config = function()
 			require("lspsaga").setup({})
 		end,
-	})
-	-- GoToDefinition previewer
-	use({
-		"rmagatti/goto-preview",
-		config = function()
-			require("goto-preview").setup({})
-		end,
-	})
+	},
 	-- Symbol outline tree
-	use({
+	{
 		"simrat39/symbols-outline.nvim",
-		config = require("plugin.symbols"),
-	})
-	-- TS/JS LSP improvements
-	use({ "jose-elias-alvarez/nvim-lsp-ts-utils" })
-	-- Mustache/Handlebars
-	use({ "mustache/vim-mustache-handlebars" })
-	-- Helm
-	use({ "towolf/vim-helm" })
-	-- Prisma
-	use({ "pantharshit00/vim-prisma" })
+		config = require("plugins.symbols"),
+	},
+}
 
-	-- Nicer code actions w/diff
-	-- FIXME: No diff, wait for https://github.com/weilbith/nvim-code-action-menu/issues/35
-	-- use {
-	-- "weilbith/nvim-code-action-menu",
-	-- cmd = "CodeActionMenu"
-	-- }
+local languages = {
+	-- [[ Language Support ]] --
+	----------------------------
+	-- Completion engine + sources
+	{
+		"hrsh7th/nvim-cmp",
+		event = "InsertEnter",
+		config = require("plugins.nvim-cmp"),
+		dependencies = {
+			"hrsh7th/cmp-nvim-lsp", -- LSP completions
+			"hrsh7th/cmp-path", -- Path completions
+			"hrsh7th/cmp-nvim-lua", -- Neovim API completions
+			"L3MON4D3/LuaSnip", -- Snippet engine
+			"saadparwaiz1/cmp_luasnip", -- for autocompletion
+			"onsails/lspkind.nvim", -- vs-code like pictograms
+			-- "saadparwaiz1/cmp_luasnip", -- Snippet completions
+			-- "rafamadriz/friendly-snippets", -- A bunch of snippets to use
+		},
+	},
+	-- Treesitter for highlights and AST
+	{
+		"nvim-treesitter/nvim-treesitter",
+		event = { "BufReadPre", "BufNewFile" },
+		build = ":TSUpdate",
+		config = require("plugins.treesitter"),
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter-context",
+			"windwp/nvim-ts-autotag",
+		},
+	},
+	-- Helm file detection
+	{ "towolf/vim-helm" },
+}
 
-	-- [[ IDE Utilities ]] --
-	-------------------------
-	-- Telescope fuzzy finder
-	use({
-		"nvim-telescope/telescope.nvim",
-		config = require("plugin.telescope"),
-	})
-	-- Telescope fzy override
-	use({ "nvim-telescope/telescope-fzy-native.nvim" })
-	-- Telescope file browser
-	use({ "nvim-telescope/telescope-file-browser.nvim" })
-	-- Floating terminal
-	use({
-		"akinsho/nvim-toggleterm.lua",
-		config = require("plugin.terminal"),
-	})
-	-- NERDCommenter for sweet block comment goodness
-	use({ "preservim/nerdcommenter" })
-	-- General purpose async notifications
-	use({ "rcarriga/nvim-notify" })
+local formatter = {
+	-- [[ File Formatters ]] --
+	---------------------------
 	-- Autopairs
-	use({
+	{
 		"windwp/nvim-autopairs",
 		config = function()
 			require("nvim-autopairs").setup({})
 		end,
-		-- config = require("plugin.autopairs")
-	})
+	},
+	{
+		"stevearc/conform.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		config = require("plugins.conform"),
+	},
+	-- Formatter and linter engine
+	{ "nvimtools/none-ls.nvim" },
+}
+
+local utils = {
+	-- [[ Utilities ]] --
+	---------------------
+	-- Codeium
+	{
+		"Exafunction/codeium.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"hrsh7th/nvim-cmp",
+		},
+		config = function()
+			require("codeium").setup({
+				enable_chat = true,
+			})
+		end,
+	},
 	-- b64.nvim
-	use({ "taybart/b64.nvim" })
+	{ "taybart/b64.nvim" },
+	-- NERDCommenter for sweet block comment goodness
+	{ "preservim/nerdcommenter" },
+	{
+		"folke/todo-comments.nvim",
+		dependencies = "nvim-lua/plenary.nvim",
+		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+		config = function()
+			require("todo-comments").setup({})
+		end,
+	},
+	-- GoToDefinition previewer
+	{
+		"rmagatti/goto-preview",
+		config = function()
+			require("goto-preview").setup({})
+		end,
+	},
+	-- TODO: Try numToStr/Comment.nvim
+	-- { "numToStr/Comment.nvim" , opts = {} },
+}
+
+local aesthetics = {
+	-- [[ Functional Aesthetics ]] --
+	---------------------------------
+	-- General purpose async notifications
+	{
+		"rcarriga/nvim-notify",
+		config = require("plugins.nvim-notify"),
+	},
 	-- scope.nvim for hidding buffers in tabs
-	use({
+	{
 		"tiagovla/scope.nvim",
 		config = function()
 			require("scope").setup()
 		end,
-	})
-	-- Github Copilot
-	use({ "github/copilot.vim" })
-
-	-- [[ Functional Aesthetics ]] --
-	---------------------------------
-	-- File tree with nerdicons
-	use({
-		"kyazdani42/nvim-tree.lua",
-		config = require("plugin.nvim-tree"),
-		requires = "nvim-web-devicons",
-		after = "nvim-web-devicons",
-	})
-	-- Gitsigns for gutter + in-line blame
-	use({
-		"lewis6991/gitsigns.nvim",
-		config = require("plugin.gitsigns"),
-	})
+	},
 	-- Lualine --
 	-- TODO: Add LSP info see https://github.com/nvim-lualine/lualine.nvim#screenshots
 	-- FIXME: Use same symbols as SYMBOLS.diagnostic_signs
 	-- TODO: Check feline-nvim/feline.nvim for inspiration
 	-- TODO: Check https://github.com/windwp/windline.nvim
-	use({
+	{
 		"nvim-lualine/lualine.nvim",
-		config = require("plugin.lualine"),
-		requires = "nvim-web-devicons",
-		after = "nvim-web-devicons",
-	})
+		config = require("plugins.lualine"),
+		dependencies = {
+			"kyazdani42/nvim-web-devicons",
+		},
+	},
 	-- Bufferline --
-	use({
+	{
 		"akinsho/bufferline.nvim",
-		config = require("plugin.bufferline"),
-		requires = "nvim-web-devicons",
-		after = "nvim-web-devicons",
-	})
+		config = require("plugins.bufferline"),
+		dependencies = {
+			"kyazdani42/nvim-web-devicons",
+		},
+	},
 	-- Dim inactive buffers --
-	-- FIXME: Causes some highlight issues with indent-blankline
-	use({
+	{
 		"levouh/tint.nvim",
-		config = require("plugin.tint"),
-	})
+		config = require("plugins.tint"),
+	},
 	-- Indent lines --
-	use({
+	{
 		"lukas-reineke/indent-blankline.nvim",
-		config = require("plugin.indent-blankline"),
-		event = "BufRead",
-	})
+		config = require("plugins.indent-blankline"),
+	},
 	-- Dashboard --
-	-- FIXME: Only loads manually by calling :Alpha. Possibly related to startup screen disappearing
-	use({
-		"goolord/alpha-nvim",
-		config = require("plugin.alpha-nvim"),
-		requires = "nvim-web-devicons",
-	})
+	-- FIXME: Crashes
+	-- {
+	-- "goolord/alpha-nvim",
+	-- config = require("plugins.alpha-nvim"),
+	-- -- requires = "nvim-web-devicons",
+	-- },
 	-- Inline color display --
-	use({
+	{
 		"rrethy/vim-hexokinase",
 		event = "BufRead",
-		run = "make hexokinase",
-	})
-	-- Nicer folds --
-	use({
-		"anuvyklack/pretty-fold.nvim",
-		config = require("plugin.pretty-fold"),
-	})
+		build = "make hexokinase",
+	},
 	-- Diagnostics in scrollbar --
-	use({
+	{
 		"petertriho/nvim-scrollbar",
-		config = require("plugin.scrollbar"),
-	})
+		config = require("plugins.scrollbar"),
+	},
+	-- Show function signature while typing
+	{ "ray-x/lsp_signature.nvim" },
+	-- Nicer Rename
+	{
+		"CosmicNvim/cosmic-ui",
+		config = require("plugins.cosmic-ui"),
+		dependencies = { "MunifTanjim/nui.nvim" },
+	},
+	-- Colorschemes
+	{
+		"catppuccin/nvim",
+		lazy = false,
+		priority = 1000,
+		config = function()
+			vim.cmd([[colorscheme catppuccin]])
+		end,
+	},
+	{ "folke/tokyonight.nvim" },
+	{ "rebelot/kanagawa.nvim" },
+	{ "christianchiarulli/nvcode-color-schemes.vim" },
+}
 
-	-- [[ Misc ]] --
-	----------------
-	-- Treesitter compatible with more italics
-	use({ "folke/tokyonight.nvim" })
-	-- Kanagawa theme
-	use({ "rebelot/kanagawa.nvim" })
-	-- Catppuccin theme
-	use({ "catppuccin/nvim" })
-	-- A collection of treesitter compatible themes (nvcode,onedark,nord,aurora,gruvbox,palenight,snazzy)
-	use({ "christianchiarulli/nvcode-color-schemes.vim" })
+local lsp = {
+	{
+		"neovim/nvim-lspconfig",
+		event = { "BufReadPre", "BufNewFile" },
+		dependencies = {
+			{ "antosha417/nvim-lsp-file-operations", config = true },
+			{ "folke/lazydev.nvim", opts = {} },
+		},
+		config = require("lsp-new.lspconfig"),
+	},
+	{
+		"williamboman/mason.nvim",
+		dependencies = {
+			"williamboman/mason-lspconfig.nvim",
+			"WhoIsSethDaniel/mason-tool-installer.nvim",
+		},
+		config = require("lsp-new.mason"),
+	},
+}
 
-	-- [[ Loader ]] --
-	------------------
-	-- Automatically set up config, always keep this at the end
-	if PACKER_BOOTSTRAP then
-		-- require("packer").sync() -- also works but then we get the sync screen on every startup
-		require("packer").install()
-		require("packer").compile()
-	end
-end)
+-- Options
+-- Docs: https://github.com/folke/lazy.nvim#%EF%B8%8F-configuration
+local opts = {
+	checker = {
+		enabled = true,
+		notify = false,
+	},
+	change_detection = {
+		notify = false,
+	},
+}
+
+require("lazy").setup({
+	common,
+	ide,
+	languages,
+	formatter,
+	utils,
+	aesthetics,
+	lsp,
+}, opts)

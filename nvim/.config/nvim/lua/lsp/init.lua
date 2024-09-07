@@ -7,8 +7,8 @@ end
 
 -- require("lsp.lsp-installer") -- [DEPRECATED]
 require("lsp.handlers").setup()
-require("lsp.null-ls")
+-- require("lsp.none-ls")
 
 -- New:
-require("neodev").setup()
+-- require("neodev").setup()
 require("lsp.mason")

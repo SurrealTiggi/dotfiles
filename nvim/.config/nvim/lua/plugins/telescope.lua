@@ -10,7 +10,7 @@ return function()
 		return
 	end
 
-	-- [[ Imports for convenience ]] --
+	-- Imports for convenience
 	local actions = require("telescope.actions")
 	local pickers = require("telescope.pickers")
 	local previewers = require("telescope.previewers")
@@ -32,6 +32,7 @@ return function()
 
 	-- [[ Main telescope config ]] --
 	telescope.setup({
+    path_display = { shorten = 5 },
 		defaults = {
 			prompt_prefix = SYMBOLS.misc.search .. " ",
 			selection_caret = SYMBOLS.misc.selector .. " ",
@@ -42,7 +43,6 @@ return function()
 				prompt_position = "top",
 			},
 			sorting_strategy = "ascending",
-			path_display = { shorten = 5 },
 			color_devicons = true,
 			set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
 
@@ -91,9 +91,6 @@ return function()
 			grep_string = fixfolds,
 			live_grep = fixfolds,
 			oldfiles = fixfolds,
-			-- find_files = {
-			-- find_command = { "fd", "--type=file", "--hidden" }
-			-- }
 		},
 		extensions = {
 			fzy_native = {
@@ -107,4 +104,5 @@ return function()
 	})
 	require("telescope").load_extension("fzy_native")
 	require("telescope").load_extension("file_browser")
+	require("telescope").load_extension("notify")
 end

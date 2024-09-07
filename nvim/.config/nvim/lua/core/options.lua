@@ -1,8 +1,10 @@
 -- [[ GLOBAL OPTIONS ]] --
 --------------------------
 local options = {
+	autoindent = true, -- copy indent from current line when starting a new line
 	autoread = true, -- reload files when changed on disk
 	autowriteall = true, -- always autosave
+	backspace = "indent,eol,start", -- allow backspace on indent, end of line or insert mode start position
 	clipboard = "unnamedplus", -- yank across different terminals
 	completeopt = { "menuone", "noselect" }, -- mostly for cmp
 	cursorline = true, -- highlights the current line

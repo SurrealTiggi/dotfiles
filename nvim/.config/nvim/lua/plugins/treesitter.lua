@@ -1,6 +1,6 @@
 return function()
 	require("nvim-treesitter.configs").setup({
-		auto_install = false,
+		auto_install = true,
 		ensure_installed = {
 			"bash",
 			"comment",
@@ -9,13 +9,17 @@ return function()
 			"graphql",
 			"query",
 			"hcl",
+      "helm",
 			"html",
 			"javascript",
 			"jsonnet",
 			"typescript",
+      "tsx",
 			"jsdoc",
 			"json",
 			"lua",
+      "vim",
+      "dockerfile",
 			"python",
 			"regex",
 			"rust",
@@ -26,7 +30,7 @@ return function()
 			"markdown_inline",
 		},
 		playground = {
-			enable = true,
+			enable = false,
 		},
 		highlight = {
 			enable = true,

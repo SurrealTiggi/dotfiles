@@ -20,14 +20,38 @@
 
 -- [[ Neovim configurations for the ages ]] --
 ----------------------------------------------
-require("init") -- Any global stuff to bootstrap first
-require("user.options") -- Vim general options
--- require("user.plugins") -- [DEPRECATED] Plugin management + plugin configs
-require("user.lazyplugins") -- Lazy.nvim plugin management + plugin configs
+require("init") -- Global variables and basic things to load up
+require("core.options") -- Vim general options
+require("core.lazy") -- Lazy.nvim plugin management + lsp
+
 require("user.keybinds") -- Keymap config
+require("user.plugins") -- Lazy.nvim plugin management + plugin configs
 require("user.functions") -- Utility functions
 
-require("user.autocommands") -- All autocommands
+-- require("user.autocommands") -- All autocommands
 require("user.misc") -- Everything else, eg. colorscheme, vim plugin settings, etc.
 
-require("lsp") -- Setup LSP
+-- require("lsp") -- Setup LSP
+
+--[[
+  FIXME:
+  * symbol highlighter
+  * lspsaga remove
+  * telescope folded if a buffer has :ToggleFold???
+  * lsp_signature
+
+--]]
+
+--[[
+  TODO:
+  * Add which LSP is throwing diagnostic to line
+  * null-ls -> none-ls, but maybe just with diagnostics?
+  * Go through and drop unmaintained plugins (eg. cosmic-ui)
+  * Install yaml-language-server but disable it for helm filetype
+  * 2 spaces before a comment string to not conflict with helm lint (yamlfmt)
+  * Move to Trouble symbols instead of symbols-outline?
+  * Review all keymaps
+  * pretify lualine and bufferline
+  * fix up all missing icons https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance#basic-customisations
+
+--]]

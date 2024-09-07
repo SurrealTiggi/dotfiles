@@ -60,12 +60,3 @@ vim.cmd([[autocmd BufRead,BufNewFile *.tfstate,*.tfstate.backup set filetype=jso
 
 -- JSONNET
 vim.cmd([[autocmd BufRead,BufNewFile *.libsonnet set filetype=jsonnet]])
-
--- Load vim-dadbod-completion for SQL files
--- TODO: not installed yet
--- vim.cmd([[
--- augroup DadBodSQL
--- au!
--- autocmd FileType sql,mysql,plsql lua require("cmp").setup.buffer { sources = { { name = "vim-dadbod-completion" } } }
--- augroup END
--- ]])

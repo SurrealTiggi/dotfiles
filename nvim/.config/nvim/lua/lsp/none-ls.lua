@@ -40,8 +40,8 @@ null_ls.setup({
 	debug = false,
 	sources = {
 		-- Formatters
-		formatting.trim_newlines,
-		formatting.trim_whitespace,
+		-- formatting.trim_newlines,
+		-- formatting.trim_whitespace,
 		formatting.prettier.with({
 			disabled_filetypes = { "yaml" },
 		}),
@@ -57,23 +57,23 @@ null_ls.setup({
 		formatting.stylua,
 		formatting.shfmt,
 		formatting.terraform_fmt,
-		formatting.packer,
 
 		-- Diagnostics
 		-- NOTE: would be nice to switch to flakeheaven for pyproject.toml support
 		-- but command doesn't seem to support `flakeheave lint`
-		diagnostics.flake8.with({
-			extra_args = { "--max-line-length", "88" },
-		}),
+		-- diagnostics.flake8.with({
+		-- extra_args = { "--max-line-length", "88" },
+		-- }),
 		-- diagnostics.staticcheck,
 		diagnostics.golangci_lint,
-		diagnostics.eslint,
-		diagnostics.standardjs,
+		-- diagnostics.eslint,
+		-- diagnostics.standardjs,
 		-- TODO: Tweak config for markdownlint as defaults are super noisy
 		-- diagnostics.mdl,
 		-- diagnostics.write_good,
+		diagnostics.terraform_validate,
 		diagnostics.stylelint,
-		diagnostics.shellcheck,
+		-- diagnostics.shellcheck,
 		diagnostics.yamllint.with({ extra_args = { "-d", "relaxed" } }),
 		-- tflint,
 

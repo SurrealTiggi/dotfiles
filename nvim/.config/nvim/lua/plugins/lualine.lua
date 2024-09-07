@@ -1,3 +1,4 @@
+-- TODO: Add lsp_status https://github.com/nvim-lualine/lualine.nvim/blob/master/examples/evil_lualine.lua
 return function()
 	local function tree()
 		return SYMBOLS.misc.nav_tree .. " NvimTree"
@@ -5,6 +6,22 @@ return function()
 
 	local function symbol_tree()
 		return SYMBOLS.misc.symbol_tree .. " Symbols"
+	end
+
+	local function lsp_status()
+		local msg = "No Active Lsp"
+		local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
+		local clients = vim.lsp.get_active_clients()
+		if next(clients) == nil then
+			return msg
+		end
+		for _, client in ipairs(clients) do
+			local filetypes = client.config.filetypes
+			if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+				return client.name
+			end
+		end
+		return SYMBOLS.misc.lsp_status .. "LSP: " .. msg
 	end
 
 	local prettier_tree = {

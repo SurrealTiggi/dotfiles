@@ -1,24 +1,30 @@
 return function()
 	local colors = COLORS
+	local symbols = SYMBOLS
 
-	if colors == nil then
-		print("ERROR: No colors provided, so icon overrides won't be set")
+	if colors == nil or symbols == nil then
+		vim.notify("ERROR: No colors or symbols provided, so icon overrides won't be set")
 		require("nvim-web-devicons").setup()
 	else
 		-- @SurrealTiggi: nvim-web-devicons only supports filtering by extensions or full file name
 		-- TODO: by filetype https://github.com/kyazdani42/nvim-web-devicons/pull/125
 		-- regex support https://github.com/kyazdani42/nvim-web-devicons/issues/36
 		require("nvim-web-devicons").setup({
-			override = {
-				["package.json"] = {
-					icon = SYMBOLS.files.package_json,
-					color = colors.green,
-					name = "PackageJson",
-				},
+			override_by_filename = {
 				["Makefile"] = {
 					icon = SYMBOLS.files.makefile,
 					color = colors.peach,
 					name = "Makefile",
+				},
+				[".gitignore"] = {
+					icon = SYMBOLS.git_symbols.git["unmerged"],
+					color = colors.vibrant_green,
+					name = "GitIgnore",
+				},
+				["package.json"] = {
+					icon = SYMBOLS.files.package_json,
+					color = colors.green,
+					name = "PackageJson",
 				},
 				["Justfile"] = {
 					icon = SYMBOLS.files.makefile,
@@ -35,6 +41,13 @@ return function()
 					color = colors.vibrant_green,
 					name = "env",
 				},
+				["go.mod"] = {
+					icon = SYMBOLS.files.golang,
+					color = colors.teal,
+					name = "GoMod",
+				},
+			},
+			override = {
 				md = {
 					icon = SYMBOLS.files.markdown,
 					colors = colors.blue,
@@ -65,25 +78,10 @@ return function()
 					color = colors.green,
 					name = "sh",
 				},
-				[".secrets.baseline"] = {
-					icon = SYMBOLS.misc.lock,
-					color = colors.white,
-					name = "GitIgnore",
-				},
-				[".gitignore"] = {
-					icon = SYMBOLS.git_symbols.git["unmerged"],
-					color = colors.vibrant_green,
-					name = "GitIgnore",
-				},
 				py = {
 					icon = SYMBOLS.files.python,
 					color = colors.orange,
 					name = "py",
-				},
-				["go.mod"] = {
-					icon = SYMBOLS.files.golang,
-					color = colors.teal,
-					name = "GoMod",
 				},
 				html = {
 					icon = SYMBOLS.files.html,
