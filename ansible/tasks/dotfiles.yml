@@ -1,5 +1,4 @@
-# TODO: Refresh terminal at the end (exec zsh)
-# TODO: run nvim +PackerSync
+# See TODO.md for all outstanding tasks
 ---
 - name: Ensure homebrew is available
   import_tasks: tasks/homebrew.yml
@@ -38,9 +37,9 @@
   check_mode: false
 
 - name: Register git directory
-  stat:
-    path: "{{ ansible_env.HOME }}/{{ main_git_dir | default('git') }}"
-  register: git_dir
+  set_fact:
+    git_dir_path: "{{ ansible_env.HOME }}/{{ main_git_dir | default('git') }}"
+  when: git_dir_path is not defined
   check_mode: false
 
 - name: Register dotfiles source
@@ -50,7 +49,7 @@
   check_mode: false
 
 - debug:
-    msg: "Dotfiles source at {{ ansible_env.DOTFILES | default(ghq_root.stdout + '/' + dotfiles_repo) }}"
+    msg: "Dotfiles source at {{ ansible_env.DOTFILES | default(ghq_root.stdout + '/' + dotfiles_repo) }}\nGit dir at {{ git_dir_path }}"
 
 - name: Exit if ghq or stow are missing
   fail:
@@ -71,11 +70,16 @@
     state: absent
   when: zshrc.stat.exists and zshrc.stat.islnk == "false"
 
-- name: Create main git dir
+- name: Ensure main git dir exists
   file:
-    path: "{{ git_dir.stat.path }}"
+    path: "{{ git_dir_path }}"
     state: directory
-  when: not git_dir.stat.exists
+    mode: '0755'
+
+- name: Register git_dir stats
+  stat:
+    path: "{{ git_dir_path }}"
+  register: git_dir
 
 # NOTE: it's fine if sources don't exist, provided it works when we clone something manually as we need it
 - name: Symlink git dirs for convenience

@@ -7,22 +7,25 @@
   register: kubectl_binary
   check_mode: false
 
+- name: Register helm binary
+  ansible.builtin.stat: "path={{ homebrew_brew_bin_path }}/helm"
+  register: helm_binary
+  check_mode: false
+
 - name: Clone oh-my-zsh
-  become: true
-  become_user: '{{ user.username }}'
-  ansible.builtin.command: |
-    git clone -c core.autocrlf=input --depth=1 https://github.com/robbyrussell/oh-my-zsh.git .oh-my-zsh
-  args:
-    chdir: '~{{ user.username }}'
-    creates: '~{{ user.username }}/.oh-my-zsh'
+  ansible.builtin.git:
+    repo: https://github.com/robbyrussell/oh-my-zsh.git
+    dest: '~{{ user.username }}/.oh-my-zsh'
+    version: HEAD
+    force: yes
+    clone: yes
+    update: no
   loop: "{{ users }}"
   loop_control:
     loop_var: user
     label: '{{ user.username }}'
 
 - name: Set oh-my-zsh dir permissions
-  become: true
-  become_user: '{{ user.username }}'
   file:
     path: '~{{ user.username }}/.oh-my-zsh'
     mode: 'go-w'
@@ -33,8 +36,6 @@
     label: '{{ user.username }}'
 
 - name: Bootstrap fzf
-  become: true
-  become_user: '{{ user.username }}'
   ansible.builtin.command: |
     {{ homebrew_prefix }}/opt/fzf/install --all --no-update-rc --no-bash
   args:
@@ -52,8 +53,6 @@
     {{ users | product(terminal_extra_plugins) | list }}
 
 - name: Install 3rd party oh-my-zsh plugins
-  become: true
-  become_user: '{{ item[0].username }}'
   ansible.builtin.command: |
     git clone https://{{ item[1].source }}.git .oh-my-zsh/custom/plugins/{{ item[1].plugin }}
   args:
@@ -63,8 +62,6 @@
     {{ users | product(terminal_extra_plugins) | list }}
 
 - name: Install powerlevel10k theme
-  become: true
-  become_user: '{{ user.username }}'
   ansible.builtin.command: |
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git .oh-my-zsh/custom/themes/powerlevel10k
   args:
@@ -75,8 +72,7 @@
     loop_var: user
     label: '{{ user.username }}'
 
-# TODO: Compare p10k-lean and see what vars we're still missing
-# then pull down .p10k-lean so we can avoid running the config wizard
+# See TODO.md for all outstanding tasks
 
 - name: Install kubectl krew plugins
   ansible.builtin.command: |
@@ -87,3 +83,13 @@
   loop: |
     {{ users | product(krew_plugins) | list }}
   when: kubectl_binary.stat.exists
+
+- name: Install helm plugins
+  ansible.builtin.command: |
+    helm plugin install https://github.com/{{ item[1] }}.git
+  args:
+    chdir: "~{{ item[0].username }}"
+    creates: "~{{ item[0].username }}/Library/helm/plugins/{{ item[1] | split('/') | last }}.git"
+  loop: |
+    {{ users | product(helm_plugins) | list }}
+  when: helm_binary.stat.exists

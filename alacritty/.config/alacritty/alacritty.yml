@@ -34,7 +34,7 @@ scrolling:
   auto_scroll: false
 
 env:
-  TERM: xterm-256color # tmux uses tmux-256color
+  TERM: xterm-256color  # tmux uses tmux-256color
 font:
   normal:
     family: BlexMono Nerd Font
@@ -48,14 +48,14 @@ font:
   bold_italic:
     family: VictorMono Nerd Font
     style: Bold Italic
-  size: 15.5
+  size: 14
   use_thin_strokes: true
 
 # background_opacity: 0.9
 live_config_reload: true
 
 mouse_bindings:
-  - { mouse: Middle, action: PasteSelection }
+  - {mouse: Middle, action: PasteSelection,}
 
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
@@ -147,18 +147,18 @@ colors:
 
 # For reference https://www.eso.org/~ndelmott/ascii.html
 key_bindings:
-  - { key: Slash, mods: Control, chars: "\x1f" } # ^_
-  - { key: R, mods: Control, chars: "\x12" } # ^R
+  - {key: Slash, mods: Control, chars: "\x1F"}  # ^_
+  - {key: R, mods: Control, chars: "\x12"}  # ^R
   # - { key: W,       mods: Control,  chars: "\x17" }        # ^W
-  - { key: Period, mods: Alt, chars: "\x1b\x2e" } # ^[.
-  - { key: Left, mods: Alt, chars: "\x1b\x62" } # ^[b
-  - { key: Right, mods: Alt, chars: "\x1b\x66" } # ^[f
-  - { key: V, mods: Control, action: Paste }
-  - { key: N, mods: Command, action: CreateNewWindow }
-  - { key: Home, chars: "\x1bOH", mode: AppCursor }
-  - { key: Home, chars: "\x1b[H", mode: ~AppCursor }
-  - { key: End, chars: "\x1bOF", mode: AppCursor }
-  - { key: End, chars: "\x1b[F", mode: ~AppCursor }
-  - { key: Back, chars: "\x7f" }
+  - {key: Period, mods: Alt, chars: "\e."}  # ^[.
+  - {key: Left, mods: Alt, chars: "\eb"}  # ^[b
+  - {key: Right, mods: Alt, chars: "\ef"}  # ^[f
+  - {key: V, mods: Control, action: Paste}
+  - {key: N, mods: Command, action: CreateNewWindow}
+  - {key: Home, chars: "\eOH", mode: AppCursor}
+  - {key: Home, chars: "\e[H", mode: ~AppCursor}
+  - {key: End, chars: "\eOF", mode: AppCursor}
+  - {key: End, chars: "\e[F", mode: ~AppCursor}
+  - {key: Back, chars: "\x7F",}
   # - { key: Home,     mods: Shift, action: ScrollToTop,    mode: ~Alt       }
   # - { key: End,      mods: Shift, action: ScrollToBottom, mode: ~Alt       }

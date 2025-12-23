@@ -30,9 +30,18 @@ return function()
 		end,
 	}
 
+	-- Disable folding in Telescope buffers
+	vim.api.nvim_create_autocmd("FileType", {
+		pattern = { "TelescopeResults", "TelescopePrompt" },
+		callback = function()
+			vim.opt_local.foldenable = false
+			vim.opt_local.foldmethod = "manual"
+		end,
+	})
+
 	-- [[ Main telescope config ]] --
 	telescope.setup({
-    path_display = { shorten = 5 },
+		path_display = { shorten = 5 },
 		defaults = {
 			prompt_prefix = SYMBOLS.misc.search .. " ",
 			selection_caret = SYMBOLS.misc.selector .. " ",
@@ -53,23 +62,25 @@ return function()
 			qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
 
 			vimgrep_arguments = {
-				"ag",
-				"--hidden",
-				"--nocolor",
-				"--noheading",
-				"--filename",
-				"--numbers",
+				"rg",
+				"--color=never",
+				"--no-heading",
+				"--with-filename",
+				"--line-number",
 				"--column",
 				"--smart-case",
+				"--hidden",          -- Search hidden files
+				"--glob=!.git/",     -- But exclude .git directory
 			},
 			file_ignore_patterns = {
-				"^.terraform/",
-				"^.git/",
-				"go.sum",
-				"go.mod",
-				"package-lock.json",
-				"yarn.lock",
-				"poetry.lock",
+				"%.terraform/",
+				"%.git/",
+				"go%.sum$",
+				"go%.mod$",
+				"package%-lock%.json$",
+				"yarn%.lock$",
+				"poetry%.lock$",
+				"lazy%-lock%.json$",
 			},
 			mappings = {
 				i = {
@@ -85,24 +96,40 @@ return function()
 			},
 		},
 		pickers = {
-			find_files = fixfolds,
+			find_files = vim.tbl_extend("force", fixfolds, {
+				hidden = true,
+				no_ignore = false,
+				follow = true,
+			}),
 			buffers = fixfolds,
 			git_files = fixfolds,
 			grep_string = fixfolds,
 			live_grep = fixfolds,
 			oldfiles = fixfolds,
+			lsp_references = vim.tbl_extend("force", fixfolds, {
+				initial_mode = "normal",
+				show_line = false,
+			}),
+			git_bcommits = vim.tbl_extend("force", fixfolds, {
+				git_command = { "git", "log", "--pretty=oneline", "--abbrev-commit", "--format=%h %s - %an (%cr)" },
+			}),
+			git_commits = vim.tbl_extend("force", fixfolds, {
+				git_command = { "git", "log", "--pretty=oneline", "--abbrev-commit", "--format=%h %s - %an (%cr)" },
+			}),
 		},
 		extensions = {
-			fzy_native = {
-				override_generic_sorter = false,
+			fzf = {
+				fuzzy = true,
+				override_generic_sorter = true,
 				override_file_sorter = true,
+				case_mode = "smart_case",
 			},
 			file_browser = {
 				-- theme = "dropdown",
 			},
 		},
 	})
-	require("telescope").load_extension("fzy_native")
+	require("telescope").load_extension("fzf")
 	require("telescope").load_extension("file_browser")
 	require("telescope").load_extension("notify")
 end

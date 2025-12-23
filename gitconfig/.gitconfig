@@ -40,6 +40,9 @@
   renames = copies
   submodule = log
 
+[diff "sopsdiffer"]
+  textconv = sops -d
+
 [difftool "nvimdiff"]
   cmd = nvim -d $LOCAL $REMOTE
   trustexitcode = true
@@ -48,6 +51,7 @@
   tool = nvimmerge
   keepBackup = false
   log = true
+	conflictstyle = diff3
 
 [mergetool "nvimmerge"]
   cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c '$wincmd J'
@@ -55,7 +59,7 @@
 [delta]
   line-numbers = true
   syntax-theme = gruvbox-dark
-  side-by-side = false
+  side-by-side = true
 
   file-modified-label = modified:
 

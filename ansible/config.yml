@@ -1,12 +1,7 @@
----
 ##################################################
 ### Homebrew                                   ###
 ##################################################
 homebrew_taps:
-  - homebrew/bundle
-  - homebrew/core
-  - homebrew/cask
-  - homebrew/cask-fonts
   - aws/tap
   - charmbracelet/tap
   - derailed/k9s
@@ -15,128 +10,168 @@ homebrew_taps:
   - helm/tap
   - hidetatz/tap
   - itchyny/tap
+  - kubeshark/kubeshark
+  - norwoodj/tap
+  - orlangure/tap
   - pulumi/tap
   - sigstore/tap
   - trashhalo/brews
+  - updatecli/updatecli
   - weaveworks/tap
+  - spectralops/tap
+  - nats-io/nats-tools
 
 homebrew_cask_appdir: /Applications
 homebrew_cask_apps:
-  - amethyst                        # A simple tiling window manager
-  - alt-tab                         # Windows style switcher
-  - bitwarden                       # Password manager
-  - brave-browser                   # Browser of choice
-  - cron                            # Calendar client
-  - docker                          # Docker client
-  - firefox                         # Alternative browser
-  - font-fira-code-nerd-font        # Nerd font
-  - font-fira-mono-nerd-font        # Nerd font
-  - font-hack-nerd-font             # Nerd font
-  - font-iosevka-nerd-font          # Nerd font
-  - font-jetbrains-mono-nerd-font   # Nerd font
-  - font-victor-mono-nerd-font      # Nerd font
-  - hazeover                        # Dims inactive window
-  - itsycal                         # A simple menubar calendar
-  - karabiner-elements              # Keyboard keymapping
-  - linear-linear                   # Linear Project Management
-  - neat                            # Github menubar notifications
-  - notion                          # Organize your life
-  - shottr                          # Screenshot tool
-  - slack                           # Messaging app
-  - spotify                         # For the soul
-  - stats                           # A simple stats client
+  - amethyst  # A simple tiling window manager
+  - alt-tab  # Windows style switcher
+  - arc  # Browser of choice
+  - bitwarden  # Personal password manager
+  - docker  # Docker client
+  - firefox  # Alternative browser
+  - font-fira-code-nerd-font  # Nerd font
+  - font-fira-mono-nerd-font  # Nerd font
+  - font-hack-nerd-font  # Nerd font
+  - font-iosevka-nerd-font  # Nerd font
+  - font-jetbrains-mono-nerd-font  # Nerd font
+  - font-victor-mono-nerd-font  # Nerd font
+  - gitify  # Github menubar notifications
+  #- hazeover  # Dims inactive window
+  - hot  # CPU temp in menubar
+  - itsycal  # A simple menubar calendar
+  #- karabiner-elements  # Keyboard keymapping
+  - linear-linear  # Linear Project Management
+  - notion  # Organize your life
+  - raycast  # Multi-purpose launcher
+  - shottr  # Screenshot tool
+  - slack  # Messaging app
+  - spotify  # For the soul
+  - stats  # A simple stats client
+  - visual-studio-code  # For rare occasions
+  - yaak  # Postman alternative
 
 # Some other funs ones to check out
 # https://github.com/Lissy93/Brewfile/blob/master/Brewfile
 homebrew_installed_packages:
-  - act                               # Run github actions locally
-  - alacritty                         # Terminal of choice
-  - asdf                              # Extendable version manager for *all the things*
-  - aws-sam-cli                       # AWS Serverless Application Model cli
-  - awscli                            # Official AWS cli
-  - bat                               # A better cat
-  - brew-gem                          # Manage ruby gems via homebrew
-  - dict                              # A dictionary cli
-  - dockutil                          # Manage MacOS dock
-  - docutils                          # Text processing for reStructured Text
-  - doppler                           # SecretOps cli
-  - fd                                # A faster find
-  - ffmpeg                            # Audio & video utility
-  - flux                              # Flux GitOps cli
-  - fx                                # Terminal JSON viewer
-  - fzf                               # Fuzzy finder
-  - fzy                               # Optimized fuzzy finder
-  - gh                                # Github cli
-  - ghq                               # Git repo manager
-  - git                               # Git, obviously
-  - git-delta                         # Syntax highlighting pager for git diffs
-  - git-extras                        # Little git extras
-  - git-quick-stats                   # Simple statistics about a git repo
-  - gitui                             # Git TUI written in Rust
-  - glab                              # Gitlab cli
-  - golangci-lint                     # Golang linter utility
-  - google-cloud-sdk                  # GCP cli
-  - gotop                             # Graphical activity monitor TUI
-  - gpg-suite                         # GPG Suite and cli
-  - gron                              # Grep for JSON
-  - helm                              # Kubernetes package manager cli
-  - htop                              # Another graphical activity monitor TUI
-  - httpie                            # cURL replacement cli
-  - iftop                             # Network usage cli
-  - imgcat                            # Output images in a terminal
-  - infracost                         # Cost estimates for terraform
-  - ipcalc                            # Calculate network ranges and masks
-  - iperf                             # Tool to measure network performance
-  - iproute2mac                       # MacOS network utils
-  - jless                             # JSON cli pager
-  - jq                                # JSON processor cli
-  - k9s                               # Kubernetes TUI client
-  - kind                              # Kubernetes in docker
-  - krew                              # Kubernetes plugin manager
-  - kube-ns                           # Kubernetes namespace switcher
-  - kubecolor                         # Colored output for kubectl
-  - kubectl                           # Kubernetes cli
-  - kubectx                           # Kubernetes context switcher
-  - kustomize                         # Kubernetes manifest customizer
-  - lazydocker                        # Docker management
-  - mas                               # Mac App Store cli
-  - mmv                               # File operation cli
-  - mtr                               # Network tracing cli
-  - neofetch                          # Graphical system info TUI
-  - neovim                            # Neovim
-  - ngrok                             # Reverse proxy tunnels to localhost
-  - nmap                              # Network port scanner
-  - okteto                            # Okteto cli
-  - poetry                            # Python package management tool
-  - pre-commit                        # Pre-commit cli for git repos
-  - pstree                            # Process output as a tree
-  - pulumi                            # IaC cloud development framework
-  - ripgrep                           # Fast search cli
-  - s3cmd                             # AWS S3 cli
-  - shellcheck                        # Shell script linter
-  - skate                             # Personal key/value store
-  - speedtest-cli                     # Speedtest cli
-  - ssh-copy-id                       # Copy your SSH key to a remote host
-  - stow                              # Simple symlink management
-  - teleport                          # Identity aware reverse-proxy for VM's, K8s, DB's, etc
-  - terraform-docs                    # Generate docs from terraform modules
-  - terragrunt                        # Terraform DRY wrapper
-  - the_silver_searcher               # (Arguably) faster search cli
-  - tidy-html5                        # HTML linter and other tools
-  - tmux                              # Terminal multiplexer
-  - tree                              # File listing as a tree
-  - vault                             # Hashicorp vault cli
-  - viu                               # Terminal image viewer written in Rust
-  - wget                              # Internet file retriever
-  - yarn                              # Node package management
-  - zsh-completions                   # A collection of completions for ZSH
-  - zsh-history-substring-search      # ZSH port of Fish shell history search
-  - zsh-syntax-highlighting           # Syntax highlighting for ZSH
+  - 1password-cli  # 1Password cli
+  - act  # Run github actions locally
+  - pgcli # PSQSL client on steroids
+  - alacritty  # Terminal of choice
+  - argocd  # Argo CLI util
+  - asdf  # Extendable version manager for *all the things*
+  - aws-sam-cli  # AWS Serverless Application Model cli
+  - awscli  # Official AWS cli
+  - bash  # To get a more recent version since MacOS ships with an old version
+  - bat  # A better cat
+  - brew-gem  # Manage ruby gems via homebrew
+  - dict  # A dictionary cli
+  - dockutil  # Manage MacOS dock
+  - docutils  # Text processing for reStructured Text, also needed for awscli
+  - doppler  # SecretOps cli
+  - eza  # Better ls
+  - fd  # A faster find
+  - ffmpeg  # Audio & video utility
+  - ffmpegthumbnailer
+  - fluxcd/tap/flux  # Flux GitOps cli
+  - fx  # Terminal JSON viewer
+  - fzf  # Fuzzy finder
+  - fzy  # Optimized fuzzy finder
+  - gh  # Github cli
+  - ghq  # Git repo manager
+  - git  # Git, obviously
+  - git-delta  # Syntax highlighting pager for git diffs
+  - git-extras  # Little git extras
+  - git-quick-stats  # Simple statistics about a git repo
+  - gitui  # Git TUI written in Rust
+  - glab  # Gitlab cli
+  - gnu-getopt  # GNU getopt
+  - gocovsh  # Go test coverage explorer for the terminal
+  - golangci-lint  # Golang linter utility
+  - google-cloud-sdk  # GCP cli
+  - gotop  # Graphical activity monitor TUI
+  - gpg-suite  # GPG Suite and cli
+  - gron  # Grep for JSON
+  - grpcui  # GRPC UI utility
+  - gsed  # GNU sed
+  - helm  # Kubernetes package manager cli
+  - helm-docs  # Easily generate helm-docs
+  - helmify  # Creates a helm chart from Kubernetes yaml
+  - hey  # HTTP load generator cli
+  - htop  # Another graphical activity monitor TUI
+  - httpie  # cURL replacement cli
+  - iftop  # Network usage cli
+  - imagemagick
+  - imgcat  # Output images in a terminal
+  - infracost  # Cost estimates for terraform
+  - ipcalc  # Calculate network ranges and masks
+  - iperf  # Tool to measure network performance
+  - iproute2mac  # MacOS network utils
+  - jless  # JSON cli pager
+  - jq  # JSON processor cli
+  - k3d  # Faster Kubernetes in docker
+  - k9s  # Kubernetes TUI client
+  - kind  # Kubernetes in docker
+  - krew  # Kubernetes plugin manager
+  - kubecolor  # Colored output for kubectl
+  - kubeconform  # Kubernetes manifest validation
+  - kubectl  # Kubernetes cli
+  - kubectx  # Kubernetes context switcher
+  - kubeshark  # API traffic analyzer for k8s
+  - kustomize  # Kubernetes manifest customizer
+  - lazydocker  # Docker management
+  - lazysql  # SQL TUI
+  - mas  # Mac App Store cli
+  - mmv  # File operation cli
+  - mtr  # Network tracing cli
+  - nats-io/nats-tools/nats  # KV store
+  - neofetch  # Graphical system info TUI
+  - neovim # Neovim
+  - ngrok  # Reverse proxy tunnels to localhost
+  - nmap  # Network port scanner
+  - nushell # Utility shell
+  - okteto  # Okteto cli
+  - poppler
+  - pre-commit  # Pre-commit cli for git repos
+  - prometheus  # Monitoring system, mostly installed for promtool
+  - pstree  # Process output as a tree
+  - pulumi  # IaC cloud development framework
+  - ripgrep  # Fast search cli
+  - s3cmd  # AWS S3 cli
+  - sevenzip
+  - shellcheck  # Shell script linter
+  - skate  # Personal key/value store
+  - sops  # Secret Management
+  - speedtest-cli  # Speedtest cli
+  - ssh-copy-id  # Copy your SSH key to a remote host
+  - steampipe  # steampipe.io query cloud like SQL
+  - stern  # Kubernetes log tailer
+  - stow  # Simple symlink management
+  - teleport  # Identity aware reverse-proxy for VM's, K8s, DB's, etc
+  #- teller  # Easy secrets management on AWS
+  - terraform-docs  # Generate docs from terraform modules
+  - terragrunt  # Terraform DRY wrapper
+  - tflint  # Terraform linter
+  - the_silver_searcher  # (Arguably) faster search cli
+  - tidy-html5  # HTML linter and other tools
+  - tlrc  # Rust based tldr for better man pages
+  - tmux  # Terminal multiplexer
+  - tree  # File listing as a tree
+  - updatecli  # Dependency management cli utility
+  - uv  # The best(?) python package manager
+  - velero  # Kubernetes backup utility
+  - viu  # Terminal image viewer written in Rust
+  - wget  # Internet file retriever
+  - yarn  # Node package management
+  - yazi
+  - zoxide
+  - zsh-completions  # A collection of completions for ZSH
+  - zsh-history-substring-search  # ZSH port of Fish shell history search
+  - zsh-syntax-highlighting  # Syntax highlighting for ZSH
 
 ##################################################
 ### Dock                                       ###
 ##################################################
-configure_dock: true
+configure_dock: false
 dockitems_remove: []
 # - Launchpad
 # - TV
@@ -179,20 +214,24 @@ dockitems_persist:
 ##################################################
 configure_terminal: true
 users:
-  - username: "{{ ansible_user | default('tiago') }}"
+  - username: "{{ ansible_user_id | default('tiago') }}"
 terminal_extra_plugins:
-  - { plugin: "zsh-autosuggestions", source: "github.com/zsh-users/zsh-autosuggestions" }
-  - { plugin: "zsh-syntax-highlighting", source: "github.com/zsh-users/zsh-syntax-highlighting"}
+  - {plugin: "zsh-autosuggestions", source: "github.com/zsh-users/zsh-autosuggestions"}
+  - {plugin: "zsh-syntax-highlighting", source: "github.com/zsh-users/zsh-syntax-highlighting"}
 krew_plugins:
-  - access-matrix       # Show an access matrix for server resources
-  - deprecations        # Shows all the deprecated objects in a cluster
-  - get-all             # *Actually* gets all resources
-  - graph               # Generates a visual representation of resources
-  - images              # Show container images as a table
-  - krew                # Krew plugin management self-manage
-  - neat                # Cleans up `kubectl get ...`
-  - pod-lens            # Finds related workloads and displays in a tree
-  - view-utilization    # Show resource utilization based on cpu/memory
+  - access-matrix  # Show an access matrix for server resources
+  - deprecations  # Shows all the deprecated objects in a cluster
+  - get-all  # *Actually* gets all resources
+  - graph  # Generates a visual representation of resources
+  - images  # Show container images as a table
+  - krew  # Krew plugin management self-manage
+  - neat  # Cleans up `kubectl get ...`
+  - pod-lens  # Finds related workloads and displays in a tree
+  - view-utilization  # Show resource utilization based on cpu/memory
+  - whoami  # Simple command to show current authenticated user
+  - ktop  # Top for k8s
+helm_plugins:
+  - komodorio/helm-dashboard  # Helm release dashboard
 
 ##################################################
 ### Dotfiles                                   ###
@@ -205,15 +244,17 @@ dotfiles_pkgs:
   - asdf-default-packages
   - bin
   - gitconfig
+  - gitui
   - nvim
   - tflint
   - tmux
   - zsh
 git_link:
-  - { user: "github.com/SurrealTiggi", dest: "personal" }
-  - { user: "{{ ansible_env.WORK_GIT_ORG1 | default('')}}", dest: "work" }
-  - { user: "github.com", dest: "github.com" }
-  - { user: "github.com/crypticmonsters", dest: "cm" }
+  - {user: "github.com/SurrealTiggi", dest: "personal"}
+  - {user: "{{ ansible_env.WORK_GIT_ORG | default('github.com')}}", dest: "work"}
+  - {user: "github.com", dest: "github.com"}
+  - {user: "gitlab.com", dest: "gitlab.com"}
+  - {user: "github.com/CrypticMonsters", dest: "cm",}
   # - { user: gitlab.com/dirtypillows, dest: dp }
 
 ##################################################

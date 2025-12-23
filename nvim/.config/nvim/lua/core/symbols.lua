@@ -89,6 +89,7 @@ M.misc = {
 	symbol_tree = "", -- \uf487
 	left = "",
 	right = "",
+	right_light = "",
 	left_separator_light = "",
 	right_separator_light = "",
 	left_separator_heavy = "",
@@ -104,6 +105,8 @@ M.misc = {
 	indent_line = "", -- ┆ ┊ 
 	plugin = " ",
 	debug = " ",
+	breakpoint = "",
+	stop = "",
 	ghost = "󰊠 ",
 	github = "",
 	tree = "",
@@ -112,7 +115,7 @@ M.misc = {
 	selector = "",
 	hint_prefix = "❱❱❱",
 	lsp_status = " ",
-  robot = "󰚩",
+	robot = "󰚩",
 }
 
 M.files = {
@@ -129,9 +132,10 @@ M.files = {
 	javascript = "",
 	typescript = "",
 	docker = "",
-	vue = "﵂",
-	toml = "",
+	vue = "",
+	toml = "",
 	prisma = "",
+	ruby = "",
 }
 
 return M

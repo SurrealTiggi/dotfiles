@@ -9,10 +9,10 @@ echo "
 # Local #
 #########
 "
-git tag
+git tag --sort=-taggerdate
 echo "
 ##########
 # Remote #
 ##########
 "
-git ls-remote --tags
+git ls-remote --tags --sort=-taggerdate

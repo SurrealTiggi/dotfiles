@@ -4,7 +4,6 @@ local common = {
 	-- [[ Common dependencies ]] --
 	-------------------------------
 	{ "nvim-lua/plenary.nvim" },
-	{ "nvim-lua/popup.nvim" },
 	-- NerdIcons
 	{
 		"nvim-tree/nvim-web-devicons",
@@ -20,7 +19,10 @@ local ide = {
 		"nvim-telescope/telescope.nvim",
 		config = require("plugins.telescope"),
 		dependencies = {
-			"nvim-telescope/telescope-fzy-native.nvim",
+			{
+				"nvim-telescope/telescope-fzf-native.nvim",
+				build = "make",
+			},
 			"nvim-telescope/telescope-file-browser.nvim",
 		},
 	},
@@ -33,6 +35,43 @@ local ide = {
 	{
 		"nvim-tree/nvim-tree.lua",
 		config = require("plugins.nvim-tree"),
+	},
+	-- Oil.nvim - Edit filesystem like a buffer
+	{
+		"stevearc/oil.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		config = function()
+			require("oil").setup({
+				default_file_explorer = false, -- Keep nvim-tree as default
+				columns = {
+					"icon",
+					-- "permissions",
+					-- "size",
+					-- "mtime",
+				},
+				keymaps = {
+					["g?"] = "actions.show_help",
+					["<CR>"] = "actions.select",
+					["<C-v>"] = "actions.select_vsplit",
+					["<C-s>"] = "actions.select_split",
+					["<C-t>"] = "actions.select_tab",
+					["<C-p>"] = "actions.preview",
+					["<C-c>"] = "actions.close",
+					["<C-r>"] = "actions.refresh",
+					["-"] = "actions.parent",
+					["_"] = "actions.open_cwd",
+					["`"] = "actions.cd",
+					["~"] = "actions.tcd",
+					["gs"] = "actions.change_sort",
+					["gx"] = "actions.open_external",
+					["g."] = "actions.toggle_hidden",
+				},
+				use_default_keymaps = true,
+				view_options = {
+					show_hidden = false,
+				},
+			})
+		end,
 	},
 	-- Gitsigns for gutter + in-line blame
 	{
@@ -48,17 +87,10 @@ local ide = {
 		config = require("plugins.trouble"),
 		dependencies = "nvim-web-devicons",
 	},
-	-- LSPSaga
+	-- Symbol outline tree (modern fork of symbols-outline)
 	{
-		"glepnir/lspsaga.nvim",
-		config = function()
-			require("lspsaga").setup({})
-		end,
-	},
-	-- Symbol outline tree
-	{
-		"simrat39/symbols-outline.nvim",
-		config = require("plugins.symbols"),
+		"hedyhli/outline.nvim",
+		config = require("plugins.outline"),
 	},
 }
 
@@ -94,6 +126,30 @@ local languages = {
 	},
 	-- Helm file detection
 	{ "towolf/vim-helm" },
+	-- Markdown rendering in-buffer
+	{
+		"MeanderingProgrammer/render-markdown.nvim",
+		ft = "markdown",
+		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+		opts = {
+			heading = {
+				enabled = true,
+				sign = true,
+				icons = { "󰲡 ", "󰲣 ", "󰲥 ", "󰲧 ", "󰲩 ", "󰲫 " },
+			},
+			code = {
+				enabled = true,
+				sign = true,
+				style = "full",
+				width = "block",
+			},
+			checkbox = {
+				enabled = true,
+				checked = { icon = "󰄬 " },
+				unchecked = { icon = "󰄱 " },
+			},
+		},
+	},
 }
 
 local formatter = {
@@ -178,7 +234,7 @@ local aesthetics = {
 		"nvim-lualine/lualine.nvim",
 		config = require("plugins.lualine"),
 		dependencies = {
-			"kyazdani42/nvim-web-devicons",
+			"nvim-tree/nvim-web-devicons",
 		},
 	},
 	-- Bufferline --
@@ -186,14 +242,14 @@ local aesthetics = {
 		"akinsho/bufferline.nvim",
 		config = require("plugins.bufferline"),
 		dependencies = {
-			"kyazdani42/nvim-web-devicons",
+			"nvim-tree/nvim-web-devicons",
 		},
 	},
 	-- Dim inactive buffers --
-	{
-		"levouh/tint.nvim",
-		config = require("plugins.tint"),
-	},
+	-- {
+	-- "levouh/tint.nvim",
+	-- config = require("plugins.tint"),
+	-- },
 	-- Indent lines --
 	{
 		"lukas-reineke/indent-blankline.nvim",
@@ -206,11 +262,17 @@ local aesthetics = {
 	-- config = require("plugins.alpha-nvim"),
 	-- -- requires = "nvim-web-devicons",
 	-- },
-	-- Inline color display --
+	-- Inline color display (modern, no build required)
 	{
-		"rrethy/vim-hexokinase",
+		"brenoprata10/nvim-highlight-colors",
 		event = "BufRead",
-		build = "make hexokinase",
+		config = function()
+			require("nvim-highlight-colors").setup({
+				render = "background", -- 'background', 'foreground', 'virtual'
+				enable_named_colors = true,
+				enable_tailwind = true,
+			})
+		end,
 	},
 	-- Diagnostics in scrollbar --
 	{
@@ -219,12 +281,6 @@ local aesthetics = {
 	},
 	-- Show function signature while typing
 	{ "ray-x/lsp_signature.nvim" },
-	-- Nicer Rename
-	{
-		"CosmicNvim/cosmic-ui",
-		config = require("plugins.cosmic-ui"),
-		dependencies = { "MunifTanjim/nui.nvim" },
-	},
 	-- Colorschemes
 	{
 		"catppuccin/nvim",
@@ -241,21 +297,38 @@ local aesthetics = {
 
 local lsp = {
 	{
-		"neovim/nvim-lspconfig",
-		event = { "BufReadPre", "BufNewFile" },
+		"williamboman/mason.nvim",
+		lazy = false, -- Load immediately
+		priority = 100, -- Load before other plugins
 		dependencies = {
+			"williamboman/mason-lspconfig.nvim",
+			"WhoIsSethDaniel/mason-tool-installer.nvim",
+		},
+		config = require("lsp-new.mason"),
+	},
+	{
+		"neovim/nvim-lspconfig",
+		lazy = false, -- Load immediately so mason can configure it
+		priority = 99, -- Load right after mason
+		dependencies = {
+			"williamboman/mason.nvim",
+			"williamboman/mason-lspconfig.nvim",
+			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			{ "antosha417/nvim-lsp-file-operations", config = true },
 			{ "folke/lazydev.nvim", opts = {} },
 		},
 		config = require("lsp-new.lspconfig"),
 	},
 	{
-		"williamboman/mason.nvim",
+		"mfussenegger/nvim-dap",
 		dependencies = {
-			"williamboman/mason-lspconfig.nvim",
-			"WhoIsSethDaniel/mason-tool-installer.nvim",
+			"rcarriga/nvim-dap-ui",
+			"nvim-neotest/nvim-nio",
+			"theHamsta/nvim-dap-virtual-text",
+			"mfussenegger/nvim-dap-python",
+			"leoluz/nvim-dap-go",
 		},
-		config = require("lsp-new.mason"),
+		config = require("plugins.dap"),
 	},
 }
 

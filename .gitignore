@@ -8,3 +8,13 @@ nvim/autoload
 .ctagsrc
 
 .luarc.json
+
+zsh/.p10k.zsh
+bin/.local/bin/docker
+bin/.local/bin/docker-compose
+bin/.local/bin/docker-credential-osxkeychain
+bin/.local/bin/orb
+bin/.local/bin/orbctl
+bin/.local/bin/pipenv-nvim.sh
+bin/.local/bin/pongo
+bin/.local/bin/ksops

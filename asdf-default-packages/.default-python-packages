@@ -9,10 +9,12 @@ botocore
 certifi
 colorama
 coverage
+cryptography
 detect-secrets
 dnspython
 fastjsonschema
 flake8
+grafana-wtf
 hvac
 ipython
 isort
@@ -50,4 +52,3 @@ termcolor
 tornado
 tqdm
 yamllint
-yq

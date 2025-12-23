@@ -33,25 +33,4 @@ require("user.misc") -- Everything else, eg. colorscheme, vim plugin settings, e
 
 -- require("lsp") -- Setup LSP
 
---[[
-  FIXME:
-  * symbol highlighter
-  * lspsaga remove
-  * telescope folded if a buffer has :ToggleFold???
-  * lsp_signature
-
---]]
-
---[[
-  TODO:
-  * Add which LSP is throwing diagnostic to line
-  * null-ls -> none-ls, but maybe just with diagnostics?
-  * Go through and drop unmaintained plugins (eg. cosmic-ui)
-  * Install yaml-language-server but disable it for helm filetype
-  * 2 spaces before a comment string to not conflict with helm lint (yamlfmt)
-  * Move to Trouble symbols instead of symbols-outline?
-  * Review all keymaps
-  * pretify lualine and bufferline
-  * fix up all missing icons https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance#basic-customisations
-
---]]
+-- See TODO.md for all outstanding tasks and enhancements

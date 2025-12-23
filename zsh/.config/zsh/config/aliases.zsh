@@ -1,15 +1,20 @@
 # Aliases
 ## Dots
-alias dots="cd $MY_GIT/personal/public/dotfiles"
+alias dots="cd $MY_GIT/dotfiles"
 
 ## Handy map
 alias map="cat $HOME/vgs.aws.md"
 # alias ruby="$HOME/.rbenv/shims/ruby"
 # alias gem="$HOME/.rbenv/shims/gem"
-alias ls='colorls --sd -1'
+# alias ls='colorls --sd -1'
+alias ls='eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions --group-directories-first'
+alias lsa='eza --color=always --long --git --icons=always --no-time --no-user --group-directories-first'
 alias ll='n -He -P p'
 alias ctree='colorls --tree'
 alias cat='bat'
+
+# Dig ignore ipv6
+alias dig='dig -4 +noall +answer'
 
 ## K8S
 # alias kubectl='kubecolor'
@@ -34,7 +39,7 @@ alias gt='git tag'
 
 ## GCP
 alias gcp='gcloud'
-alias gsp='gcloud config set project'
+alias cfg='config-connector'
 
 ## PSQL
 alias psql='pgcli'

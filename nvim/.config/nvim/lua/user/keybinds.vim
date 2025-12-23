@@ -54,17 +54,28 @@ nnoremap <silent> <leader>a :call ToggleFold()<CR>
 map <silent><leader>w :update!<CR>
 """" Gitsigns
 " TODO: Need to figure out why `diffthis` closes into the wrong buffer
-nnoremap <silent><leader>gd :Gitsigns preview_hunk<CR>
+nnoremap <silent><leader>gd :lua require("user.functions").next_hunk_and_preview()<CR>
+nnoremap <silent><leader>gD :lua require("user.functions").prev_hunk_and_preview()<CR>
+nnoremap <silent><leader>ga :Gitsigns stage_hunk<CR>
+vnoremap <silent><leader>ga :Gitsigns stage_hunk<CR>
 " nnoremap <silent><leader>gdf :Gitsigns diffthis<CR>
 """" gitui
 nnoremap <leader>gg <cmd>lua _gitui_toggle()<CR>
 """" b64.nvim
 vnoremap <silent> <leader>be :<c-u>lua require("b64").encode()<CR>
 vnoremap <silent> <leader>bd :<c-u>lua require("b64").decode()<CR>
+"""" sops.nvim
+nnoremap <leader>sd :SopsDecrypt<CR>
+nnoremap <leader>se :SopsEncrypt<CR>
+nnoremap <leader>sv :SopsView<CR>
+nnoremap <leader>st :SopsEdit<CR>
+
 """" Telescope
 " Ctrl+T to checkout + track remote
 nnoremap <leader>gco :Telescope git_branches<CR>
 nnoremap <silent> <leader>ll :Telescope file_browser<CR>
+"""" Oil.nvim - Edit filesystem like a buffer
+nnoremap <silent> <leader>o :Oil<CR>
 " nmap <silent> ff :Telescope current_buffer_fuzzy_find<CR>
 " TODO: want to pass --name-only to git_commits see https://github.com/LinArcX/telescope-env.nvim
 " TODO: Or try https://github.com/sindrets/diffview.nvim as replacement for this and <leader>gdf

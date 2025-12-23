@@ -18,7 +18,7 @@
   when: not asdf_binary.stat.exists
 
 - name: Install asdf plugins
-  ansible.builtin.command: "bash -lc 'asdf plugin-add {{ item.name }}'"
+  ansible.builtin.command: "bash -lc 'asdf plugin add {{ item.name }}'"
   args:
     creates: "{{ asdf_dir }}/plugins/{{ item.name }}"
   with_items: "{{ asdf_plugins }}"
@@ -41,7 +41,7 @@
   become_user: "{{ asdf_user }}"
 
 - name: Set asdf global plugin versions
-  ansible.builtin.command: "bash -lc 'asdf global {{ item.name }} {{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}'"
+  ansible.builtin.command: "bash -lc 'asdf set -u {{ item.name }} {{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}'"
   when: item.versions is defined
   with_items: "{{ asdf_plugins }}"
   become: True

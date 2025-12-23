@@ -37,8 +37,7 @@ typeset -g POWERLEVEL9K_MODE=nerdfont-complete
 typeset -g POWERLEVEL9K_ICON_PADDING=moderate
 
 #################################[ os_icon: os identifier ]##################################
-# typeset -g POWERLEVEL9K_APPLE_ICON='\uf5a6 ' # hazard
-typeset -g POWERLEVEL9K_APPLE_ICON='\ufb8a ' # skull
+typeset -g POWERLEVEL9K_APPLE_ICON='\ue711 ' # apple
 
 ################################[ prompt_char: prompt symbol ]################################
 local my_ok_prompt="%{$fg_bold[red]%}❱%{$fg_bold[yellow]%}❱%{$fg_bold[green]%}❱"
@@ -48,7 +47,7 @@ typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_VIINS_CONTENT_EXPANSION=$my_ok_prompt
 typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_VIINS_CONTENT_EXPANSION=$my_error_prompt
 
 ##################################[ dir: current directory ]##################################
-typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
+typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_middle
 typeset -g POWERLEVEL9K_DIR_MAX_LENGTH=20
 
 #####################################[ vcs: git status ]######################################
@@ -97,6 +96,7 @@ typeset -g POWERLEVEL9K_ASDF_GCLOUD_SHOW_ON_UPGLOB='DISABLED'
 typeset -g POWERLEVEL9K_ASDF_TANKA_SHOW_ON_UPGLOB='DISABLED'
 typeset -g POWERLEVEL9K_ASDF_JB_SHOW_ON_UPGLOB='DISABLED'
 typeset -g POWERLEVEL9K_ASDF_JSONNET_SHOW_ON_UPGLOB='DISABLED'
+typeset -g POWERLEVEL9K_ASDF_YQ_SHOW_ON_UPGLOB='DISABLED'
 
 
 #########################[ virtualenv: python virtual environment ]###########################
@@ -107,7 +107,7 @@ typeset -g POWERLEVEL9K_VIRTUALENV_VISUAL_IDENTIFIER_EXPANSION=' '
 typeset -g POWERLEVEL9K_PYENV_VISUAL_IDENTIFIER_EXPANSION=''
 
 ##########################[ kubecontext: current kubernetes context ]#########################
-typeset -g POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND='kubecolor|kubectl|helm|kubens|kubectx|oc|istioctl|kogito|k9s|helmfile|flux|fluxctl|stern|k|kns|kcx'
+typeset -g POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND='kubecolor|kubectl|helm|kubens|kubectx|oc|istioctl|kogito|k9s|helmfile|flux|fluxctl|stern|k|kns|kcx|argocd|argo'
 typeset -g POWERLEVEL9K_KUBECONTEXT_DEFAULT_FOREGROUND=$color_purple
 
 #####################################[ aws: aws profile ]#####################################
@@ -125,6 +125,6 @@ typeset -g POWERLEVEL9K_AWS_DEFAULT_FOREGROUND=$color_orange
 # typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 #####################################[ gcloud: GCP profile ]##################################
-typeset -g POWERLEVEL9K_GCLOUD_SHOW_ON_COMMAND='gcloud|gcp'
+typeset -g POWERLEVEL9K_GCLOUD_SHOW_ON_COMMAND='gcloud|gcp|gsp'
 typeset -g POWERLEVEL9K_GCLOUD_VISUAL_IDENTIFIER_EXPANSION=' '
 typeset -g POWERLEVEL9K_GCLOUD_FOREGROUND=$color_light_blue

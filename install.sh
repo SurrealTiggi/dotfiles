@@ -6,20 +6,11 @@
 # Sets up Homebrew, downloads Brewfile, and bundles listed packages  #
 ######################################################################
 
-# TODO: Add emojis to every INFO_COLOR
-
-# Keyboard shortcuts:
-# Find, Re-open, reload, new tab
-# Apps:
-# * Lightshot
-# * Beardie
-# * Neat.run
-
 set -o errexit
 set -o pipefail
 
 # Global vars
-PYTHON_VERSION=3.10.8
+PYTHON_VERSION=3.11.0
 DOTFILES_REPO="github.com/SurrealTiggi/dotfiles" # NOTE: must match `dotfiles_repo` in ansible/config.yml
 START_TIME=$(date +%s)                           # Start timer
 
@@ -67,15 +58,52 @@ initial_checks() {
 	export PATH=${HOMEBREW_PREFIX}/bin:$PATH
 }
 
-set_vars() {
-	echo_this "setting"
-	export BECOME_PASS="surreal@con17T"        # TODO: Ask for this
-	export WORK_GIT_ORG="github.com/conduktor" # TODO: Ask for this
+set_pass() {
+	# Credit: https://antofthy.gitlab.io/software/askpass_stars_v1.sh.txt
+	unset password
+	password=
+
+	echo -n 'Sudo password: ' 1>&2
+
+	while IFS= read -r -n1 -s char; do
+		code=${char:+$(printf '%02x' "'$char'")}
+
+		case "$code" in
+		'' | 0a | 0d) break ;;
+		08 | 7f)
+			if [ -n "$password" ]; then
+				password="$(echo "$password" | sed 's/.$//')"
+				echo -n $'\b \b' 1>&2
+			fi
+			;;
+		15)
+			echo -n "$password" | sed 's/./\cH \cH/g' >&2
+			password=''
+			;;
+		[01]?) ;;
+		*)
+			password+="$char"
+			echo -n '*' 1>&2
+			;;
+		esac
+	done
+	echo
+
+	sudo -k
+	if ! echo $password | sudo -lS &>/dev/null; then
+		echo_this "Wrong password."
+		exit 1
+	fi
+
+	# read -rp "Work git organisation (eg. github.com/example): " WORK_GIT_ORG
+
+	export BECOME_PASS="$password"
+	# export WORK_GIT_ORG="bar"
 }
 
 install_xcode_cmdlines_utils() {
 	if ! command -v cc >/dev/null; then
-		echo_this "${INFO_COLOR}Installing xcode...{$RESET}"
+		echo_this "🔧  ${INFO_COLOR}Installing xcode...${RESET}"
 		xcode-select --install
 	else
 		echo_this "${WARN_COLOR}Xcode already installed, skipping...${RESET}"
@@ -83,14 +111,23 @@ install_xcode_cmdlines_utils() {
 }
 
 install_homebrew() {
-	# TODO: Ensure curl exists
+	if ! command -v curl >/dev/null; then
+		echo_this "${ERROR_COLOR}ERROR: curl is required but not found!${RESET}"
+		exit 1
+	fi
+
 	if ! command -v brew >/dev/null; then
-		echo_this "${INFO_COLOR}Installing Homebrew...{$RESET}"
+		echo_this "🍺  ${INFO_COLOR}Installing Homebrew...${RESET}"
 		bash -c "$(NONINTERACTIVE=1 curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+		# Ensure brew is in PATH for the rest of the script
+		if [[ -x "${HOMEBREW_PREFIX}/bin/brew" ]]; then
+			eval "$("${HOMEBREW_PREFIX}/bin/brew" shellenv)"
+		fi
 	else
 		echo_this "${WARN_COLOR}Homebrew already installed, skipping...${RESET}"
 	fi
-
+	brew analytics off
 }
 
 update_brew() {
@@ -99,67 +136,90 @@ update_brew() {
 	brew upgrade
 }
 
-# TODO: Need to curl or wget BREWFILE first
+download_brewfile() {
+	echo_this "📥  ${INFO_COLOR}Downloading Brewfile...${RESET}"
+
+	if [ -f "Brewfile" ]; then
+		echo_this "${WARN_COLOR}Brewfile already exists, skipping download...${RESET}"
+		return
+	fi
+
+	BREWFILE_URL="https://raw.githubusercontent.com/${DOTFILES_REPO}/main/Brewfile"
+	if ! curl -fsSL "$BREWFILE_URL" -o Brewfile; then
+		echo_this "${ERROR_COLOR}ERROR: Failed to download Brewfile from $BREWFILE_URL${RESET}"
+		exit 1
+	fi
+}
+
 install_brew_apps() {
 	echo_this "💾  ${INFO_COLOR}Installing listed apps...${RESET}"
-	brew bundle --global --file "${BREWFILE}"
+	brew bundle --file Brewfile
+
+	# Ensure newly installed binaries are in PATH
+	hash -r
 }
 
 clone_dotfiles() {
-	echo_this "${INFO_COLOR}Cloning dotfiles...${RESET}"
-	if command -v ghq 2>/dev/null; then
-		ghq get "${DOTFILES_REPO}" 2>/dev/null
+	echo_this "📦  ${INFO_COLOR}Cloning dotfiles...${RESET}"
+	DOTFILES_DIR="$HOME/dotfiles"
+
+	if [ -d "$DOTFILES_DIR" ]; then
+		echo_this "${WARN_COLOR}Dotfiles directory already exists at $DOTFILES_DIR, skipping...${RESET}"
 	else
-		echo_this "${ERROR_COLOR}ERROR: ghq missing!${RESET}"
-		exit 1
+		if ! command -v git >/dev/null; then
+			echo_this "${ERROR_COLOR}ERROR: git is required but not found!${RESET}"
+			exit 1
+		fi
+		git clone "https://${DOTFILES_REPO}" "$DOTFILES_DIR"
 	fi
 }
 
 setup_python() {
-	echo_this "${INFO_COLOR}Setting up required dependencies...${RESET}"
+	echo_this "🐍  ${INFO_COLOR}Installing Python and Ansible via uv...${RESET}"
 
-	if ! command -v python >/dev/null; then
-		if command -v asdf 2>/dev/null; then
-			asdf plugin-add python
-			asdf install python "${PYTHON_VERSION}"
-		else
-			echo_this "${ERROR_COLOR}ERROR: asdf missing!${RESET}"
-			exit 1
-		fi
-	else
-		echo_this "${WARN_COLOR}Python already installed, skipping...${RESET}"
-	fi
-}
-
-# TODO: uncomment DOTFILES and remove --check
-# TODO: supply sudo pass via an earlier var
-run_ansible() {
-	echo_this "${INFO_COLOR}Running ansible playbook...${RESET}"
-	GHQ_ROOT=$(ghq root)
-	export DOTFILES="${GHQ_ROOT}/${DOTFILES_REPO}"
-	if command -v poetry 2>/dev/null; then
-		# pushd "${DOTFILES}"
-		poetry install
-		poetry run ansible-galaxy install -r ansible/requirements.yml
-		poetry run ansible-playbook ansible/playbook.yml --check --extra-vars="ansible_become_pass=${BECOME_PASS}" --tags terminal -i ansible/inventory
-	else
-		echo_this "${ERROR_COLOR}ERROR: poetry missing!${RESET}"
+	if ! command -v uv >/dev/null; then
+		echo_this "${ERROR_COLOR}ERROR: uv missing!${RESET}"
 		exit 1
 	fi
+
+	# uv will handle Python installation automatically
+	uv pip install --system ansible
+}
+
+run_ansible() {
+	echo_this "🤖  ${INFO_COLOR}Running ansible playbook...${RESET}"
+	export DOTFILES="$HOME/dotfiles"
+
+	if [ ! -d "$DOTFILES" ]; then
+		echo_this "${ERROR_COLOR}ERROR: Dotfiles directory not found at $DOTFILES${RESET}"
+		exit 1
+	fi
+
+	if ! command -v ansible-playbook >/dev/null; then
+		echo_this "${ERROR_COLOR}ERROR: ansible not installed!${RESET}"
+		exit 1
+	fi
+
+	cd "$DOTFILES"
+	ansible-galaxy collection install geerlingguy.mac
+	ansible-playbook ansible/playbook.yml --extra-vars="ansible_become_pass=${BECOME_PASS}" -i ansible/inventory --tags asdf
 }
 
 # Main
+echo_this " --------------------------- INIT --------------------------- "
 echo_this "⚡${INFO_COLOR}Boostrapping...${RESET}"
 
 initial_checks
-set_vars
+set_pass
 install_xcode_cmdlines_utils
 install_homebrew
-# update_brew
-# install_brew_apps
+update_brew
+download_brewfile
+install_brew_apps
 clone_dotfiles
 setup_python
 run_ansible
 
 echo_this "✅ ${INFO_COLOR}Tasks completed successfully in $(($(date +%s) - START_TIME)) seconds${RESET}"
+echo_this " --------------------------- DONE --------------------------- "
 exit 0

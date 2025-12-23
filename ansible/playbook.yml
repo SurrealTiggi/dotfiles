@@ -1,16 +1,10 @@
-# TODO:
-# - doppler config for secrets
-# - fetch and configure ssh key
-# - fetch and configure gpg keys
-# - fetch and configure .env.secrets accordingly
-# Apps to still install:
-# * Beardie (https://github.com/Stillness-2/beardie/)
+# See TODO.md for all outstanding tasks
 ---
 - hosts: all
   name: Bootstrap
 
   vars_files:
-    config.yml
+    - config.yml
 
   pre_tasks:
     - name: Include playbook configuration.
@@ -20,12 +14,12 @@
       tags: ['always']
 
   roles:
-    - role: elliotweiser.osx-command-line-tools
     - role: geerlingguy.mac.homebrew
       tags: ['homebrew']
-    - role: geerlingguy.mac.dock
-      when: configure_dock
-      tags: ['dock']
+   # - role: elliotweiser.osx-command-line-tools
+   # - role: geerlingguy.mac.dock
+     # when: configure_dock
+     # tags: ['dock']
 
   tasks:
     - name: Setup terminal
@@ -44,6 +38,9 @@
       import_tasks: tasks/asdf.yml
       when: configure_asdf
       tags: ['asdf']
-    - import_tasks: tasks/osx.yml
-      when: configure_osx
-      tags: ['osx']
+    # - import_tasks: tasks/osx.yml
+      # when: configure_osx
+      # tags: ['osx']
+   # - import_tasks: tasks/secrets.yml
+     # when: configure_secrets
+     # tags: ['secrets']

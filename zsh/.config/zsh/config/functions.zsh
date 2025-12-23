@@ -31,3 +31,10 @@ function n() {
     rm -f "$NNN_TMPFILE" > /dev/null
   fi
 }
+
+############################################################
+## GCloud
+############################################################
+function gsp() {
+  gcloud config set project "$(gcloud projects list --format='value(projectId)' | fzf)" 2>&1 | grep --color=never 'Updated';
+}

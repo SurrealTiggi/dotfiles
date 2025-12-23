@@ -26,6 +26,7 @@ plugins=(
   git-extras
   kubectl
   poetry
+  uv
   web-search
   yarn
   z
@@ -36,6 +37,9 @@ plugins=(
 ## Oh-my-zsh
 # For a little extra speed, disables handle_completion_insecurities https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/compfix.zsh
 export ZSH_DISABLE_COMPFIX=true
+
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+
 source $ZSH/oh-my-zsh.sh
 
 #-------------------------------
@@ -62,7 +66,9 @@ export ZSH_THEMES="$HOME/.config/zsh/themes"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 ## Misc
-# TODO: Look into a better way to do this as it causes overhead
+# direnv: Uncomment if needed, but causes shell startup overhead (~100-200ms)
 # eval "$(direnv hook zsh)"
 
 # zprof
+
+export PATH="$HOME/.local/bin:$PATH"

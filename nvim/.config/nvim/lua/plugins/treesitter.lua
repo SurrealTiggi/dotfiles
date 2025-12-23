@@ -9,17 +9,17 @@ return function()
 			"graphql",
 			"query",
 			"hcl",
-      "helm",
+			"helm",
 			"html",
 			"javascript",
 			"jsonnet",
 			"typescript",
-      "tsx",
+			"tsx",
 			"jsdoc",
 			"json",
 			"lua",
-      "vim",
-      "dockerfile",
+			"vim",
+			"dockerfile",
 			"python",
 			"regex",
 			"rust",
@@ -28,6 +28,7 @@ return function()
 			"yaml",
 			"markdown",
 			"markdown_inline",
+			"nginx",
 		},
 		playground = {
 			enable = false,
@@ -40,5 +41,26 @@ return function()
 		rainbow = { enable = true },
 		autotag = { enable = true },
 		context_commentstring = { enable = true },
+	})
+
+	-- Fix folding on file open - ensure treesitter has parsed before setting up folds
+	vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
+		pattern = "*",
+		callback = function()
+			-- Delay to ensure treesitter has fully parsed
+			vim.defer_fn(function()
+				-- Only use treesitter folding if a parser is available for this filetype
+				local ok, parser = pcall(vim.treesitter.get_parser, 0)
+				if ok and parser then
+					vim.opt_local.foldmethod = "expr"
+					vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
+					-- Force fold recalculation
+					vim.cmd("normal! zx")
+				else
+					-- Fallback to indent-based folding
+					vim.opt_local.foldmethod = "indent"
+				end
+			end, 100)
+		end,
 	})
 end

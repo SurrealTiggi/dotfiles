@@ -1,7 +1,7 @@
 return function()
 	local stages_util = require("notify.stages.util")
 	require("notify").setup({
-		timeout = 5000,
+		timeout = 3000,
 		-- For stages that change opacity this is treated as the highlight behind the window
 		background_colour = "#000000",
 		-- Icons for the different levels

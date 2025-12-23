@@ -6,7 +6,7 @@ return function()
 			["*"] = { "trim_whitespace", "trim_newlines" },
 			bash = { "shfmt" },
 			css = { "prettier" },
-			golang = { "gofumpt", "goimports" },
+			go = { "gofumpt", "goimports" },
 			graphql = { "prettier" },
 			html = { "prettier" },
 			javascript = { "prettier" },
@@ -20,7 +20,7 @@ return function()
 			terraform = { "terraform_fmt" },
 			typescript = { "prettier" },
 			typescriptreact = { "prettier" },
-			yaml = { "yamlfmt" },
+			-- yaml = { "yamlfmt" },
 		},
 		format_on_save = {
 			lsp_fallback = true,
