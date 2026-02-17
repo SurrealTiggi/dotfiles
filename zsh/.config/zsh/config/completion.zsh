@@ -72,3 +72,6 @@ source ${HOME}/ghq/github.com/sanity-io/so/completion/completion.bash.inc
 # Terraform
 # autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /Users/tiago.baptista/.asdf/installs/terraform/1.12.2/bin/terraform terraform
+
+# Tailscale
+source <(tailscale completion zsh)

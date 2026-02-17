@@ -46,7 +46,7 @@ return function()
 	require("lualine").setup({
 		options = {
 			icons_enabled = true,
-			theme = "tokyonight",
+			theme = "catppuccin",
 			component_separators = {
 				left = SYMBOLS.misc.left_separator_light,
 				right = SYMBOLS.misc.right_separator_light,

@@ -42,8 +42,19 @@ export NNN_FIFO=/tmp/nnn.fifo
 export NNN_PLUG='d:diffs;p:preview-tui'
 # export NNN_FCOLORS='0000E6310000000000000000'
 
+# Preview settings for preview-tui plugin
+export NNN_SCOPE=1                  # Enable scope.sh for enhanced file previewing
+export NNN_SPLIT='h'                # Split direction: 'h' = right vertical, 'v' = lower horizontal (tmux inverts this)
+export NNN_SPLITSIZE=50             # Preview pane size percentage (default: 50)
+export NNN_PAGER='less -R'          # Pager for preview scrolling
+export NNN_BATTHEME='Nord'          # Bat theme for syntax highlighting (matches BAT_THEME)
+export NNN_BATSTYLE='numbers,grid'  # Bat style: show line numbers and grid
+
 ## AWS
 export AWS_PAGER=""
+
+## SOPS
+export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
 
 # Path stuff
 # Cache HOMEBREW_PREFIX to avoid slow brew --prefix calls on every shell startup

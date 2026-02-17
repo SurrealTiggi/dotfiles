@@ -1,0 +1,15 @@
+# Yazi configuration for neovim (image previews disabled)
+
+[mgr]
+ratio = [0, 2, 6]
+show_hidden = true
+sort_by = "natural"
+sort_sensitive = false
+sort_reverse = false
+sort_dir_first = true
+linemode = "size"
+
+[preview]
+# Disable image previews to avoid terminal color issues
+image_filter = "none"
+tab_size = 2

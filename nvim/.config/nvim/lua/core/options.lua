@@ -54,5 +54,34 @@ end
 vim.g.python_host_prog = "$HOME/.asdf/shims/python"
 vim.g.python3_host_prog = "$HOME/.asdf/shims/python3"
 
+-- Ensure Homebrew binaries are in PATH (for yazi previews, etc.)
+vim.env.PATH = "/opt/homebrew/bin:" .. vim.env.PATH
+
+-- Disable terminal background query to prevent OSC sequence issues
+-- This fixes "rgb:0000/0000/0000" errors in terminal programs like yazi
+vim.opt.background = "dark" -- Set explicitly instead of querying terminal
+
 -- Extra options to apply that only work in vim syntax
 vim.cmd([[set iskeyword+=-]]) -- Extends keyword actions to include '-'
+
+-- Prevent .env files from being detected as sh/bash (avoid bashls/shellcheck)
+-- Use 'dotenv' filetype to prevent LSP, but keep sh syntax for highlighting
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+	pattern = { "*.env", ".env", ".env.*" },
+	callback = function()
+		vim.bo.filetype = "dotenv"
+		vim.bo.syntax = "sh"
+	end,
+})
+
+-- Also catch if something tries to set filetype to sh/bash on .env files
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "sh", "bash" },
+	callback = function()
+		local filename = vim.fn.expand("%:t")
+		if filename:match("%.env") or filename == ".env" then
+			vim.bo.filetype = "dotenv"
+			vim.bo.syntax = "sh"
+		end
+	end,
+})

@@ -1,7 +1,9 @@
 -- [[ MISCELLANEOUS ]] --
 -------------------------
--- Set nvim-notify as main notifier
-vim.notify = require("notify")
+-- Set snacks.notifier as main notifier
+vim.notify = function(msg, level, opts)
+	require("snacks").notifier.notify(msg, level, opts)
+end
 
 -- [[ Highlight Groups ]] --
 ----------------------------

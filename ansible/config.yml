@@ -64,6 +64,7 @@ homebrew_installed_packages:
   - bash  # To get a more recent version since MacOS ships with an old version
   - bat  # A better cat
   - brew-gem  # Manage ruby gems via homebrew
+  - chafa  # Terminal image viewer for yazi previews
   - dict  # A dictionary cli
   - dockutil  # Manage MacOS dock
   - docutils  # Text processing for reStructured Text, also needed for awscli
@@ -135,6 +136,7 @@ homebrew_installed_packages:
   - prometheus  # Monitoring system, mostly installed for promtool
   - pstree  # Process output as a tree
   - pulumi  # IaC cloud development framework
+  - resvg  # Preview SVG in terminal
   - ripgrep  # Fast search cli
   - s3cmd  # AWS S3 cli
   - sevenzip
@@ -162,7 +164,7 @@ homebrew_installed_packages:
   - viu  # Terminal image viewer written in Rust
   - wget  # Internet file retriever
   - yarn  # Node package management
-  - yazi
+  - yazi  # Terminal file browser
   - zoxide
   - zsh-completions  # A collection of completions for ZSH
   - zsh-history-substring-search  # ZSH port of Fish shell history search
@@ -248,6 +250,7 @@ dotfiles_pkgs:
   - nvim
   - tflint
   - tmux
+  - yazi
   - zsh
 git_link:
   - {user: "github.com/SurrealTiggi", dest: "personal"}

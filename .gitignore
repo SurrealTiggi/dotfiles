@@ -18,3 +18,4 @@ bin/.local/bin/orbctl
 bin/.local/bin/pipenv-nvim.sh
 bin/.local/bin/pongo
 bin/.local/bin/ksops
+bin/.local/bin/claude

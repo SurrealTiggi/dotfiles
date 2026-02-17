@@ -29,14 +29,14 @@ keymap("n", "gs", "<cmd>Outline<CR>", opts) -- ✓ Get document symbols (outline
 -- [[ Filepath Copy ]] --
 -------------------------
 -- Copy absolute path to clipboard with notification
-vim.keymap.set("n", "<leader>yp", function()
+vim.keymap.set("n", "<leader>yP", function()
 	local path = vim.fn.expand("%:p")
 	vim.fn.setreg("+", path)
 	vim.notify('Yanked: "' .. path .. '"', vim.log.levels.INFO, { timeout = 2000 })
 end, { noremap = true, silent = true, desc = "Copy absolute path to clipboard" })
 
 -- Copy relative path to clipboard with notification
-vim.keymap.set("n", "<leader>yP", function()
+vim.keymap.set("n", "<leader>yp", function()
 	local path = vim.fn.expand("%")
 	vim.fn.setreg("+", path)
 	vim.notify('Yanked: "' .. path .. '"', vim.log.levels.INFO, { timeout = 2000 })
@@ -48,6 +48,21 @@ end, { noremap = true, silent = true, desc = "Copy relative path to clipboard" }
 vim.keymap.set("n", "<leader>gb", function()
 	require("user.functions").open_pr_for_line()
 end, { noremap = true, silent = true, desc = "Open PR that merged current line" })
+
+-- Git commit history for current file with author and date
+vim.keymap.set("n", "<leader>gvf", function()
+	require("snacks").picker.git_log_file()
+end, { noremap = true, silent = true, desc = "Git history for current file" })
+
+-- Git commit history for repository
+vim.keymap.set("n", "<leader>gv", function()
+	require("snacks").picker.git_log()
+end, { noremap = true, silent = true, desc = "Git commit history" })
+
+-- Git branches (checkout)
+vim.keymap.set("n", "<leader>gco", function()
+	require("snacks").picker.git_branches()
+end, { noremap = true, silent = true, desc = "Git checkout branch" })
 
 -- [[ Legacy config ]] --
 -------------------------

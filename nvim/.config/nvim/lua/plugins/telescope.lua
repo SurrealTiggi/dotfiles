@@ -131,5 +131,6 @@ return function()
 	})
 	require("telescope").load_extension("fzf")
 	require("telescope").load_extension("file_browser")
-	require("telescope").load_extension("notify")
+	-- Removed notify extension (now using snacks.notifier)
+	-- require("telescope").load_extension("notify")
 end

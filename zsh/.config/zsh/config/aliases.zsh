@@ -9,7 +9,8 @@ alias map="cat $HOME/vgs.aws.md"
 # alias ls='colorls --sd -1'
 alias ls='eza --color=always --long --git --no-filesize --icons=always --no-time --no-user --no-permissions --group-directories-first'
 alias lsa='eza --color=always --long --git --icons=always --no-time --no-user --group-directories-first'
-alias ll='n -He -P p'
+# alias ll='n -He -P p'
+alias ll='yazi'
 alias ctree='colorls --tree'
 alias cat='bat'
 

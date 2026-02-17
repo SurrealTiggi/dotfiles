@@ -1,3 +1,4 @@
+-- TODO: Disable @comment.todo.comment
 return function()
 	require("nvim-treesitter.configs").setup({
 		auto_install = true,

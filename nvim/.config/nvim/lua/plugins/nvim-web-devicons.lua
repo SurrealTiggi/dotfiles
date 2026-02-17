@@ -41,6 +41,46 @@ return function()
 					color = colors.vibrant_green,
 					name = "env",
 				},
+				[".env.local"] = {
+					icon = SYMBOLS.misc.tree,
+					color = colors.vibrant_green,
+					name = "env",
+				},
+				[".env.development"] = {
+					icon = SYMBOLS.misc.tree,
+					color = colors.vibrant_green,
+					name = "env",
+				},
+				[".env.production"] = {
+					icon = SYMBOLS.misc.tree,
+					color = colors.vibrant_green,
+					name = "env",
+				},
+				[".env.staging"] = {
+					icon = SYMBOLS.misc.tree,
+					color = colors.vibrant_green,
+					name = "env",
+				},
+				[".env.test"] = {
+					icon = SYMBOLS.misc.tree,
+					color = colors.vibrant_green,
+					name = "env",
+				},
+				[".env.example"] = {
+					icon = SYMBOLS.misc.tree,
+					color = colors.vibrant_green,
+					name = "env",
+				},
+				[".env.secret"] = {
+					icon = SYMBOLS.misc.tree,
+					color = colors.vibrant_green,
+					name = "env",
+				},
+				[".env.personal"] = {
+					icon = SYMBOLS.misc.tree,
+					color = colors.vibrant_green,
+					name = "env",
+				},
 				["go.mod"] = {
 					icon = SYMBOLS.files.golang,
 					color = colors.teal,
@@ -48,6 +88,11 @@ return function()
 				},
 			},
 			override = {
+				env = {
+					icon = SYMBOLS.misc.tree,
+					color = colors.vibrant_green,
+					name = "env",
+				},
 				md = {
 					icon = SYMBOLS.files.markdown,
 					colors = colors.blue,

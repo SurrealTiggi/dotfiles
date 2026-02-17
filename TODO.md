@@ -19,6 +19,7 @@ This file tracks high-level tasks and plugin experiments for the dotfiles reposi
 - [ ] Auto-run `nvim --headless "+Lazy! sync" +qa` after bootstrap
 - [ ] Compare p10k-lean config and pull down .p10k-lean to avoid config wizard
 - [ ] Automate keyboard shortcuts setup (currently manual in System Settings)
+- [ ] Finalize secret management + git config for multiple orgs/projects
 
 ## Neovim
 
@@ -33,7 +34,7 @@ This file tracks high-level tasks and plugin experiments for the dotfiles reposi
 ### Plugins to Try
 
 - [ ] https://github.com/folke/sidekick.nvim - AI integration with Claude
-- [ ] https://github.com/folke/snacks.nvim/blob/main/docs/picker.md
+- [x] https://github.com/folke/snacks.nvim - Added explorer, picker, notifier, bigfile, quickfile, statuscolumn (replaced Telescope, nvim-tree, nvim-notify)
 - [ ] https://github.com/numToStr/Comment.nvim - Better commenting
 - [ ] Alternative status lines: feline-nvim/feline.nvim, windline.nvim
 - [ ] https://github.com/alex-popov-tech/store.nvim - Store for nvim
