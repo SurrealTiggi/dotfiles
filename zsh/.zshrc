@@ -65,6 +65,11 @@ export ZSH_THEMES="$HOME/.config/zsh/themes"
 ## Extras
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+## Herdr rename
+for _f in ${HOME}/.config/herdr/plugins/github/herdr-automatic-rename-*/shell/hook.zsh(N); do
+  source $_f; break
+done
+
 ## Misc
 # direnv: Uncomment if needed, but causes shell startup overhead (~100-200ms)
 # eval "$(direnv hook zsh)"
@@ -72,3 +77,6 @@ export ZSH_THEMES="$HOME/.config/zsh/themes"
 # zprof
 
 export PATH="$HOME/.local/bin:$PATH"
+
+# Google Workspace CLI credentials (added by so gws init)
+export GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE="/Users/tiago.baptista/.config/gws/credentials.json"

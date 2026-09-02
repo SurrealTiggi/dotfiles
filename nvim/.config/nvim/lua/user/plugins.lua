@@ -75,6 +75,25 @@ local ide = {
 						},
 					},
 					sources = {
+						files = {
+							hidden = true, -- Show hidden files/folders
+							follow = true, -- Follow symlinks
+						},
+						grep = {
+							hidden = true, -- Search in hidden files/folders
+						},
+						recent = {
+							hidden = true, -- Show hidden files in recent files
+						},
+						git_log = {
+							hidden = true, -- Include commits from hidden files
+						},
+						git_log_file = {
+							hidden = true, -- Include commits from hidden files
+						},
+						git_branches = {
+							-- No hidden option needed for branches
+						},
 						explorer = {
 							hidden = true, -- Show hidden files by default
 							win = {
@@ -92,6 +111,18 @@ local ide = {
 										["c"] = "explorer_copy",
 										["x"] = "explorer_cut",
 										["p"] = "explorer_paste",
+										-- Page navigation (simulate with repeated key presses)
+										["<PageUp>"] = function()
+											local count = 6
+											vim.cmd("normal! " .. count .. "k")
+										end,
+										["<PageDown>"] = function()
+											local count = 6
+											vim.cmd("normal! " .. count .. "j")
+										end,
+										-- Keep Ctrl+u/d as full page scroll
+										["<C-u>"] = "list_scroll_up",
+										["<C-d>"] = "list_scroll_down",
 									},
 								},
 							},
@@ -363,7 +394,7 @@ local utils = {
 				provider = "claude",
 				provider_options = {
 					claude = {
-						model = "claude-sonnet-4-20250514",
+						model = "claude-sonnet-5",
 						max_tokens = 512,
 					},
 				},

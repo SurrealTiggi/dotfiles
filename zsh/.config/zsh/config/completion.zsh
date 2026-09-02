@@ -75,3 +75,6 @@ complete -o nospace -C /Users/tiago.baptista/.asdf/installs/terraform/1.12.2/bin
 
 # Tailscale
 source <(tailscale completion zsh)
+
+# Herdr
+source <(herdr completion zsh)

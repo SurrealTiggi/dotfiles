@@ -34,6 +34,7 @@ vim.cmd([[
   hi! CursorLine term=bold cterm=bold guibg=#2a303c
 ]])
 
+
 -- Make floating windows the same color as the background
 -- vim.cmd([[
 -- hi! FloatBorder guibg=NONE ctermbg=NONE

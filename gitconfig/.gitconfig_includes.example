@@ -1,0 +1,8 @@
+# Copy to .gitconfig_includes and add one block per identity.
+# Later matches win, so keep the catch-all first.
+
+# [includeIf "gitdir:~/ghq/github.com/"]
+# path = ~/.gitconfig_personal
+
+# [includeIf "gitdir:~/ghq/github.com/<org>/"]
+# path = ~/.gitconfig_<name>

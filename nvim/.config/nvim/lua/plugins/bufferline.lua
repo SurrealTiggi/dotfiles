@@ -1,4 +1,5 @@
 return function()
+	local colors = require("core.colors")
 	require("bufferline").setup({
 		options = {
 			numbers = "none",
@@ -32,6 +33,12 @@ return function()
 					text_align = "center",
 					highlight = "Directory",
 				},
+				{
+					filetype = "snacks_explorer",
+					text = "File Explorer",
+					text_align = "center",
+					highlight = "Directory",
+				},
 			},
 			show_buffer_icons = true,
 			show_buffer_close_icons = true,
@@ -43,6 +50,11 @@ return function()
 			enforce_regular_tabs = false,
 			always_show_bufferline = true,
 			sort_by = "id",
+		},
+		highlights = {
+			buffer_selected = {
+				fg = colors.orange, -- orange text for active buffer
+			},
 		},
 	})
 end

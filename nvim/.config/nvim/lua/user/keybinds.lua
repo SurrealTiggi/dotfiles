@@ -37,7 +37,7 @@ end, { noremap = true, silent = true, desc = "Copy absolute path to clipboard" }
 
 -- Copy relative path to clipboard with notification
 vim.keymap.set("n", "<leader>yp", function()
-	local path = vim.fn.expand("%")
+	local path = vim.fn.expand("%:.")
 	vim.fn.setreg("+", path)
 	vim.notify('Yanked: "' .. path .. '"', vim.log.levels.INFO, { timeout = 2000 })
 end, { noremap = true, silent = true, desc = "Copy relative path to clipboard" })

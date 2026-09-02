@@ -10,11 +10,8 @@ return function()
 
 	cmp.setup({
     completion = {
-      completeopt = "menu,menuone,preview,noselect",
+      completeopt = "menu,menuone,noselect",
     },
-		view = {
-			entries = "native",
-		},
     snippet = {
       expand = function(args)
         luasnip.lsp_expand(args.body)
@@ -56,6 +53,7 @@ return function()
     -- TODO: disable the "Text" source https://github.com/hrsh7th/nvim-cmp/issues/684
     -- TODO: Add an icon for codeium https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance#how-to-add-custom-icons-for-any-source
 		sources = {
+      { name = "minuet" },
       { name = "codeium" },
       { name = "nvim_lsp" },
       { name = "nvim_lua" },
@@ -68,4 +66,56 @@ return function()
 			},
 		},
 	})
+
+	-- Create user commands for toggling AI providers
+	vim.api.nvim_create_user_command("ToggleMinuet", function()
+		require("user.functions").toggle_ai_provider("minuet")
+	end, { desc = "Toggle Minuet AI completion" })
+
+	vim.api.nvim_create_user_command("ToggleCodeium", function()
+		require("user.functions").toggle_ai_provider("codeium")
+	end, { desc = "Toggle Codeium completion" })
+
+	vim.api.nvim_create_user_command("MinuetOnly", function()
+		local cmp = require("cmp")
+		local config = cmp.get_config()
+		local sources = {}
+		-- Keep all sources except codeium
+		for _, source in ipairs(config.sources) do
+			if source.name ~= "codeium" then
+				table.insert(sources, source)
+			end
+		end
+		cmp.setup({ sources = sources })
+		print("Minuet only mode enabled")
+	end, { desc = "Use only Minuet AI completion" })
+
+	vim.api.nvim_create_user_command("CodeiumOnly", function()
+		local cmp = require("cmp")
+		local config = cmp.get_config()
+		local sources = {}
+		-- Keep all sources except minuet
+		for _, source in ipairs(config.sources) do
+			if source.name ~= "minuet" then
+				table.insert(sources, source)
+			end
+		end
+		cmp.setup({ sources = sources })
+		print("Codeium only mode enabled")
+	end, { desc = "Use only Codeium completion" })
+
+	vim.api.nvim_create_user_command("BothAI", function()
+		local cmp = require("cmp")
+		cmp.setup({
+			sources = {
+				{ name = "minuet" },
+				{ name = "codeium" },
+				{ name = "nvim_lsp" },
+				{ name = "nvim_lua" },
+				{ name = "path" },
+				{ name = "buffer", keyword_length = 5 },
+			},
+		})
+		print("Both AI providers enabled")
+	end, { desc = "Enable both Minuet and Codeium" })
 end

@@ -72,22 +72,20 @@
 [tag]
 	sort = version:refname
 
-# CM
-[includeIf "gitdir:~/git/cm/"]
-path = ~/.gitconfig_priv
-[includeIf "gitdir:~/ghq/github.com/CrypticMonsters/"]
-path = ~/.gitconfig_priv
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[advice]
+	detachedHead = false
 
-# Work
-[includeIf "gitdir:~/git/work/"]
-path = ~/.gitconfig_work
-[includeIf "gitdir:~/ghq/github.com/conduktor/"]
-path = ~/.gitconfig_work
 
-# Everything else
-[includeIf "gitdir:~/git/github.com/"]
-path = ~/.gitconfig_priv
-[includeIf "gitdir:~/git/gitlab.com/"]
-path = ~/.gitconfig_priv
-[includeIf "gitdir:~/git/dirtypillows/"]
-path = ~/.gitconfig_dp
+# Per-identity routing lives in .gitconfig_includes, which is gitignored:
+# it names orgs and points at files holding real email addresses.
+# See .gitconfig_includes.example.
+[include]
+	path = ~/.gitconfig_includes
+
+[url "git@github.com:"]
+	insteadOf = https://github.com/

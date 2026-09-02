@@ -19,3 +19,19 @@ bin/.local/bin/pipenv-nvim.sh
 bin/.local/bin/pongo
 bin/.local/bin/ksops
 bin/.local/bin/claude
+
+# Per-identity git configs: emails and signing keys, and this repo is public.
+# Commit the .example boilerplate, never the real ones.
+gitconfig/.gitconfig_*
+!gitconfig/.gitconfig_*.example
+
+# Binaries and generated launcher shims that land in the stow'd bin dir.
+bin/.local/bin/agenda
+bin/.local/bin/herdr
+bin/.local/bin/herdr-launcher
+bin/.local/bin/herdr-reviewr
+bin/.local/bin/sqlit
+bin/.local/bin/terminal-browser
+
+# Work-specific shell config: internal hostnames, and this repo is public.
+zsh/.config/zsh/config/aliases.work.zsh

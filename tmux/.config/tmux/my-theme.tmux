@@ -139,18 +139,8 @@ tmux_set @prefix_highlight_output_prefix "#[fg=$TC]#[bg=$BG]$left_arrow_icon#[bg
 tmux_set @prefix_highlight_output_suffix "#[fg=$TC]#[bg=$BG]$right_arrow_icon"
 
 set_segments() {
-  # Cool teal gradient: dark → lighter (center) → dark at edges
-  # 1. Weather segment - dark teal background
-  weather_segment="#[fg=$GRADIENT_LIGHT,bg=$BG]$left_arrow_icon#[fg=$FG,bg=$GRADIENT_LIGHT] #(~/.config/tmux/scripts/weather.sh) "
-
-  # 2. CPU + Memory segment - lightest teal (center highlight)
-  systats_segment="#[fg=$GRADIENT_MEDIUM,bg=$GRADIENT_LIGHT]$left_arrow_icon#[fg=$FG,bg=$GRADIENT_MEDIUM] $cpu_icon #(~/.config/tmux/scripts/cpu.sh)#[fg=$FG,bg=$GRADIENT_MEDIUM]  $memory_icon #(~/.config/tmux/scripts/mem.sh)#[fg=$FG,bg=$GRADIENT_MEDIUM] "
-
-  # 3. Time segment - dark teal background
-  time_segment="#[fg=$GRADIENT_DARK,bg=$GRADIENT_MEDIUM]$left_arrow_icon#[fg=$FG,bg=$GRADIENT_DARK] $time_icon %H:%M:%S "
-
-  # 4. Date segment - darkest teal background (rightmost edge)
-  date_segment="#[fg=$GRADIENT_DARKEST,bg=$GRADIENT_DARK]$left_arrow_icon#[fg=$FG,bg=$GRADIENT_DARKEST] $date_icon %Y-%m-%d "
+  # Right status bar segments intentionally left empty
+  :
 }
 set_segments
 
@@ -175,8 +165,8 @@ set_left() {
   LS="$LS#[fg=$SECONDARY,bg=$MANTLE] $session_icon #S "
   LS="$LS#[fg=$MANTLE,bg=$PRIMARY]$right_arrow_icon"
 
-  # Current folder (show ~ when in home directory)
-  LS="$LS#[fg=$CORE,bg=$PRIMARY,bold] $folder_icon #([ \"#{pane_current_path}\" = \"$HOME\" ] && echo \"~\" || basename \"#{pane_current_path}\") #[fg=$PRIMARY,bg=$BG,nobold]$right_arrow_icon"
+  # Current folder (show ~ for home, truncate to 10 chars with ellipsis)
+  LS="$LS#[fg=$CORE,bg=$PRIMARY,bold] $folder_icon #(d=\"#{pane_current_path}\"; [ \"\$d\" = \"$HOME\" ] && echo '~' || { n=\$(basename \"\$d\"); [ \${#n} -le 15 ] && echo \"\$n\" || echo \"\${n:0:8}…\${n: -6}\"; }) #[fg=$PRIMARY,bg=$BG,nobold]$right_arrow_icon"
 
   tmux_set status-left "$LS"
 }
@@ -186,8 +176,7 @@ set_right() {
   tmux_set status-right-fg "$FG"
   tmux_set status-right-length 1000
 
-  # Four segments with red gradient: Weather (lightest) → CPU/Mem → Time → Date (darkest)
-  RS="$weather_segment$systats_segment$time_segment$date_segment"
+  RS=""
 
   tmux_set status-right "$RS"
 }

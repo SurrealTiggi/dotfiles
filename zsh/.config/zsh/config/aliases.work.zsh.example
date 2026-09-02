@@ -1,0 +1,3 @@
+# Copy to aliases.work.zsh. Gitignored: employer-internal hostnames do not
+# belong in a public repo.
+# alias acdp='argocd context argocd.<internal-domain>'

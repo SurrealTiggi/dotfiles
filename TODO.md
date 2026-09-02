@@ -33,17 +33,17 @@ This file tracks high-level tasks and plugin experiments for the dotfiles reposi
 
 ### Plugins to Try
 
-- [ ] https://github.com/folke/sidekick.nvim - AI integration with Claude
 - [x] https://github.com/folke/snacks.nvim - Added explorer, picker, notifier, bigfile, quickfile, statuscolumn (replaced Telescope, nvim-tree, nvim-notify)
-- [ ] https://github.com/numToStr/Comment.nvim - Better commenting
+- [x] https://github.com/stevearc/oil.nvim
 - [ ] Alternative status lines: feline-nvim/feline.nvim, windline.nvim
+- [ ] https://github.com/folke/sidekick.nvim - AI integration with Claude
 - [ ] https://github.com/alex-popov-tech/store.nvim - Store for nvim
 - [ ] https://github.com/nvim-mini/mini.nvim/
 - [ ] https://github.com/dnlhc/glance.nvim better peeking (possibly abandoned)
-- [ ] https://github.com/stevearc/oil.nvim
 - [ ] inspo https://dotfiles.substack.com/p/29-gonzalo-stoll
 - [ ] Better inlay hints https://vinnymeller.com/posts/neovim_nightly_inlay_hints/
 - [ ] more inspo https://altf4.blog/blog/2024-02-25-development-environment-winter-2024-edition/
+- [ ] https://github.com/numToStr/Comment.nvim - Better commenting
 
 ## Tmux
 

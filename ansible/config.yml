@@ -271,28 +271,46 @@ configure_tmux: true
 configure_asdf: true
 asdf_plugins:
   - name: golang
-    versions: ["1.17.2", "1.18", "1.19"]
-    global: "1.19"
+    versions: ["1.24.7"]
+    global: "1.24.7"
   - name: jsonnet
     versions: ["0.18.0"]
   - name: nodejs
-    versions: ["16.13.2", "17.1.0", "18.12.1"]
-    global: "18.12.1"
+    versions: ["22.16.0"]
+    global: "22.16.0"
   - name: python
-    versions: ["2.7.18", "3.9.6", "3.10.5"]
-    global: "3.10.5"
+    versions: ["3.11.0", "3.14.0"]
+    global: "3.14.0"
+  - name: poetry
+    versions: ["2.1.3"]
+    global: "2.1.3"
   - name: ruby
-    versions: ["3.0.2"]
-    global: "3.0.2"
+    versions: ["3.4.4"]
+    global: "3.4.4"
   - name: rust
-    versions: ["1.64.0", "stable"]
-    global: "1.64.0"
+    versions: ["1.95.0"]
+    global: "1.95.0"
   - name: terraform
-    versions: ["1.0.10"]
-    global: "1.0.10"
+    versions: ["1.12.2"]
+    global: "1.12.2"
+  - name: yq
+    versions: ["4.35.2"]
+    global: "4.35.2"
 
 ##################################################
 ### MacOS                                      ###
 ##################################################
-configure_osx: true
+configure_osx: false
 osx_script: "{{ playbook_dir }}/scripts/osx_settings.sh"
+
+##################################################
+### Secrets                                    ###
+##################################################
+configure_secrets: false
+secrets:
+  - project: workstation-personal
+    environment: personal
+  - project: workstation-work
+    environment: "{{ ansible_env.WORK_GIT_ORG | default('') }}"
+  - project: crypticmonsters
+    environment: prd
