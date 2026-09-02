@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# One-line system metrics for tab_bar_right. sysmon publishes these as
+# per-workspace tokens, which repeat on every sidebar row; the tab bar renders
+# once, so reuse its metric library rather than its tokens.
+#
+# No colour: herdr does not interpret ANSI here, it prints the escapes verbatim.
+set -uo pipefail
+
+d=$(find "$HOME/.config/herdr/plugins/github" -maxdepth 1 -type d -name '*sysmon*' 2>/dev/null | head -1)
+[ -n "$d" ] && [ -r "$d/scripts/metrics.sh" ] || exit 0
+# shellcheck source=/dev/null
+source "$d/scripts/metrics.sh" 2>/dev/null || exit 0
+
+printf '\uf4bc %s  \uefc5 %s  %s' "$(sys_cpu)" "$(sys_mem)" "$(sys_batt)"
+exit 0

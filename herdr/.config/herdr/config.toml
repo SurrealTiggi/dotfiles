@@ -1,0 +1,158 @@
+# herdr configuration
+# Mapped from ~/.tmux.conf.
+
+[theme]
+name = "terminal"
+
+auto_switch = false
+[terminal]
+new_cwd = "follow"
+
+[keys]
+## God key
+prefix = "ctrl+a"
+
+## Sessions/workspaces (tmux windows -> herdr tabs, tmux sessions -> herdr workspaces)
+workspace_picker = "prefix+b"          # workspace list/picker
+previous_workspace = "ctrl+shift+up"   # spaces stack vertically in the sidebar
+next_workspace = "ctrl+shift+down"
+new_workspace = "prefix+shift+w"
+rename_workspace = ""                  # use the command bar
+close_workspace = "prefix+shift+d"
+switch_workspace = "prefix+shift+1..9"
+
+## Tabs
+new_tab = "ctrl+w"                     # tmux: bind -n C-w new-window
+previous_tab = "ctrl+shift+left"       # tmux: C-PPage
+next_tab = "ctrl+shift+right"          # tmux: C-NPage
+switch_tab = "prefix+1..9"
+rename_tab = "prefix+comma"
+close_tab = "prefix+shift+x"
+
+## Splits
+split_vertical = "prefix+s"            # tmux: bind s split-window -h
+split_horizontal = "prefix+x"          # tmux: bind x split-window -v
+close_pane = "prefix+shift+q"
+
+## vim-like pane switching
+focus_pane_left = ["prefix+left"]
+focus_pane_down = ["prefix+down"]
+focus_pane_up = ["prefix+up"]
+focus_pane_right = ["prefix+right"]
+
+## Resizing without entering resize mode
+resize_pane_left = "ctrl+shift+alt+left"
+resize_pane_down = "ctrl+shift+alt+down"
+resize_pane_up = "ctrl+shift+alt+up"
+resize_pane_right = "ctrl+shift+alt+right"
+resize_mode = "prefix+r"
+
+## Misc
+zoom = "prefix+z"
+detach = ["prefix+d", "prefix+q"]      # tmux: prefix+d
+goto = ""                              # navigate mode; unused
+new_worktree = ""                      # prefix+c creates a worktree with an agent
+help = "prefix+?"
+settings = "prefix+shift+s"            # no socket API: unreachable from any palette
+toggle_sidebar = "prefix+h"            # hide/show sidebar
+edit_scrollback = "prefix+e"
+reload_config = ""                     # replaced by the command below (adds a toast)
+
+
+[ui]
+accent = "cyan"
+tab_bar_position = "top"               # tmux: set -g status-position top
+tab_bar_right = [
+  { type = "command", command = "herdr-zoom-glyph", interval_seconds = 2 },
+  { type = "command", command = "herdr-sysmon-bar", interval_seconds = 5 },
+]
+mouse_capture = true                   # tmux: set -g mouse on
+copy_on_select = true
+confirm_close = true
+prompt_new_tab_name = false            # a typed name opts the tab out of auto-rename
+
+# Orca-like sidebar: workspace + branch, agents nested with their session name
+show_agent_labels_on_pane_borders = true
+agent_panel_sort = "priority"
+[ui.sidebar.spaces]
+# No $sys_* rows here: those tokens are per-workspace, so machine-wide metrics
+# would repeat on every space. They render once in tab_bar_right instead.
+rows = [
+  ["state_icon", "workspace"],
+  [
+    { token = "$gitref", fg = "#a6e3a1", dim = true },
+    { token = "$gitahead", fg = "#a6e3a1" },
+    { token = "$gitbehind", fg = "#f38ba8" },
+    { token = "$gitclean", fg = "#a6e3a1" },
+    { token = "$gitdirty", fg = "#f9e2af" },
+  ],
+]
+
+# Render the agent's OWN identity, not "tab": the tab name tracks whichever pane
+# is focused, so a tab token makes the agent row change when you focus a sibling
+# shell pane.
+[ui.sidebar.agents]
+rows = [["state_icon", "workspace"], ["terminal_title_stripped"]]
+
+[session]
+# Needs `herdr integration install claude`, which is what makes an agent report
+# its conversation id — without it a restore relaunches claude, losing history.
+resume_agents_on_restore = true
+
+[advanced]
+scrollback_limit_bytes = 10000000
+
+## Plugin actions
+[[keys.command]]
+key = "prefix+shift+r"
+type = "shell"
+command = """herdr server reload-config >/dev/null 2>&1 && herdr notification show "Config reloaded" --body "$(herdr config check 2>&1)" || herdr notification show "Config reload FAILED""""
+description = "Reload config"
+
+[[keys.command]]
+key = "prefix+n"
+type = "plugin_action"
+command = "herdr-file-viewer.open-file-viewer"
+
+[[keys.command]]
+key = "prefix+g"
+type = "popup"
+command = "gitui"
+width = "90%"
+height = "85%"
+description = "gitui"
+
+[[keys.command]]
+key = "prefix+w"
+type = "plugin_action"
+command = "herdr-bar.open"
+description = "Command Bar"
+
+[[keys.command]]
+key = ["prefix+p", "prefix+f"]
+type = "popup"
+command = "herdr-open-file"
+width = "80%"
+height = "70%"
+description = "Open file in nvim"
+
+[[keys.command]]
+key = "prefix+c"
+type = "popup"
+command = "herdr-launcher run launch-agent"
+width = "70%"
+height = "60%"
+description = "New worktree + agent"
+
+[[keys.command]]
+key = ["super+k", "ctrl+alt+k"]        # cmd+k; ghostty sends ctrl+alt+k
+type = "plugin_action"
+command = "vjeantet.palette.open"
+description = "Command palette"
+
+[ui.toast]
+delivery = "herdr"
+
+[experimental]
+# terminal-browser (and any image-rendering TUI) draws nothing without this.
+kitty_graphics = true

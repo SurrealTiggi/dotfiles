@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Publishes a $gitref token per workspace: a branch name with a leading glyph.
+#
+# herdr's built-in `branch` token is computed internally and cannot be reformatted,
+# so the sidebar renders this custom token instead. Custom metadata MUST be
+# referenced with a $ prefix in [ui.sidebar.spaces].rows — a bare name silently
+# resolves to the built-in of the same name.
+set -uo pipefail
+
+herdr="${HERDR_BIN_PATH:-herdr}"
+command -v "$herdr" >/dev/null 2>&1 || exit 0
+
+glyph="${HERDR_BRANCH_GLYPH:-}"
+
+"$herdr" workspace list 2>/dev/null |
+  jq -r '(.result.workspaces // [])[] | .workspace_id' |
+while read -r ws; do
+  [ -n "$ws" ] || continue
+  cwd=$("$herdr" pane list --workspace "$ws" 2>/dev/null |
+        jq -r '[(.result.panes // [])[] | select(.focused)][0].cwd //
+               (.result.panes // [])[0].cwd // ""')
+  [ -n "$cwd" ] && [ -d "$cwd" ] || continue
+
+  # Outside a repo, clear any value left from when this pane was elsewhere.
+  if ! git -C "$cwd" rev-parse --git-dir >/dev/null 2>&1; then
+    "$herdr" workspace report-metadata "$ws" --source gitwatch \
+      --token "gitref=" --token "gitahead=" --token "gitbehind=" --token "gitclean=" --token "gitdirty=" >/dev/null 2>&1
+    continue
+  fi
+
+  branch=$(git -C "$cwd" branch --show-current 2>/dev/null)
+  [ -n "$branch" ] || branch="detached:$(git -C "$cwd" rev-parse --short HEAD 2>/dev/null)"
+
+  # Ahead/behind against the tracking ref. Fails silently with no upstream,
+  # which is correct: a local-only branch has nothing to compare against.
+  # Separate tokens so ahead (unpushed, fine) and behind (needs a pull) can
+  # carry different colours — a token takes one fg for its whole value.
+  up=""; down=""
+  if counts=$(git -C "$cwd" rev-list --left-right --count HEAD...@{upstream} 2>/dev/null); then
+    ahead=${counts%%[[:space:]]*}
+    behind=${counts##*[[:space:]]}
+    [ "${ahead:-0}" -gt 0 ] 2>/dev/null && up="\u2191$ahead"
+    [ "${behind:-0}" -gt 0 ] 2>/dev/null && down="\u2193$behind"
+  fi
+
+  n=$(git -C "$cwd" status --porcelain 2>/dev/null | wc -l | tr -d " ")
+  # Separate tokens again: one fg per token, and clean/dirty want different ones.
+  clean=""; dirty=""
+  [ "$n" = "0" ] && clean="\u2713" || dirty="$n"
+
+  "$herdr" workspace report-metadata "$ws" --source gitwatch \
+    --token "gitref=$glyph $branch" \
+    --token "gitahead=$(printf "$up")" \
+    --token "gitbehind=$(printf "$down")" \
+    --token "gitclean=$(printf "$clean")" \
+    --token "gitdirty=$(printf "$dirty")" >/dev/null 2>&1
+done

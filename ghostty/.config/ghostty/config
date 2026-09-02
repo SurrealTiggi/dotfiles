@@ -1,0 +1,17 @@
+# Translate Ctrl+PageUp/PageDown into the sequences herdr binds to.
+# herdr's keybinding parser rejects page keys, but decodes ctrl+shift+arrows fine.
+keybind = ctrl+page_up=csi:1;6D
+keybind = ctrl+page_down=csi:1;6C
+
+macos-titlebar-style = hidden
+window-padding-x = 12
+window-padding-y = 12
+window-padding-balance = true
+
+# Let cmd+k through to herdr (bound to super+k) instead of Ghostty's
+# clear-screen default. If the app doesn't see it, swap to: cmd+k=csi:107;7u
+keybind = cmd+k=unbind
+
+# Nerd Font explicitly: the sidebar's branch glyph (U+F418) and other PUA
+# codepoints need it, and the bundled default does not reliably cover them.
+font-family = "FiraCode Nerd Font Mono"

@@ -1,0 +1,49 @@
+---
+- name: Check for herdr
+  ansible.builtin.command:
+    cmd: which herdr
+  register: herdr_bin
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: List installed herdr plugins
+  ansible.builtin.command:
+    cmd: herdr plugin list
+  register: herdr_plugins
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  when: herdr_bin.rc == 0
+
+- name: Install herdr plugins
+  ansible.builtin.command:
+    cmd: "herdr plugin install {{ item.repo }} --yes"
+  loop: "{{ herdr_plugin_list }}"
+  loop_control:
+    label: "{{ item.repo }}"
+  when:
+    - herdr_bin.rc == 0
+    - item.id not in herdr_plugins.stdout
+  changed_when: true
+
+- name: Find launcher manifest
+  ansible.builtin.find:
+    paths: "{{ ansible_env.HOME }}/.config/herdr/plugins/github"
+    patterns: "herdr-plugin.toml"
+    recurse: true
+    file_type: file
+    contains: '.*herdr-launcher.*'
+  register: launcher_manifest
+  when: herdr_bin.rc == 0
+
+# The binary lives in a versioned plugin dir; the keybinding calls it by name.
+- name: Link herdr-launcher onto PATH
+  ansible.builtin.file:
+    src: "{{ (launcher_manifest.files | first).path | dirname }}/bin/herdr-launcher"
+    dest: "{{ ansible_env.HOME }}/.local/bin/herdr-launcher"
+    state: link
+    force: true
+  when:
+    - herdr_bin.rc == 0
+    - launcher_manifest.matched | default(0) > 0

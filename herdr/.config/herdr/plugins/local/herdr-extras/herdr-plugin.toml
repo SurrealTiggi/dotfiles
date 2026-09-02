@@ -1,0 +1,33 @@
+id = "local.herdr-extras"
+name = "herdr extras"
+version = "0.2.0"
+description = "Keeps the sysmon poller alive and refreshes git remotes for the sidebar."
+min_herdr_version = "0.8.0"
+platforms = ["macos", "linux"]
+
+[[startup]]
+command = ["herdr-sysmon-ensure"]
+
+[[startup]]
+command = ["herdr-git-tokens"]
+
+# herdr computes branch/git_status from LOCAL refs and never fetches, so
+# ahead/behind counts go stale until something updates origin/*.
+[[startup]]
+command = ["herdr-git-fetch"]
+
+[[events]]
+on = "workspace.created"
+command = ["herdr-git-tokens"]
+
+[[events]]
+on = "pane.focused"
+command = ["herdr-git-tokens"]
+
+[[events]]
+on = "workspace.created"
+command = ["herdr-git-fetch"]
+
+[[events]]
+on = "worktree.created"
+command = ["herdr-git-fetch"]

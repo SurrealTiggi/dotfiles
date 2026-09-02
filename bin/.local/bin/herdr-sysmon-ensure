@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# sysmon only spawns its poller from a [[startup]] hook, so it dies on a server
+# restart. Its --spawn is pidfile-guarded, so calling it repeatedly is safe.
+set -uo pipefail
+d=$(find "$HOME/.config/herdr/plugins/github" -maxdepth 1 -type d -name '*sysmon*' 2>/dev/null | head -1)
+[ -n "$d" ] || exit 0
+(cd "$d" && bash scripts/poll.sh --spawn >/dev/null 2>&1) || true
