@@ -1,0 +1,95 @@
+---
+- name: Ensure homebrew is available
+  import_tasks: tasks/homebrew.yml
+
+- name: Register kubectl binary
+  ansible.builtin.stat: "path={{ homebrew_brew_bin_path }}/kubectl"
+  register: kubectl_binary
+  check_mode: false
+
+- name: Register helm binary
+  ansible.builtin.stat: "path={{ homebrew_brew_bin_path }}/helm"
+  register: helm_binary
+  check_mode: false
+
+- name: Clone oh-my-zsh
+  ansible.builtin.git:
+    repo: https://github.com/robbyrussell/oh-my-zsh.git
+    dest: '~{{ user.username }}/.oh-my-zsh'
+    version: HEAD
+    force: yes
+    clone: yes
+    update: no
+  loop: "{{ users }}"
+  loop_control:
+    loop_var: user
+    label: '{{ user.username }}'
+
+- name: Set oh-my-zsh dir permissions
+  file:
+    path: '~{{ user.username }}/.oh-my-zsh'
+    mode: 'go-w'
+    recurse: yes
+  loop: "{{ users }}"
+  loop_control:
+    loop_var: user
+    label: '{{ user.username }}'
+
+- name: Bootstrap fzf
+  ansible.builtin.command: |
+    {{ homebrew_prefix }}/opt/fzf/install --all --no-update-rc --no-bash
+  args:
+    creates: '~{{ user.username }}/.fzf.zsh'
+  loop: "{{ users }}"
+  loop_control:
+    loop_var: user
+    label: '{{ user.username }}'
+
+- name: Debug plugin installations
+  debug:
+    msg: |
+      Installing {{ item[1].plugin }} for user: {{ item[0].username }}
+  loop: |
+    {{ users | product(terminal_extra_plugins) | list }}
+
+- name: Install 3rd party oh-my-zsh plugins
+  ansible.builtin.command: |
+    git clone https://{{ item[1].source }}.git .oh-my-zsh/custom/plugins/{{ item[1].plugin }}
+  args:
+    chdir: "~{{ item[0].username }}"
+    creates: "~{{ item[0].username }}/.oh-my-zsh/custom/plugins/{{ item[1].plugin }}"
+  loop: |
+    {{ users | product(terminal_extra_plugins) | list }}
+
+- name: Install powerlevel10k theme
+  ansible.builtin.command: |
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git .oh-my-zsh/custom/themes/powerlevel10k
+  args:
+    chdir: '~{{ user.username }}'
+    creates: '~{{ user.username }}/.oh-my-zsh/custom/themes/powerlevel10k'
+  loop: "{{ users }}"
+  loop_control:
+    loop_var: user
+    label: '{{ user.username }}'
+
+# See TODO.md for all outstanding tasks
+
+- name: Install kubectl krew plugins
+  ansible.builtin.command: |
+    kubectl krew install {{ item[1] }}
+  args:
+    chdir: "~{{ item[0].username }}"
+    creates: "~{{item[0].username }}/.krew/store/{{ item[1] }}"
+  loop: |
+    {{ users | product(krew_plugins) | list }}
+  when: kubectl_binary.stat.exists
+
+- name: Install helm plugins
+  ansible.builtin.command: |
+    helm plugin install https://github.com/{{ item[1] }}.git
+  args:
+    chdir: "~{{ item[0].username }}"
+    creates: "~{{ item[0].username }}/Library/helm/plugins/{{ item[1] | split('/') | last }}.git"
+  loop: |
+    {{ users | product(helm_plugins) | list }}
+  when: helm_binary.stat.exists

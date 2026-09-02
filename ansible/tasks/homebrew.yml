@@ -1,0 +1,26 @@
+# NOTE: This set of tasks is primarily to cover cases when
+# geerlingguy.mac.homebrew hasn't run as expected
+#
+# Source: https://github.com/geerlingguy/ansible-collection-mac
+---
+- name: Set homebrew prefix if not defined
+  ansible.builtin.set_fact:
+    homebrew_prefix: "/opt/homebrew"
+  when: homebrew_prefix is not defined
+  check_mode: false
+
+- name: Set homebrew bin path if not defined
+  ansible.builtin.set_fact:
+    homebrew_brew_bin_path: "/opt/homebrew/bin"
+  when: homebrew_brew_bin_path is not defined
+  check_mode: false
+
+- name: Register brew binary
+  stat:
+    path: "{{ homebrew_brew_bin_path }}/brew"
+  register: brew_binary
+  check_mode: false
+
+- name: Exit if homebrew is missing
+  fail: msg="homebrew not installed!"
+  when: not brew_binary.stat.exists

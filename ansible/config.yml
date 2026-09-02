@@ -1,0 +1,316 @@
+##################################################
+### Homebrew                                   ###
+##################################################
+homebrew_taps:
+  - aws/tap
+  - charmbracelet/tap
+  - derailed/k9s
+  - dopplerhq/cli
+  - fluxcd/tap
+  - helm/tap
+  - hidetatz/tap
+  - itchyny/tap
+  - kubeshark/kubeshark
+  - norwoodj/tap
+  - orlangure/tap
+  - pulumi/tap
+  - sigstore/tap
+  - trashhalo/brews
+  - updatecli/updatecli
+  - weaveworks/tap
+  - spectralops/tap
+  - nats-io/nats-tools
+
+homebrew_cask_appdir: /Applications
+homebrew_cask_apps:
+  - amethyst  # A simple tiling window manager
+  - alt-tab  # Windows style switcher
+  - arc  # Browser of choice
+  - bitwarden  # Personal password manager
+  - docker  # Docker client
+  - firefox  # Alternative browser
+  - font-fira-code-nerd-font  # Nerd font
+  - font-fira-mono-nerd-font  # Nerd font
+  - font-hack-nerd-font  # Nerd font
+  - font-iosevka-nerd-font  # Nerd font
+  - font-jetbrains-mono-nerd-font  # Nerd font
+  - font-victor-mono-nerd-font  # Nerd font
+  - gitify  # Github menubar notifications
+  #- hazeover  # Dims inactive window
+  - hot  # CPU temp in menubar
+  - itsycal  # A simple menubar calendar
+  #- karabiner-elements  # Keyboard keymapping
+  - linear-linear  # Linear Project Management
+  - notion  # Organize your life
+  - raycast  # Multi-purpose launcher
+  - shottr  # Screenshot tool
+  - slack  # Messaging app
+  - spotify  # For the soul
+  - stats  # A simple stats client
+  - visual-studio-code  # For rare occasions
+  - yaak  # Postman alternative
+
+# Some other funs ones to check out
+# https://github.com/Lissy93/Brewfile/blob/master/Brewfile
+homebrew_installed_packages:
+  - 1password-cli  # 1Password cli
+  - act  # Run github actions locally
+  - pgcli # PSQSL client on steroids
+  - alacritty  # Terminal of choice
+  - argocd  # Argo CLI util
+  - asdf  # Extendable version manager for *all the things*
+  - aws-sam-cli  # AWS Serverless Application Model cli
+  - awscli  # Official AWS cli
+  - bash  # To get a more recent version since MacOS ships with an old version
+  - bat  # A better cat
+  - brew-gem  # Manage ruby gems via homebrew
+  - chafa  # Terminal image viewer for yazi previews
+  - dict  # A dictionary cli
+  - dockutil  # Manage MacOS dock
+  - docutils  # Text processing for reStructured Text, also needed for awscli
+  - doppler  # SecretOps cli
+  - eza  # Better ls
+  - fd  # A faster find
+  - ffmpeg  # Audio & video utility
+  - ffmpegthumbnailer
+  - fluxcd/tap/flux  # Flux GitOps cli
+  - fx  # Terminal JSON viewer
+  - fzf  # Fuzzy finder
+  - fzy  # Optimized fuzzy finder
+  - gh  # Github cli
+  - ghq  # Git repo manager
+  - git  # Git, obviously
+  - git-delta  # Syntax highlighting pager for git diffs
+  - git-extras  # Little git extras
+  - git-quick-stats  # Simple statistics about a git repo
+  - gitui  # Git TUI written in Rust
+  - glab  # Gitlab cli
+  - gnu-getopt  # GNU getopt
+  - gocovsh  # Go test coverage explorer for the terminal
+  - golangci-lint  # Golang linter utility
+  - google-cloud-sdk  # GCP cli
+  - gotop  # Graphical activity monitor TUI
+  - gpg-suite  # GPG Suite and cli
+  - gron  # Grep for JSON
+  - grpcui  # GRPC UI utility
+  - gsed  # GNU sed
+  - helm  # Kubernetes package manager cli
+  - helm-docs  # Easily generate helm-docs
+  - helmify  # Creates a helm chart from Kubernetes yaml
+  - hey  # HTTP load generator cli
+  - htop  # Another graphical activity monitor TUI
+  - httpie  # cURL replacement cli
+  - iftop  # Network usage cli
+  - imagemagick
+  - imgcat  # Output images in a terminal
+  - infracost  # Cost estimates for terraform
+  - ipcalc  # Calculate network ranges and masks
+  - iperf  # Tool to measure network performance
+  - iproute2mac  # MacOS network utils
+  - jless  # JSON cli pager
+  - jq  # JSON processor cli
+  - k3d  # Faster Kubernetes in docker
+  - k9s  # Kubernetes TUI client
+  - kind  # Kubernetes in docker
+  - krew  # Kubernetes plugin manager
+  - kubecolor  # Colored output for kubectl
+  - kubeconform  # Kubernetes manifest validation
+  - kubectl  # Kubernetes cli
+  - kubectx  # Kubernetes context switcher
+  - kubeshark  # API traffic analyzer for k8s
+  - kustomize  # Kubernetes manifest customizer
+  - lazydocker  # Docker management
+  - lazysql  # SQL TUI
+  - mas  # Mac App Store cli
+  - mmv  # File operation cli
+  - mtr  # Network tracing cli
+  - nats-io/nats-tools/nats  # KV store
+  - neofetch  # Graphical system info TUI
+  - neovim # Neovim
+  - ngrok  # Reverse proxy tunnels to localhost
+  - nmap  # Network port scanner
+  - nushell # Utility shell
+  - okteto  # Okteto cli
+  - poppler
+  - pre-commit  # Pre-commit cli for git repos
+  - prometheus  # Monitoring system, mostly installed for promtool
+  - pstree  # Process output as a tree
+  - pulumi  # IaC cloud development framework
+  - resvg  # Preview SVG in terminal
+  - ripgrep  # Fast search cli
+  - s3cmd  # AWS S3 cli
+  - sevenzip
+  - shellcheck  # Shell script linter
+  - skate  # Personal key/value store
+  - sops  # Secret Management
+  - speedtest-cli  # Speedtest cli
+  - ssh-copy-id  # Copy your SSH key to a remote host
+  - steampipe  # steampipe.io query cloud like SQL
+  - stern  # Kubernetes log tailer
+  - stow  # Simple symlink management
+  - teleport  # Identity aware reverse-proxy for VM's, K8s, DB's, etc
+  #- teller  # Easy secrets management on AWS
+  - terraform-docs  # Generate docs from terraform modules
+  - terragrunt  # Terraform DRY wrapper
+  - tflint  # Terraform linter
+  - the_silver_searcher  # (Arguably) faster search cli
+  - tidy-html5  # HTML linter and other tools
+  - tlrc  # Rust based tldr for better man pages
+  - tmux  # Terminal multiplexer
+  - tree  # File listing as a tree
+  - updatecli  # Dependency management cli utility
+  - uv  # The best(?) python package manager
+  - velero  # Kubernetes backup utility
+  - viu  # Terminal image viewer written in Rust
+  - wget  # Internet file retriever
+  - yarn  # Node package management
+  - yazi  # Terminal file browser
+  - zoxide
+  - zsh-completions  # A collection of completions for ZSH
+  - zsh-history-substring-search  # ZSH port of Fish shell history search
+  - zsh-syntax-highlighting  # Syntax highlighting for ZSH
+
+##################################################
+### Dock                                       ###
+##################################################
+configure_dock: false
+dockitems_remove: []
+# - Launchpad
+# - TV
+# - Podcasts
+# - 'App Store'
+dockitems_persist:
+  - name: "Brave Browser"
+    path: "/Applications/Brave Browser.app/"
+    pos: 1
+  - name: "Alacritty"
+    path: "/Applications/Alacritty.app/"
+    pos: 2
+  - name: "Slack"
+    path: "/Applications/Spotify.app/"
+    pos: 3
+  - name: "Spotify"
+    path: "/Applications/Spotify.app/"
+    pos: 4
+  - name: "Notion"
+    path: "/Applications/Notion.app/"
+    pos: 5
+  - name: "Linear"
+    path: "/Applications/Linear.app/"
+    pos: 6
+  - name: "Screen Sharing"
+    path: "/System/Library/CoreServices/Applications/Screen Sharing.app/"
+    pos: 7
+  - name: "Cron"
+    path: "/Applications/Cron.app/"
+    pos: 8
+  - name: "Notes"
+    path: "/System/Applications/Notes.app/"
+    pos: 9
+  - name: "System Settings"
+    path: "/System/Applications/System Settings.app/"
+    pos: 10
+
+##################################################
+### Terminal                                   ###
+##################################################
+configure_terminal: true
+users:
+  - username: "{{ ansible_user_id | default('tiago') }}"
+terminal_extra_plugins:
+  - {plugin: "zsh-autosuggestions", source: "github.com/zsh-users/zsh-autosuggestions"}
+  - {plugin: "zsh-syntax-highlighting", source: "github.com/zsh-users/zsh-syntax-highlighting"}
+krew_plugins:
+  - access-matrix  # Show an access matrix for server resources
+  - deprecations  # Shows all the deprecated objects in a cluster
+  - get-all  # *Actually* gets all resources
+  - graph  # Generates a visual representation of resources
+  - images  # Show container images as a table
+  - krew  # Krew plugin management self-manage
+  - neat  # Cleans up `kubectl get ...`
+  - pod-lens  # Finds related workloads and displays in a tree
+  - view-utilization  # Show resource utilization based on cpu/memory
+  - whoami  # Simple command to show current authenticated user
+  - ktop  # Top for k8s
+helm_plugins:
+  - komodorio/helm-dashboard  # Helm release dashboard
+
+##################################################
+### Dotfiles                                   ###
+##################################################
+configure_dotfiles: true
+dotfiles_repo: github.com/SurrealTiggi/dotfiles
+dotfiles_pkgs:
+  - alacritty
+  - amethyst
+  - asdf-default-packages
+  - bin
+  - gitconfig
+  - gitui
+  - nvim
+  - tflint
+  - tmux
+  - yazi
+  - zsh
+git_link:
+  - {user: "github.com/SurrealTiggi", dest: "personal"}
+  - {user: "{{ ansible_env.WORK_GIT_ORG | default('github.com')}}", dest: "work"}
+  - {user: "github.com", dest: "github.com"}
+  - {user: "gitlab.com", dest: "gitlab.com"}
+  - {user: "github.com/CrypticMonsters", dest: "cm",}
+  # - { user: gitlab.com/dirtypillows, dest: dp }
+
+##################################################
+### Tmux                                       ###
+##################################################
+configure_tmux: true
+
+##################################################
+### ASDF
+##################################################
+configure_asdf: true
+asdf_plugins:
+  - name: golang
+    versions: ["1.24.7"]
+    global: "1.24.7"
+  - name: jsonnet
+    versions: ["0.18.0"]
+  - name: nodejs
+    versions: ["22.16.0"]
+    global: "22.16.0"
+  - name: python
+    versions: ["3.11.0", "3.14.0"]
+    global: "3.14.0"
+  - name: poetry
+    versions: ["2.1.3"]
+    global: "2.1.3"
+  - name: ruby
+    versions: ["3.4.4"]
+    global: "3.4.4"
+  - name: rust
+    versions: ["1.95.0"]
+    global: "1.95.0"
+  - name: terraform
+    versions: ["1.12.2"]
+    global: "1.12.2"
+  - name: yq
+    versions: ["4.35.2"]
+    global: "4.35.2"
+
+##################################################
+### MacOS                                      ###
+##################################################
+configure_osx: false
+osx_script: "{{ playbook_dir }}/scripts/osx_settings.sh"
+
+##################################################
+### Secrets                                    ###
+##################################################
+configure_secrets: false
+secrets:
+  - project: workstation-personal
+    environment: personal
+  - project: workstation-work
+    environment: "{{ ansible_env.WORK_GIT_ORG | default('') }}"
+  - project: crypticmonsters
+    environment: prd

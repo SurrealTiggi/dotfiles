@@ -4,38 +4,38 @@
 # Thanks to ThePrimeagen
 
 cheat_languages=(
-  python
-  golang
-  nodejs
-  javascript
-  typescript
-  lua
-  bash
-  css
-  html
+	python
+	golang
+	nodejs
+	javascript
+	typescript
+	lua
+	rust
+	bash
+	css
+	html
 )
 cheat_commands=(
-  find
-  sed
-  awk
-  tr
-  xargs
-  ag
-  jq
-  stow
+	find
+	sed
+	awk
+	tr
+	xargs
+	ag
+	jq
+	stow
 )
 
 selected=$(echo "${cheat_languages[@]}" "${cheat_commands[@]}" | tr ' ' '\n' | fzf)
 if [[ -z $selected ]]; then
-  exit 0
+	exit 0
 fi
 
 read -rp "What do you need? " query
 
-
 if printf '%s\n' "${cheat_languages[@]}" | grep -e "^${selected}$"; then
-  query=$(echo "$query" | tr ' ' '+')
-  tmux neww bash -c "echo \"curl cht.sh/$selected/$query/\" & curl cht.sh/$selected/$query & while [ : ]; do sleep 1; done"
+	query=$(echo "$query" | tr ' ' '+')
+	tmux neww bash -c "echo \"curl cht.sh/$selected/$query/\" & curl cht.sh/$selected/$query & while [ : ]; do sleep 1; done"
 else
-  tmux neww bash -c "curl -s cht.sh/$selected~$query | less"
+	tmux neww bash -c "curl -s cht.sh/$selected~$query | less"
 fi

@@ -17,9 +17,6 @@ vnoremap < <gv
 vnoremap > >gv
 """" Quick hack in case you forgot to sudo
 cnoremap w!! execute 'silent! write !sudo tee % > /dev/null' <bar> edit!
-"""" Telescope
-nmap <silent> ll :Telescope file_browser<CR>
-" nmap <silent> ff :Telescope current_buffer_fuzzy_find<CR>
 nmap <silent> ff :lua require("user.functions").curr_buf()<CR>
 """" Use visual K|J to move a single line up|down
 vnoremap <silent>K :m '<-2<CR>gv=gv
@@ -33,20 +30,18 @@ nnoremap <silent><Esc>f :vertical resize +2<CR>
 """" Toggleterm
 nnoremap <silent><c-z> <Cmd>exe v:count . "ToggleTerm"<CR>
 tnoremap <silent><c-z> <Esc><Cmd>exe v:count . "ToggleTerm"<CR>
-"""" NvimTree
-nnoremap <silent> <C-n> :call NvimTreeToggleAndRefresh()<CR>
-" nnoremap <silent> <C-n> :NvimTreeToggle<CR>
-
+"""" NvimTree (disabled - now using snacks.explorer with <C-n>)
+" nnoremap <silent> <C-n> :NvimTreeFindFileToggle<CR>
 """" NERDCommenter
 nmap <C-_> <leader>c<Space>
 vmap <C-_> <leader>c<Space>gv
 """" Telescope
-nnoremap <C-f> :Telescope live_grep<CR>
+" Replaced with Snacks Picker (configured in plugins.lua)
+" nnoremap <C-f> :Telescope live_grep<CR>
 " nnoremap <C-p> :Telescope find_files<CR>
-nnoremap <silent><C-p> :lua require('telescope.builtin').find_files({layout_strategy='vertical',layout_config={width=0.5}})<CR>
-nnoremap <C-h> :Telescope oldfiles<CR>
-" nnoremap <C-h> <cmd>lua require('telescope.builtin').oldfiles()<cr><CR>
-nnoremap <C-b> :Telescope buffers<CR>
+" nnoremap <silent><C-p> :lua require('telescope.builtin').find_files({layout_strategy='vertical',layout_config={width=0.5}})<CR>
+" nnoremap <C-h> :Telescope oldfiles<CR>
+" nnoremap <C-b> :Telescope buffers<CR>
 """" Make home/end behave the same as everywhere else
 map <C-a> <home>
 map <C-e> <end>
@@ -59,25 +54,40 @@ nnoremap <silent> <leader>a :call ToggleFold()<CR>
 map <silent><leader>w :update!<CR>
 """" Gitsigns
 " TODO: Need to figure out why `diffthis` closes into the wrong buffer
-nnoremap <silent><leader>gd :Gitsigns preview_hunk<CR>
+nnoremap <silent><leader>gd :lua require("user.functions").next_hunk_and_preview()<CR>
+nnoremap <silent><leader>gD :lua require("user.functions").prev_hunk_and_preview()<CR>
+nnoremap <silent><leader>ga :Gitsigns stage_hunk<CR>
+vnoremap <silent><leader>ga :Gitsigns stage_hunk<CR>
 " nnoremap <silent><leader>gdf :Gitsigns diffthis<CR>
 """" gitui
 nnoremap <leader>gg <cmd>lua _gitui_toggle()<CR>
 """" b64.nvim
 vnoremap <silent> <leader>be :<c-u>lua require("b64").encode()<CR>
 vnoremap <silent> <leader>bd :<c-u>lua require("b64").decode()<CR>
+"""" sops.nvim
+nnoremap <leader>sd :SopsDecrypt<CR>
+nnoremap <leader>se :SopsEncrypt<CR>
+nnoremap <leader>sv :SopsView<CR>
+nnoremap <leader>st :SopsEdit<CR>
+
 """" Telescope
-" Ctrl+T to checkout + track remote
-nnoremap <leader>gco :Telescope git_branches<CR>
+" Replaced with Snacks git_branches (configured in keybinds.lua)
+" nnoremap <leader>gco :Telescope git_branches<CR>
+" <leader>ll now opens Yazi (configured in plugins.lua)
+" nnoremap <silent> <leader>ll :Telescope file_browser<CR>
+"""" Oil.nvim - Edit filesystem like a buffer
+nnoremap <silent> <leader>o :Oil<CR>
+" nmap <silent> ff :Telescope current_buffer_fuzzy_find<CR>
 " TODO: want to pass --name-only to git_commits see https://github.com/LinArcX/telescope-env.nvim
 " TODO: Or try https://github.com/sindrets/diffview.nvim as replacement for this and <leader>gdf
-nnoremap <leader>gvf :Telescope git_bcommits<CR>
-nnoremap <leader>gv :Telescope git_commits<CR>
+" Replaced with Snacks git_log (configured in keybinds.lua)
+" nnoremap <leader>gvf :Telescope git_bcommits<CR>
+" nnoremap <leader>gv :Telescope git_commits<CR>
 """" Window navigation, normalizing t(tab), s(vsplit), i(hsplit)
 " Also use <leader><Arrow> for navigation
 nmap <leader>t :tab new<CR>   " tab split
 nmap <leader>s <C-w>v<CR>       " vertical split
-nmap <leader>i <C-w>s<CR>       " horizontal split
+nmap <leader>x <C-w>s<CR>       " horizontal split
 nmap <leader><Left> <C-w><Left>
 nmap <leader><Right> <C-w><Right>
 nmap <leader><Up> <C-w><Up>
@@ -92,6 +102,8 @@ noremap <silent> <Tab> :bn<CR>
 map <silent> <leader>vimrc :source ~/.vimrc<CR>
 """" Quick JSON formatter (needs jq)
 map <silent> <leader>jq :%!jq .<CR>
+"""" Quick JSON minifier (needs jq)
+map <silent> <leader>jm :%!jq -c .<CR>
 """" Close buffer safely
 nnoremap <leader>q :bd!<CR>
 " nnoremap <leader>q :lua close_win_and_floats()<CR>

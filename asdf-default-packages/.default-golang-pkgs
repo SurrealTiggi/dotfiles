@@ -16,3 +16,13 @@ honnef.co/go/tools/cmd/staticcheck@latest
 mvdan.cc/gofumpt@latest
 // Bash formatter
 mvdan.cc/sh/v3/cmd/shfmt@latest
+// Yaml formatter
+github.com/google/yamlfmt/cmd/yamlfmt@latest
+// Protobuf
+github.com/bufbuild/buf/cmd/buf@latest
+// Stern for log tailing
+github.com/stern/stern@latest
+// Grafana MCP
+github.com/grafana/mcp-grafana/cmd/mcp-grafana@latest
+// Alertmanager Util
+github.com/prometheus/alertmanager/cmd/amtool@latest

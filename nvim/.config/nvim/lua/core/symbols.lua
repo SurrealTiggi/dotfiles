@@ -13,6 +13,7 @@ local M = {}
 -- 
 -- 
 --  \uf52a
+--  \ue27e
 
 -- Git symbols
 M.git_symbols = {
@@ -30,49 +31,50 @@ M.git_symbols = {
 }
 
 -- LSP Type Symbols
+-- TODO - doublecheck refs
 M.lsp_symbols = {
-	Text = "", -- \uf77e
-	Method = "", -- \uf6a6
-	Function = "", -- \uf794
-	Constructor = "練",
-	Field = "ﰠ", -- \ufc20
-	Variable = "", -- \uf292
-	Class = "ﴰ", -- \ufd30
+	Text = "󰦨", -- \uf77e
+	Method = "󰆧", -- \uf6a6
+	Function = "󰊕", -- \uf794
+	Constructor = "",
+	Field = "󰇽", -- \ufc20
+	Variable = "󰀫", -- \uf292 
+	Class = "󰠱", -- \ufd30
 	Interface = "", -- \uf417
-	Module = "", -- \uf668
-	Property = "ﰊ", -- \ufc0a
+	Module = "", -- \uf668
+	Property = "󰜢", -- \ufc0a
 	Unit = "", -- \uf475
-	Value = "", -- \uf89f
-	Enum = "", -- \uf779
-	Keyword = "", -- \uf805
+	Value = "󰎠", -- \uf89f
+	Enum = "", -- \uf779
+	Keyword = "󰌋", -- \uf805
 	Snippet = "", -- \uf674
-	Color = "", -- \ue22b
-	File = "", -- \uf723
-	Reference = "", -- \ufa46
+	Color = "󰏘", -- \ue22b
+	File = "󰈙", -- \uf723
+	Reference = "", -- \ufa46
 	Folder = "", -- \uf114
 	EnumMember = "",
-	Constant = "", -- \uf8fe
+	Constant = "󰏿", -- \uf8fe
 	Struct = "", -- \uf1b3
 	Event = "", -- \uf0e7
-	Operator = "ﬦ", -- \ufb26
+	Operator = "󰆕", -- \ufb26
 	TypeParameter = "", -- \uf673
 	-- The rest were added for the outline tree
-	Boolean = "", -- \uf53c
-	Package = "", -- \uf8d6
-	Namespace = "", -- \uf5c6
+	Boolean = "", -- \uf53c
+	Package = "󰏖", -- \uf8d6
+	Namespace = "", -- \uf5c6
 	String = "", -- \uf52b
-	Number = "", -- \uf89f
-	Array = "", -- \uf669
-	Object = "", -- \uf6a1
-	Key = "", -- \uf805
-	Null = "", -- \uf8dc
+	Number = "", -- \uf89f
+	Array = "󰅨", -- \uf669
+	Object = "", -- \uf6a1
+	Key = "󰌋", -- \uf805
+	Null = "󰢤", -- \uf8dc
 }
 
 -- LSP Diagnostic Signs
 M.diagnostic_signs = {
-	Error = " ﯇",
+	Error = " ",
 	Warn = " ",
-	Hint = " ",
+	Hint = " ",
 	Info = " ",
 	Other = " ",
 }
@@ -83,10 +85,11 @@ M.borders = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" }
 -- Misc (until I refactor this)
 -- see https://github.com/CosmicNvim/CosmicNvim/blob/main/lua/cosmic/theme/icons.lua
 M.misc = {
-	nav_tree = "פּ",
+	nav_tree = "󰙅",
 	symbol_tree = "", -- \uf487
 	left = "",
 	right = "",
+	right_light = "",
 	left_separator_light = "",
 	right_separator_light = "",
 	left_separator_heavy = "",
@@ -96,26 +99,31 @@ M.misc = {
 	finder = "",
 	recent = "",
 	settings = "",
-	close = "",
+	close = "",
 	close_heavy = "",
-	close_light = "",
+	close_light = "󰅖",
 	indent_line = "", -- ┆ ┊ 
-	plugin = " ",
+	plugin = " ",
 	debug = " ",
-	ghost = " ",
+	breakpoint = "",
+	stop = "",
+	ghost = "󰊠 ",
 	github = "",
 	tree = "",
 	lock = "",
 	search = "",
 	selector = "",
 	hint_prefix = "❱❱❱",
+	lsp_status = " ",
+	robot = "󰚩",
 }
 
 M.files = {
+	markdown = "",
 	package_json = "",
-	makefile = "",
-	yaml = "ﬥ",
-	terraform = "",
+	makefile = "",
+	yaml = "󰅩",
+	terraform = "󱁢",
 	shell = "",
 	python = "",
 	golang = "",
@@ -124,8 +132,10 @@ M.files = {
 	javascript = "",
 	typescript = "",
 	docker = "",
-	vue = "﵂",
-	toml = "",
+	vue = "",
+	toml = "",
+	prisma = "",
+	ruby = "",
 }
 
 return M

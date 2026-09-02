@@ -1,0 +1,7 @@
+# Yazi keybindings (same as main config)
+
+[mgr]
+prepend_keymap = [
+	{ on = "q", run = "quit", desc = "Exit yazi" },
+	{ on = "I", run = "hidden toggle", desc = "Toggle hidden files" },
+]

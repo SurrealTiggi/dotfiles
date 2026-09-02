@@ -8,6 +8,7 @@
 
 [push]
   default = current
+	autoSetupRemote = true
 
 [pull]
   rebase = true
@@ -17,6 +18,12 @@
 
 [init]
   defaultBranch = main
+
+[rerere]
+	enabled = true
+
+[remote "origin"]
+  prune = true
 
 # https://git-scm.com/docs/pretty-formats#Documentation/pretty-formats.txt-emGem for signature status
 [alias]
@@ -33,6 +40,9 @@
   renames = copies
   submodule = log
 
+[diff "sopsdiffer"]
+  textconv = sops -d
+
 [difftool "nvimdiff"]
   cmd = nvim -d $LOCAL $REMOTE
   trustexitcode = true
@@ -41,6 +51,7 @@
   tool = nvimmerge
   keepBackup = false
   log = true
+	conflictstyle = diff3
 
 [mergetool "nvimmerge"]
   cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c '$wincmd J'
@@ -48,7 +59,7 @@
 [delta]
   line-numbers = true
   syntax-theme = gruvbox-dark
-  side-by-side = false
+  side-by-side = true
 
   file-modified-label = modified:
 
@@ -61,11 +72,20 @@
 [tag]
 	sort = version:refname
 
-[includeIf "gitdir:~/git/work/"]
-path = ~/.gitconfig_work
-[includeIf "gitdir:~/ghq/github.com/conduktor/"]
-path = ~/.gitconfig_work
-[includeIf "gitdir:~/git/personal/"]
-path = ~/.gitconfig_priv
-[includeIf "gitdir:~/git/dirtypillows/"]
-path = ~/.gitconfig_dp
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[advice]
+	detachedHead = false
+
+
+# Per-identity routing lives in .gitconfig_includes, which is gitignored:
+# it names orgs and points at files holding real email addresses.
+# See .gitconfig_includes.example.
+[include]
+	path = ~/.gitconfig_includes
+
+[url "git@github.com:"]
+	insteadOf = https://github.com/

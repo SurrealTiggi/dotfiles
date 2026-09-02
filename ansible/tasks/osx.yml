@@ -1,0 +1,11 @@
+---
+- name: Configuring OSX
+  ansible.builtin.script: "{{ osx_script }}"
+  become: true
+  register: script_output
+  when: ansible_facts['distribution'] == 'MacOSX'
+  changed_when: false
+
+- name: HERE
+  debug:
+    msg: "{{ osx_script }}: {{ script_output.stdout }}"

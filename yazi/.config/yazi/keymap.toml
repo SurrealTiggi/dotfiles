@@ -1,0 +1,41 @@
+# Yazi keybindings configuration
+# See: https://yazi-rs.github.io/docs/configuration/keymap
+
+[mgr]
+prepend_keymap = [
+	# Allow q to quit yazi
+	{ on = "q", run = "quit", desc = "Exit yazi" },
+
+	# Toggle hidden files (dotfiles) with Shift+I
+	# Note: gitignored files are hidden by fd by default and can't be easily toggled in file browser
+	# Use search with --args="--no-ignore" to find gitignored files when needed
+	{ on = "I", run = "hidden toggle", desc = "Toggle hidden/dot files" },
+]
+
+[tasks]
+prepend_keymap = [
+	{ on = "q", run = "close", desc = "Close the task manager" },
+	{ on = "<Esc>", run = "close", desc = "Close the task manager" },
+]
+
+[select]
+prepend_keymap = [
+	{ on = "q", run = "close", desc = "Cancel selection" },
+	{ on = "<Esc>", run = "close", desc = "Cancel selection" },
+]
+
+[input]
+prepend_keymap = [
+	{ on = "<Esc>", run = "close", desc = "Cancel input" },
+]
+
+[help]
+prepend_keymap = [
+	{ on = "q", run = "escape", desc = "Clear the filter, or hide the help" },
+	{ on = "<Esc>", run = "escape", desc = "Clear the filter, or hide the help" },
+]
+
+[completion]
+prepend_keymap = [
+	{ on = "<Esc>", run = "close", desc = "Cancel completion" },
+]

@@ -1,0 +1,12 @@
+# Copy to .gitconfig_<name> and fill in. Real copies are gitignored: they carry
+# an email (and possibly a signing key), and this repo is public.
+# .gitconfig_includes routes each gitdir to the right one.
+[user]
+  email =
+  signingkey =
+
+[commit]
+  gpgsign = false
+
+[tag]
+  gpgSign = false
