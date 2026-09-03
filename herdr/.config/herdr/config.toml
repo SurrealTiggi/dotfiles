@@ -74,6 +74,7 @@ prompt_new_tab_name = false            # a typed name opts the tab out of auto-r
 # Orca-like sidebar: workspace + branch, agents nested with their session name
 show_agent_labels_on_pane_borders = true
 agent_panel_sort = "priority"
+status_indicators = "dots"
 [ui.sidebar.spaces]
 # No $sys_* rows here: those tokens are per-workspace, so machine-wide metrics
 # would repeat on every space. They render once in tab_bar_right instead.
