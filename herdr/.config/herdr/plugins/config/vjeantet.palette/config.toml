@@ -1,0 +1,8 @@
+# The palette's built-in "Workspace: New…" asks for a typed path (source:
+# "input"); its select source only knows workspaces, tabs and agents, so a
+# directory picker has to come in as a user command.
+[[command]]
+id = "workspace.new.pick"
+title = "Workspace: New (pick a repo)"
+argv = ["herdr-new-workspace"]
+placement = "zoomed"

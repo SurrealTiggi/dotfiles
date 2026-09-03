@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Fetches every repo behind a herdr workspace so the sidebar's built-in
+# branch/git_status ahead-behind counts are current. herdr reads local refs
+# (rev-list against upstream) and never fetches on its own.
+#
+# Fetch only: never merges, never touches a working tree.
+set -uo pipefail
+
+herdr="${HERDR_BIN_PATH:-herdr}"
+command -v "$herdr" >/dev/null 2>&1 || exit 0
+
+seen=""
+"$herdr" workspace list 2>/dev/null |
+  jq -r '(.result.workspaces // [])[] | .workspace_id' |
+while read -r ws; do
+  [ -n "$ws" ] || continue
+  cwd=$("$herdr" pane list --workspace "$ws" 2>/dev/null |
+        jq -r '[(.result.panes // [])[] | select(.focused)][0].cwd //
+               (.result.panes // [])[0].cwd // ""')
+  [ -n "$cwd" ] && [ -d "$cwd" ] || continue
+
+  # One fetch per repo, not per worktree sharing it.
+  root=$(git -C "$cwd" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) || continue
+  case " $seen " in *" $root "*) continue ;; esac
+  seen="$seen $root"
+
+  git -C "$cwd" fetch --quiet --prune --no-tags 2>/dev/null || true
+done

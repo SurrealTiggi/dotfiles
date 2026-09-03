@@ -1,0 +1,2 @@
+# gitui handles the diff pane instead; keep reviewr manual via its action.
+auto_open = false

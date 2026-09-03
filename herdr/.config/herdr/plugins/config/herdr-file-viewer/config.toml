@@ -1,0 +1,4 @@
+# Show file contents via bat instead of opening git-changed files in a diff.
+changed_file_view = "content"
+tree_position = "left"
+syntax = "bat --color=always --style=numbers --paging=never --file-name={name} -"

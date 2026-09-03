@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>dev.herdr.git-fetch</string>
+  <key>ProgramArguments</key>
+  <array>
+    <!-- launchd does not expand ~, so this path is absolute. If you are not
+         the original author, change the username. -->
+    <string>/Users/tiago.baptista/.local/bin/herdr-git-fetch</string>
+  </array>
+  <key>StartInterval</key>
+  <integer>600</integer>
+  <key>RunAtLoad</key>
+  <false/>
+  <key>Nice</key>
+  <integer>10</integer>
+  <key>StandardOutPath</key>
+  <string>/dev/null</string>
+  <key>StandardErrorPath</key>
+  <string>/dev/null</string>
+</dict>
+</plist>

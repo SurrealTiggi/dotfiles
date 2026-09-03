@@ -64,6 +64,7 @@ homebrew_installed_packages:
   - bash  # To get a more recent version since MacOS ships with an old version
   - bat  # A better cat
   - brew-gem  # Manage ruby gems via homebrew
+  - bun  # JS runtime; builds the collie herdr plugin
   - chafa  # Terminal image viewer for yazi previews
   - dict  # A dictionary cli
   - dockutil  # Manage MacOS dock
@@ -245,8 +246,10 @@ dotfiles_pkgs:
   - amethyst
   - asdf-default-packages
   - bin
+  - ghostty
   - gitconfig
   - gitui
+  - herdr
   - nvim
   - tflint
   - tmux
@@ -296,6 +299,20 @@ asdf_plugins:
   - name: yq
     versions: ["4.35.2"]
     global: "4.35.2"
+
+##################################################
+### Herdr                                      ###
+##################################################
+configure_herdr: true
+herdr_plugin_list:
+  - {id: "vjeantet.palette",          repo: "vjeantet/herdr-palette"}
+  - {id: "herdr-bar",                 repo: "jeffarese/herdr-bar"}
+  - {id: "herdr-file-viewer",         repo: "smarzban/herdr-file-viewer"}
+  - {id: "persiyanov.reviewr",        repo: "persiyanov/herdr-reviewr"}
+  - {id: "getpipher.herdr-sysmon",    repo: "getpipher/herdr-sysmon"}
+  - {id: "herdr-automatic-rename",    repo: "qu8n/herdr-automatic-rename"}
+  - {id: "arjenblokzijl.herdr-launcher", repo: "arjenblokzijl/herdr-launcher"}
+  - {id: "herdr.collie",              repo: "AltanS/collie"}
 
 ##################################################
 ### MacOS                                      ###

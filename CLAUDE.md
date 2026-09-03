@@ -226,6 +226,33 @@ nvim .
 # <Space>rn  -> Rename symbol
 ```
 
+## Herdr
+
+Terminal multiplexer, migrated from tmux. Config is `herdr/.config/herdr/config.toml`
+(stowed to `~/.config/herdr/`); plugins are declared in `ansible/config.yml`
+(`herdr_plugin_list`) because herdr keeps no installable list of its own.
+
+**Read `herdr/.config/herdr/MIGRATION.md` before changing any herdr config.** It records
+the keybind map, what is deliberately impossible and why, and the traps below in more
+detail — several cost multiple rounds to rediscover.
+
+Validate every change with `herdr server reload-config && herdr config check`. A clean
+reload is necessary but not sufficient:
+
+- It does **not** validate `plugin_action` targets, so a wrong id fails silently. The
+  separator is a dot (`plugin-id.action-id`), not a colon.
+- A key collision is reported as `X: kept keys.foo, disabled keys.bar` rather than an
+  error, and an unset built-in still holds its default key.
+- `branch` and `git_status` are **built-ins herdr computes itself**; writing those token
+  names via `report-metadata` is silently ignored. Custom metadata needs a `$` prefix
+  (`$gitref`), and a token takes one `fg` for its whole value, so anything needing its
+  own colour needs its own token.
+- `tab_bar_right` command entries get **no shell** (pipes and `&&` arrive as literal
+  argv — use a script) and render **no ANSI** (escapes print literally; upstream
+  `herdrdev/herdr#3001`, fixed on preview).
+- The keybinding parser rejects page keys, `home`/`end`/`insert`/`delete`, and multi-key
+  chords. Ghostty translates those instead (see `ghostty/.config/ghostty/config`).
+
 ## Important Notes
 
 - The system is designed for macOS (Darwin) environments only

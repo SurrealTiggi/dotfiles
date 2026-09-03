@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# fzf file picker for herdr: choose a file, open it in nvim in a new pane.
+# Runs inside a herdr popup; the editor must land in a real pane, not the popup,
+# because the popup closes as soon as this script returns.
+set -uo pipefail
+
+herdr="${HERDR_BIN_PATH:-herdr}"
+root="${HERDR_ACTIVE_PANE_CWD:-$PWD}"
+cd "$root" 2>/dev/null || exit 0
+
+# ${var/#pat/rep} does not expand a leading ~ under bash, so strip $HOME by hand.
+case "$root" in
+  "$HOME") disp="~" ;;
+  "$HOME"/*) disp="~/${root#"$HOME"/}" ;;
+  *) disp="$root" ;;
+esac
+
+# Paths stay relative to the pane's cwd so the picker is not mostly $HOME.
+rel=$(fd --type f --hidden --exclude .git 2>/dev/null |
+  fzf --prompt="$disp/ " --height=100% --border=none \
+      --preview='bat --color=always --style=numbers --line-range=:200 {}' \
+      --preview-window='right:60%') || exit 0
+[ -n "$rel" ] || exit 0
+file="$root/$rel"
+
+pane="${HERDR_ACTIVE_PANE_ID:-}"
+if [ -n "$pane" ]; then
+  new=$("$herdr" pane split --pane "$pane" --direction right --cwd "$root" --focus 2>/dev/null |
+        jq -r '.result.pane.pane_id // empty')
+else
+  new=$("$herdr" pane split --current --direction right --cwd "$root" --focus 2>/dev/null |
+        jq -r '.result.pane.pane_id // empty')
+fi
+[ -n "$new" ] || exit 1
+
+# pane run types into the shell, so wait for its prompt first.
+for _ in $(seq 1 40); do
+  "$herdr" pane get "$new" >/dev/null 2>&1 && break
+  sleep 0.05
+done
+sleep 0.2
+"$herdr" pane run "$new" "nvim $(printf '%q' "$file")" >/dev/null 2>&1

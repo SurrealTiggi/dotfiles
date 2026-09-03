@@ -3,7 +3,14 @@
 export EDITOR="nvim"
 
 ## Tmux
-[[ -n $TMUX ]] || export TERM="xterm-256color"
+[[ -n $TMUX || -n $HERDR_ENV ]] || export TERM="xterm-256color"
+
+## Herdr hardcodes TERM=xterm-256color for the panes it spawns, which advertises
+## no kitty-graphics support, so image-rendering TUIs draw nothing. Ghostty does
+## support it, so correct the claim when herdr is the one lying about it.
+if [[ -n $HERDR_ENV && $TERM_PROGRAM == ghostty && $TERM == xterm-256color ]]; then
+  infocmp xterm-ghostty >/dev/null 2>&1 && export TERM="xterm-ghostty"
+fi
 
 ## Main Git dir
 export MY_GIT="$HOME/git"

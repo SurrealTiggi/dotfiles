@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Directory picker for "new workspace". The palette's own workspace.new asks for
+# a typed path (source: "input"); its select source only knows workspaces, tabs
+# and agents, so a directory picker has to live outside it.
+#
+# Lists git repos under $HOME, since that is what a workspace is nearly always
+# rooted at — a bare directory walk offers ~19k entries and is unusable.
+# Ctrl-D switches to plain directories for the rare non-repo case.
+set -uo pipefail
+
+herdr="${HERDR_BIN_PATH:-herdr}"
+root="${HERDR_NEW_WORKSPACE_ROOT:-$HOME}"
+cd "$root" 2>/dev/null || exit 0
+
+repos() {
+  fd --type d --hidden --max-depth 6 --exclude Library --exclude .Trash \
+     --exclude .cache '^\.git$' "$root" 2>/dev/null |
+    sed "s|/\.git/*$||;s|^$root/||" | grep -vE '(^|/)\.' | sort
+}
+dirs() {
+  fd --type d --max-depth 3 --exclude Library --exclude .Trash \
+     --exclude .cache --exclude node_modules . "$root" 2>/dev/null |
+    sed "s|^$root/||;s|/$||" | grep -vE '(^|/)\.' | sort
+}
+
+# fzf's ctrl-d reload re-invokes this script with the flag below.
+case "${1:-}" in
+  --list-repos) repos; exit 0 ;;
+  --list-dirs)  dirs;  exit 0 ;;
+esac
+
+sel=$(repos | fzf --prompt="repo ▸ " --height=100% --border=none --no-preview \
+        --header='ctrl-d: all directories' \
+        --bind="ctrl-d:reload($0 --list-dirs)+change-prompt(dir ▸ )") || exit 0
+[ -n "$sel" ] || exit 0
+
+"$herdr" workspace create --cwd "$root/$sel" --focus >/dev/null 2>&1
