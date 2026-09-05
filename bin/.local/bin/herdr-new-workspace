@@ -3,35 +3,31 @@
 # a typed path (source: "input"); its select source only knows workspaces, tabs
 # and agents, so a directory picker has to live outside it.
 #
-# Lists git repos under $HOME, since that is what a workspace is nearly always
-# rooted at — a bare directory walk offers ~19k entries and is unusable.
-# Ctrl-D switches to plain directories for the rare non-repo case.
+# Lists only the top level of each root, so the list is instant. Anything else
+# is a `z` away; walking $HOME for .git dirs took 1.5s and found nothing useful.
 set -uo pipefail
 
 herdr="${HERDR_BIN_PATH:-herdr}"
-root="${HERDR_NEW_WORKSPACE_ROOT:-$HOME}"
-cd "$root" 2>/dev/null || exit 0
+secret="$HOME/.config/zsh/config/.env.secret"
 
-repos() {
-  fd --type d --hidden --max-depth 6 --exclude Library --exclude .Trash \
-     --exclude .cache '^\.git$' "$root" 2>/dev/null |
-    sed "s|/\.git/*$||;s|^$root/||" | grep -vE '(^|/)\.' | sort
+# herdr may have been started without the shell env, so fall back to the file.
+if [ -z "${HERDR_NEW_WORKSPACE_ROOTS:-}" ] && [ -f "$secret" ]; then
+  eval "$(grep -E '^(export )?HERDR_NEW_WORKSPACE_ROOTS=' "$secret")"
+fi
+IFS=, read -ra roots <<<"${HERDR_NEW_WORKSPACE_ROOTS:-$HOME}"
+
+list() {
+  local r
+  for r in "${roots[@]}"; do
+    r="${r## }"; r="${r%% }"; r="${r/#\~/$HOME}"; r="${r%/}"
+    [ -d "$r" ] || continue
+    fd --max-depth 1 --type d . "$r" 2>/dev/null |
+      sed "s|/\$||" | awk -v home="$HOME" '{l=$0; sub("^"home, "~", l); print l "\t" $0}'
+  done | sort
 }
-dirs() {
-  fd --type d --max-depth 3 --exclude Library --exclude .Trash \
-     --exclude .cache --exclude node_modules . "$root" 2>/dev/null |
-    sed "s|^$root/||;s|/$||" | grep -vE '(^|/)\.' | sort
-}
 
-# fzf's ctrl-d reload re-invokes this script with the flag below.
-case "${1:-}" in
-  --list-repos) repos; exit 0 ;;
-  --list-dirs)  dirs;  exit 0 ;;
-esac
-
-sel=$(repos | fzf --prompt="repo ▸ " --height=100% --border=none --no-preview \
-        --header='ctrl-d: all directories' \
-        --bind="ctrl-d:reload($0 --list-dirs)+change-prompt(dir ▸ )") || exit 0
+sel=$(list | fzf --delimiter='\t' --with-nth=1 --prompt="workspace ▸ " \
+        --height=100% --border=none --no-preview | cut -f2) || exit 0
 [ -n "$sel" ] || exit 0
 
-"$herdr" workspace create --cwd "$root/$sel" --focus >/dev/null 2>&1
+"$herdr" workspace create --cwd "$sel" --focus >/dev/null 2>&1
