@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Re-attach the focused pane to its neighbour with the other split direction.
+# herdr has swap keys but nothing that turns side-by-side into stacked or back.
+set -uo pipefail
+herdr="${HERDR_BIN_PATH:-herdr}"
+# A horizontal neighbour means we are side by side: stack. Otherwise a vertical
+# neighbour means stacked: put beside. No neighbour: nothing to do.
+me="${HERDR_ACTIVE_PANE_ID:-}"
+[ -n "$me" ] || me=$("$herdr" pane list 2>/dev/null | jq -r '.result.panes[] | select(.focused) | .pane_id' | head -1)
+[ -n "$me" ] || exit 1
+tab=$("$herdr" pane get "$me" 2>/dev/null | jq -r '.result.pane.tab_id // empty')
+[ -n "$tab" ] || exit 1
+
+# `pane neighbor` answers with the queried pane when nothing is there, so read
+# adjacency off the rects: touching edge on one axis, overlapping on the other.
+adjacent() {
+  "$herdr" pane layout --pane "$me" 2>/dev/null | jq -r --arg me "$me" --arg axis "$1" '
+    .result.layout.panes as $p
+    | ($p[] | select(.pane_id==$me) | .rect) as $m
+    | [ $p[] | select(.pane_id!=$me) | .rect as $r
+        | select(
+            if $axis=="h"
+            then (($r.x == $m.x+$m.width) or ($r.x+$r.width == $m.x))
+                 and ($r.y < $m.y+$m.height) and ($m.y < $r.y+$r.height)
+            else (($r.y == $m.y+$m.height) or ($r.y+$r.height == $m.y))
+                 and ($r.x < $m.x+$m.width) and ($m.x < $r.x+$r.width)
+            end)
+        | .pane_id ] | first // empty'
+}
+
+split="down"; nb=$(adjacent h)
+[ -n "$nb" ] || { split="right"; nb=$(adjacent v); }
+
+if [ -z "$nb" ]; then
+  "$herdr" notification show "Nothing to flip" --body "This pane has no neighbour" --sound none >/dev/null 2>&1
+  exit 0
+fi
+
+# A move within the same tab is a no-op; bounce through a scratch tab, which
+# herdr drops again once it is empty.
+"$herdr" pane move "$me" --new-tab --no-focus >/dev/null 2>&1 || exit 1
+"$herdr" pane move "$me" --tab "$tab" --target-pane "$nb" --split "$split" --focus >/dev/null 2>&1

@@ -25,7 +25,10 @@ Prefix is `ctrl+a`. Arrow scheme: horizontal = tabs, vertical = spaces, `prefix`
 | `prefix+w` | herdr-bar (session picker) |
 | `cmd+k` / `super+k` | command palette |
 | `prefix+p` / `prefix+f` | fzf file picker → nvim |
-| `prefix+n` | file viewer |
+| `prefix+n` | yazi (popup) |
+| `prefix+shift+n` | yazi pane on the left, toggle (`herdr-yazi-side`, plugin pane `local.user.yazi`) |
+| `prefix+a` | agenda in a focused right split (plugin pane `local.user.agenda`; `type = "pane"` keys are always zoomed) |
+| `cmd+k` → `User: Toggle pane orientation` | side-by-side ↔ stacked (`herdr-pane-flip`; no built-in key exists) |
 | `prefix+h` | toggle sidebar |
 | `prefix+z` | zoom |
 | `prefix+d` / `prefix+q` | detach |

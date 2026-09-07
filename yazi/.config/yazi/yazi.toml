@@ -22,3 +22,7 @@ linemode = "size"
 tab_size = 2
 max_width = 600
 max_height = 900
+
+[plugin]
+# chafa fallback inside herdr popups; see plugins/herdr-popup-image.yazi
+prepend_previewers = [{ mime = "image/*", run = "herdr-popup-image" }]

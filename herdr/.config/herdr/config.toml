@@ -79,7 +79,23 @@ status_indicators = "dots"
 # No $sys_* rows here: those tokens are per-workspace, so machine-wide metrics
 # would repeat on every space. They render once in tab_bar_right instead.
 rows = [
-  ["state_icon", "workspace"],
+  # $task_a..j: task(s) a space works on or hosts worktrees for, one slot per
+  # task so related spaces share a shade (blue -> purple). Set via `herdr-task`.
+  [
+    "state_icon", "workspace",
+    # Ten slots, ordered so the first ones handed out differ most. Palette from
+    # coolors 89b4fa-c77dff-cea2f0-d5c6e0-9899f0-5b6bff-7973d0-967aa1-aaa1c8-b2aacd.
+    { token = "$task_a", fg = "#89b4fa", bold = true },   # sky blue
+    { token = "$task_b", fg = "#c77dff", bold = true },   # violet
+    { token = "$task_c", fg = "#d5c6e0", bold = true },   # pale lavender
+    { token = "$task_d", fg = "#5b6bff", bold = true },   # indigo
+    { token = "$task_e", fg = "#967aa1", bold = true },   # dusty mauve
+    { token = "$task_f", fg = "#cea2f0", bold = true },   # lilac
+    { token = "$task_g", fg = "#9899f0", bold = true },   # periwinkle
+    { token = "$task_h", fg = "#aaa1c8", bold = true },   # lavender grey
+    { token = "$task_i", fg = "#7973d0", bold = true },   # slate violet
+    { token = "$task_j", fg = "#b2aacd", bold = true },   # soft lavender
+  ],
   [
     { token = "$gitref", fg = "#a6e3a1", dim = true },
     { token = "$gitahead", fg = "#a6e3a1" },
@@ -111,9 +127,24 @@ command = """herdr server reload-config >/dev/null 2>&1 && herdr notification sh
 description = "Reload config"
 
 [[keys.command]]
+key = "prefix+shift+n"
+type = "shell"
+command = "herdr-yazi-side"
+description = "yazi side pane (left, toggle)"
+
+[[keys.command]]
 key = "prefix+n"
+type = "popup"
+command = "yazi"
+width = "90%"
+height = "85%"
+description = "yazi"
+
+[[keys.command]]
+key = "prefix+t"
 type = "plugin_action"
-command = "herdr-file-viewer.open-file-viewer"
+command = "herdr-dagr.open-dagr"
+description = "Task DAG (dagr)"
 
 [[keys.command]]
 key = "prefix+g"
@@ -150,6 +181,13 @@ key = ["super+k", "ctrl+alt+k"]        # cmd+k; ghostty sends ctrl+alt+k
 type = "plugin_action"
 command = "vjeantet.palette.open"
 description = "Command palette"
+
+# type = "pane" is always zoomed; the plugin pane gives a plain focused split.
+[[keys.command]]
+key = "prefix+a"
+type = "shell"
+command = """herdr plugin pane open --plugin local.user --entrypoint agenda --placement split --direction right ${HERDR_ACTIVE_PANE_ID:+--target-pane "$HERDR_ACTIVE_PANE_ID"} --focus >/dev/null 2>&1"""
+description = "agenda"
 
 [ui.toast]
 delivery = "herdr"

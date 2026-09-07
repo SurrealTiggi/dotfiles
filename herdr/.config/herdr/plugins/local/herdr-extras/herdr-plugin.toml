@@ -1,7 +1,9 @@
-id = "local.herdr-extras"
-name = "herdr extras"
+# id "local.user": the palette labels plugin rows by the id's last segment, so
+# these read "User: …", the same prefix it gives the palette's own [[command]]s.
+id = "local.user"
+name = "User"
 version = "0.2.0"
-description = "Keeps the sysmon poller alive and refreshes git remotes for the sidebar."
+description = "Sysmon poller, git remote refresh for the sidebar, pane split flips for the palette."
 min_herdr_version = "0.8.0"
 platforms = ["macos", "linux"]
 
@@ -31,3 +33,29 @@ command = ["herdr-git-fetch"]
 [[events]]
 on = "worktree.created"
 command = ["herdr-git-fetch"]
+
+# herdr has swap keys but no split-orientation flip.
+[[actions]]
+id = "toggle-pane-orientation"
+title = "Toggle pane orientation"
+command = ["herdr-pane-flip"]
+
+# `herdr plugin pane open --plugin local.user --entrypoint <id> …` spawns the
+# command straight into the pane, no shell, unlike `pane split` + `pane run`.
+[[panes]]
+id = "gitui"
+title = "gitui"
+placement = "split"
+command = ["gitui"]
+
+[[panes]]
+id = "yazi"
+title = "yazi"
+placement = "split"
+command = ["yazi"]
+
+[[panes]]
+id = "agenda"
+title = "agenda"
+placement = "split"
+command = ["agenda"]

@@ -3,6 +3,6 @@
 # directory picker has to come in as a user command.
 [[command]]
 id = "workspace.new.pick"
-title = "Workspace: New (pick a repo)"
+title = "New Workspace (repo)"
 argv = ["herdr-new-workspace"]
 placement = "zoomed"
