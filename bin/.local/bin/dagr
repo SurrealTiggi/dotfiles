@@ -1,1 +1,10 @@
-/Users/tiago.baptista/.config/herdr/plugins/github/herdr-dagr-bd0ed2fe5515/bin/dagr
+#!/usr/bin/env bash
+# The herdr-dagr plugin ships the dagr binary under a hashed install dir that
+# changes on every plugin update, so resolve it at run time.
+set -u
+root=$("${HERDR_BIN_PATH:-herdr}" plugin list --json 2>/dev/null |
+  jq -r '.result.plugins[] | select(.plugin_id=="herdr-dagr") | .plugin_root // empty')
+bin="${root:+$root/bin/dagr}"
+[ -n "$bin" ] && [ -x "$bin" ] || bin=$(ls -t "$HOME"/.config/herdr/plugins/github/herdr-dagr-*/bin/dagr 2>/dev/null | head -1)
+[ -x "${bin:-}" ] || { echo "dagr: herdr-dagr plugin binary not found" >&2; exit 127; }
+exec "$bin" "$@"
