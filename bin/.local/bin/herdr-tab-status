@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# The whole right side of the tab bar in one entry, so every gap is the same
+# two spaces. As separate entries, herdr put its own gap between them and
+# sysmon another inside its line, which read as uneven spacing.
+# No colour: herdr strips ANSI here (herdrdev/herdr#3001, fixed by stripping in 0.9.0).
+set -uo pipefail
+herdr="${HERDR_BIN_PATH:-herdr}"
+segs=()
+
+if "$herdr" pane layout --current 2>/dev/null | grep -q '"zoomed":true'; then segs+=("🔍"); fi
+
+if command -v collie-lan >/dev/null 2>&1; then
+  s=$(collie-lan glyph 2>/dev/null); [ -n "$s" ] && segs+=("$s")
+fi
+
+# sysmon publishes per-workspace tokens, which repeat on every sidebar row;
+# the tab bar renders once, so reuse its metric library instead.
+d=$(find "$HOME/.config/herdr/plugins/github" -maxdepth 1 -type d -name '*sysmon*' 2>/dev/null | head -1)
+if [ -n "$d" ] && [ -r "$d/scripts/metrics.sh" ]; then
+  # shellcheck source=/dev/null
+  if source "$d/scripts/metrics.sh" 2>/dev/null; then
+    segs+=(" $(sys_cpu)" " $(sys_mem)" "$(sys_batt)")
+  fi
+fi
+
+out=""; for s in "${segs[@]}"; do out+="${out:+  }$s"; done
+printf '%s' "$out"
+exit 0

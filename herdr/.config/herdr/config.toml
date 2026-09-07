@@ -62,10 +62,9 @@ reload_config = ""                     # replaced by the command below (adds a t
 [ui]
 accent = "cyan"
 tab_bar_position = "top"               # tmux: set -g status-position top
+# One entry, so the gaps are uniform; a command entry gets no shell and no ANSI.
 tab_bar_right = [
-  { type = "command", command = "herdr-zoom-glyph", interval_seconds = 2 },
-  { type = "command", command = "herdr-collie-glyph", interval_seconds = 5 },
-  { type = "command", command = "herdr-sysmon-bar", interval_seconds = 5 },
+  { type = "command", command = "herdr-tab-status", interval_seconds = 3 },
 ]
 mouse_capture = true                   # tmux: set -g mouse on
 copy_on_select = true

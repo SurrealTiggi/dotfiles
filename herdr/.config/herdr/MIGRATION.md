@@ -29,7 +29,7 @@ Prefix is `ctrl+a`. Arrow scheme: horizontal = tabs, vertical = spaces, `prefix`
 | `prefix+shift+n` | yazi pane on the left, toggle (`herdr-yazi-side`, plugin pane `local.user.yazi`) |
 | `prefix+a` | agenda in a focused right split (plugin pane `local.user.agenda`; `type = "pane"` keys are always zoomed) |
 | `cmd+k` → `User: Toggle pane orientation` | side-by-side ↔ stacked (`herdr-pane-flip`; no built-in key exists) |
-| `cmd+k` → `User: Toggle Remote Control` | collie LAN front door on/off (`collie-lan toggle`); tab bar shows ` on` or ` off` |
+| `cmd+k` → `User: Toggle Remote Control` | collie LAN front door on/off (`collie-lan toggle`); `herdr-tab-status` shows ` on` or ` off` |
 | `prefix+h` | toggle sidebar |
 | `prefix+z` | zoom |
 | `prefix+d` / `prefix+q` | detach |
@@ -69,7 +69,7 @@ keybinds. Verified against `herdr api schema`.
 | `persiyanov/herdr-reviewr` | agent diff review; **passive** (`auto_open = false`), gitui took over |
 | `qu8n/herdr-automatic-rename` | tab = foreground program + Nerd Font glyph |
 | `arjenblokzijl/herdr-launcher` | worktree + agent creation form (`prefix+c`) |
-| `getpipher/herdr-sysmon` | metrics; rendered once via `tab_bar_right`, not per space |
+| `getpipher/herdr-sysmon` | metrics library; rendered once by `herdr-tab-status` in `tab_bar_right`, not per space |
 | `AltanS/collie` | phone PWA (needs `bun`); fronted by Caddy on the LAN via `collie-lan`, see "Collie" below |
 | `local.gitwatch` | feeds the sidebar's branch/git_status tokens |
 
@@ -127,24 +127,22 @@ genuinely takes no command; the manifest is the mechanism that does.
 
 ## Open
 
-- [ ] **On herdr 0.8.3 (or the next stable), recheck tab-bar colour.**
-      `herdrdev/herdr#3001` — `tab_bar_right` command output leaks ANSI escape bodies (the ESC
-      byte is stripped, `[38;5;114m` renders as literal text). Fixed on master, released to the
-      **preview** channel 2026-08-31, not yet stable. When it lands, `bin/.local/bin/herdr-sysmon-bar`
-      can carry colour again (load-banded CPU, etc.) — it is plain-text-with-glyphs only because
-      of this bug. Same for `herdr-collie-glyph`; one colour per entry would then let collie,
-      CPU, memory and battery each take their own shade. Check with `herdr --version` then re-test a coloured `printf` entry.
-      Related and still open upstream: no styling config for `tab_bar_right`, and no tab
-      separator/border glyph config (so powerline-style tabs are not possible).
+- [x] **Tab-bar colour: not possible, settled.** `herdrdev/herdr#3001` (ANSI bodies leaking
+      as text) was fixed in 0.9.0 by PR 3003, "strip ansi sequences from tab bar status". The
+      bar strips escapes rather than rendering them, and there is still no styling config for
+      `tab_bar_right` and no separator/border glyph config. `herdr-tab-status` therefore stays
+      plain text with glyphs. 0.9.0 did add value-based colour rules for **sidebar** tokens, which
+      is where any coloured metric would have to live.
 
 - [x] **Work/personal isolation.** `~/.claude/hooks/work-world-guard.sh`, wired as a
       `PreToolUse` hook. Denies the six employer MCP servers when cwd is outside
       the work checkout roots (set via `CLAUDE_WORK_DIRS`; the defaults live in the
       script, which is outside this repo).
       herdr cannot do this: `--env` does not inherit to panes split later.
-- [x] **Zoom glyph.** `bin/.local/bin/herdr-zoom-glyph`, called from `tab_bar_right`. A
-      `command` entry is spawned WITHOUT a shell, so pipes and `&&` are literal args — put any
-      pipeline in a script. Verified: empty unzoomed, 🔍 zoomed.
+- [x] **Tab bar right side.** One script, `bin/.local/bin/herdr-tab-status`: zoom glyph, collie
+      state, CPU, memory, battery, joined by two spaces. It used to be three entries, and herdr's
+      own gap between entries did not match the gap inside sysmon's line. A `command` entry is
+      spawned WITHOUT a shell, so pipes and `&&` are literal args — put any pipeline in a script.
 - [x] **terminal-browser** — was `TERM` plus a stale client. herdr hardcodes
       `TERM=xterm-256color`; `exports.zsh` corrects it to `xterm-ghostty` inside herdr.
       `experimental.kitty_graphics = true` needs a full detach/reattach, not a reload

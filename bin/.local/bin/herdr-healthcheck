@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2016  # the bash -c strings take $0/$1 on purpose
+# Smoke test for the herdr setup in this repo. Run after `herdr update` (from a
+# pane inside herdr) and before trusting anything else: every line is one thing
+# that has broken, or could, across a release. Exits 1 if anything failed.
+set -uo pipefail
+herdr="${HERDR_BIN_PATH:-herdr}"
+cfg="$HOME/.config/herdr/config.toml"
+fail=0
+ok()  { printf 'ok    %s\n' "$*"; }
+bad() { printf 'FAIL  %s\n' "$*"; fail=1; }
+check() { local name=$1; shift; if "$@" >/dev/null 2>&1; then ok "$name"; else bad "$name"; fi; }
+
+echo "herdr $("$herdr" --version 2>/dev/null | awk '{print $2}')"
+
+check "server answers (workspace list)" "$herdr" workspace list
+out=$("$herdr" config check 2>&1); case "$out" in *"config: ok"*) ok "config check" ;; *) bad "config check: $out" ;; esac
+if "$herdr" server reload-config 2>/dev/null | jq -e '.result.diagnostics == []' >/dev/null; then ok "reload-config, no diagnostics"; else bad "reload-config reported diagnostics"; fi
+
+disabled=$("$herdr" plugin list 2>/dev/null | grep -E '^- ' | grep -v ' enabled ' || true)
+if [ -z "$disabled" ]; then ok "every plugin enabled"; else bad "plugins not enabled: $disabled"; fi
+for a in toggle-pane-orientation toggle-remote-control; do
+  check "palette action local.user/$a" bash -c '"$0" plugin action list --plugin local.user | grep -q "\"action_id\":\"$1\""' "$herdr" "$a"
+done
+failed=$("$herdr" plugin log list --plugin local.user --limit 50 2>/dev/null | jq -r '[.result.logs[] | select(.status != "succeeded")] | length')
+if [ "${failed:-0}" = 0 ]; then ok "no failed local.user plugin commands in the last 50"; else bad "$failed failed local.user plugin commands: herdr plugin log list --plugin local.user"; fi
+
+# Every tab_bar_right command must run, exit 0 and print something.
+while IFS= read -r cmd; do
+  [ -n "$cmd" ] || continue
+  if out=$(timeout 15 "$cmd" 2>/dev/null) && [ -n "$out" ]; then ok "tab_bar_right: $cmd -> [$out]"; else bad "tab_bar_right: $cmd (exit $?, output [${out:-}])"; fi
+done < <(python3 -c 'import tomllib,sys; c=tomllib.load(open(sys.argv[1],"rb")); print("\n".join(e["command"] for e in c["ui"]["tab_bar_right"] if e.get("type")=="command"))' "$cfg" 2>/dev/null)
+
+# JSON shapes our scripts depend on.
+check "pane layout --current has .zoomed" bash -c '"$0" pane layout --current | jq -e "[.result.layout.panes[].zoomed] | length > 0"' "$herdr"
+check "pane list has .result.panes[].pane_id" bash -c '"$0" pane list | jq -e ".result.panes[0].pane_id"' "$herdr"
+check "workspace list carries custom tokens (gitref)" bash -c '"$0" workspace list | jq -e "[.result.workspaces[].tokens.gitref // empty] | length > 0"' "$herdr"
+check "herdr-git-tokens runs" herdr-git-tokens
+check "herdr-task list runs" herdr-task list
+check "workspace report-metadata accepted" bash -c '"$0" workspace report-metadata "$("$0" workspace list | jq -r ".result.workspaces[0].workspace_id")" --source healthcheck --token healthcheck=1 --clear-token healthcheck' "$herdr"
+
+# Collie: bridge alive on loopback and read-only there, front door script sane.
+if launchctl print "gui/$(id -u)/herdr.collie" 2>/dev/null | grep -q 'state = running'; then ok "collie bridge LaunchAgent running"; else bad "collie bridge LaunchAgent not running"; fi
+if curl -s --max-time 5 http://127.0.0.1:8787/api/snapshot | jq -e '.device.authorized == false' >/dev/null 2>&1; then ok "collie loopback answers and is read-only"; else bad "collie loopback: no answer or not read-only"; fi
+check "collie-lan status" collie-lan status
+check "Caddyfile validates" bash -c 'set -a; . ~/.config/collie-lan/env; caddy validate --config ~/.config/caddy/Caddyfile --adapter caddyfile'
+
+check "dagr binary" dagr --version
+
+exit $fail
