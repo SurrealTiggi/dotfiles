@@ -24,3 +24,6 @@
 # tags
 
 **/.claude/settings.local.json
+
+# dagr run files (herdr-dagr), per workspace
+.dagr/

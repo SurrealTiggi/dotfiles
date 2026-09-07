@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# Stamps ticket tokens on herdr workspaces so related spaces share a colour.
+#
+# The sidebar can only colour a token statically, so there are ten slot tokens
+# (task_a..task_j), each with its own shade in config.toml. A ticket is assigned
+# a free slot on first use and keeps it (state in ~/.herdr/task-slots.json), so
+# every space stamped with that ticket renders in the same colour. With all ten
+# slots taken, `set` refuses until a finished ticket is released.
+#
+#   herdr-task set <ws> SRE-1234[,SRE-5678]   stamp a space (hub: list every ticket it hosts)
+#   herdr-task clear <ws>                     remove all ticket tokens from a space
+#   herdr-task release SRE-1234               free the ticket's slot once the work is done
+#   herdr-task list                           show slot assignments
+set -uo pipefail
+
+herdr="${HERDR_BIN_PATH:-herdr}"
+state="${HERDR_TASK_SLOTS:-$HOME/.herdr/task-slots.json}"
+slots=(a b c d e f g h i j)
+[ -f "$state" ] || echo '{}' >"$state"
+
+slot_for() { # ticket -> slot letter, assigning a free one if needed
+  local t=$1 s
+  s=$(jq -r --arg t "$t" '.[$t] // empty' "$state")
+  if [ -z "$s" ]; then
+    for c in "${slots[@]}"; do
+      if ! jq -e --arg c "$c" 'to_entries | any(.value == $c)' "$state" >/dev/null; then s=$c; break; fi
+    done
+    if [ -z "$s" ]; then
+      # All ten taken. Reusing a slot would put two tickets in one shade, which is
+      # worse than no colour, so stop and let the operator free a finished one.
+      echo "herdr-task: no free slot for $t; release a finished ticket first:" >&2
+      jq -r 'to_entries[] | "  herdr-task release \(.key)   (slot \(.value))"' "$state" >&2
+      exit 1
+    fi
+    jq --arg t "$t" --arg s "$s" '.[$t] = $s' "$state" >"$state.tmp" && mv "$state.tmp" "$state"
+  fi
+  echo "$s"
+}
+
+clear_args() { local a=(--clear-token task); for c in "${slots[@]}"; do a+=(--clear-token "task_$c"); done; printf '%s\n' "${a[@]}"; }
+
+case "${1:-}" in
+  set)
+    ws=${2:?workspace id}; tickets=${3:?ticket[,ticket]}
+    args=(); while IFS= read -r a; do args+=("$a"); done < <(clear_args)
+    IFS=, read -ra list <<<"$tickets"
+    for t in "${list[@]}"; do s=$(slot_for "$t") || exit 1; args+=(--token "task_$s=$t"); done
+    "$herdr" workspace report-metadata "$ws" --source task-labels "${args[@]}" >/dev/null
+    ;;
+  clear)
+    ws=${2:?workspace id}
+    args=(); while IFS= read -r a; do args+=("$a"); done < <(clear_args)
+    "$herdr" workspace report-metadata "$ws" --source task-labels "${args[@]}" >/dev/null
+    ;;
+  release)
+    t=${2:?ticket}; jq --arg t "$t" 'del(.[$t])' "$state" >"$state.tmp" && mv "$state.tmp" "$state"
+    ;;
+  list) jq -r 'to_entries[] | "\(.value)  \(.key)"' "$state" | sort ;;
+  *) sed -n 2,12p "$0"; exit 1 ;;
+esac
