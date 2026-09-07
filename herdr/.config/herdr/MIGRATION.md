@@ -29,7 +29,7 @@ Prefix is `ctrl+a`. Arrow scheme: horizontal = tabs, vertical = spaces, `prefix`
 | `prefix+shift+n` | yazi pane on the left, toggle (`herdr-yazi-side`, plugin pane `local.user.yazi`) |
 | `prefix+a` | agenda in a focused right split (plugin pane `local.user.agenda`; `type = "pane"` keys are always zoomed) |
 | `cmd+k` → `User: Toggle pane orientation` | side-by-side ↔ stacked (`herdr-pane-flip`; no built-in key exists) |
-| `cmd+k` → `User: Toggle Remote Control` | collie LAN front door on/off (`collie-lan toggle`); glyph  in the tab bar while on |
+| `cmd+k` → `User: Toggle Remote Control` | collie LAN front door on/off (`collie-lan toggle`); tab bar shows ` on` or ` off` |
 | `prefix+h` | toggle sidebar |
 | `prefix+z` | zoom |
 | `prefix+d` / `prefix+q` | detach |
