@@ -88,6 +88,13 @@ than on the next tab event) still needs adding to `.zshrc`; see its README.
 Marketplace is auto-indexed from the GitHub `herdr-plugin` topic with no vetting; stars are
 popularity, not safety.
 
+`vjeantet.palette` pins a herdr API protocol in its `commands.json` (`expected_herdr_protocol`)
+and shows a yellow warning header in the picker when herdr reports another. herdr 0.9.0 moved
+20 -> 22 while the catalog itself still matched every subcommand and flag (its own
+`scripts/check-compat.sh` passes once the number is bumped), so the installed copy is edited
+in place. A `herdr plugin install` of the palette puts 20 back; `herdr-healthcheck` catches it.
+Drop the local edit once upstream ships the bump.
+
 **Reinstalling on a new machine.** herdr keeps no declarative plugin list — `plugins.json` is a
 generated cache full of absolute paths, and `.plugins.lock` is empty. The source of truth is
 `herdr_plugin_list` in `ansible/config.yml`; `ansible-playbook ... --tags herdr` installs

@@ -22,6 +22,13 @@ if [ -z "$disabled" ]; then ok "every plugin enabled"; else bad "plugins not ena
 for a in toggle-pane-orientation toggle-remote-control; do
   check "palette action local.user/$a" bash -c '"$0" plugin action list --plugin local.user | grep -q "\"action_id\":\"$1\""' "$herdr" "$a"
 done
+# The palette pins a herdr protocol in its catalog and shows a warning header on mismatch.
+pal=$(find "$HOME/.config/herdr/plugins/github" -maxdepth 1 -type d -name 'vjeantet.palette-*' | head -1)
+if [ -n "$pal" ]; then
+  want=$(jq -r '.expected_herdr_protocol' "$pal/commands.json" 2>/dev/null)
+  have=$("$herdr" api schema 2>/dev/null | awk -F': ' '/^protocol:/ {print $2; exit}')
+  if [ -n "$want" ] && [ "$want" = "$have" ]; then ok "palette catalog protocol $want matches herdr"; else bad "palette catalog expects protocol $want, herdr reports $have (see MIGRATION.md, Plugins)"; fi
+fi
 failed=$("$herdr" plugin log list --plugin local.user --limit 50 2>/dev/null | jq -r '[.result.logs[] | select(.status != "succeeded")] | length')
 if [ "${failed:-0}" = 0 ]; then ok "no failed local.user plugin commands in the last 50"; else bad "$failed failed local.user plugin commands: herdr plugin log list --plugin local.user"; fi
 
