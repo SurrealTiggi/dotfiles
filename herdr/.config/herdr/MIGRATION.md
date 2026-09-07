@@ -29,6 +29,7 @@ Prefix is `ctrl+a`. Arrow scheme: horizontal = tabs, vertical = spaces, `prefix`
 | `prefix+shift+n` | yazi pane on the left, toggle (`herdr-yazi-side`, plugin pane `local.user.yazi`) |
 | `prefix+a` | agenda in a focused right split (plugin pane `local.user.agenda`; `type = "pane"` keys are always zoomed) |
 | `cmd+k` → `User: Toggle pane orientation` | side-by-side ↔ stacked (`herdr-pane-flip`; no built-in key exists) |
+| `cmd+k` → `User: Toggle Remote Control` | collie LAN front door on/off (`collie-lan toggle`); glyph  in the tab bar while on |
 | `prefix+h` | toggle sidebar |
 | `prefix+z` | zoom |
 | `prefix+d` / `prefix+q` | detach |
@@ -69,7 +70,7 @@ keybinds. Verified against `herdr api schema`.
 | `qu8n/herdr-automatic-rename` | tab = foreground program + Nerd Font glyph |
 | `arjenblokzijl/herdr-launcher` | worktree + agent creation form (`prefix+c`) |
 | `getpipher/herdr-sysmon` | metrics; rendered once via `tab_bar_right`, not per space |
-| `AltanS/collie` | phone UI over Tailscale (needs `bun`) |
+| `AltanS/collie` | phone PWA (needs `bun`); fronted by Caddy on the LAN via `collie-lan`, see "Collie" below |
 | `local.gitwatch` | feeds the sidebar's branch/git_status tokens |
 
 `herdr-automatic-rename` renames the **agent** as well as the tab, not just the tab. With
@@ -131,7 +132,8 @@ genuinely takes no command; the manifest is the mechanism that does.
       byte is stripped, `[38;5;114m` renders as literal text). Fixed on master, released to the
       **preview** channel 2026-08-31, not yet stable. When it lands, `bin/.local/bin/herdr-sysmon-bar`
       can carry colour again (load-banded CPU, etc.) — it is plain-text-with-glyphs only because
-      of this bug. Check with `herdr --version` then re-test a coloured `printf` entry.
+      of this bug. Same for `herdr-collie-glyph`; one colour per entry would then let collie,
+      CPU, memory and battery each take their own shade. Check with `herdr --version` then re-test a coloured `printf` entry.
       Related and still open upstream: no styling config for `tab_bar_right`, and no tab
       separator/border glyph config (so powerline-style tabs are not possible).
 
@@ -156,6 +158,32 @@ genuinely takes no command; the manifest is the mechanism that does.
       workspace/worktree/pane-focus events. Add a `$linear` token the same way.
 - [x] Plugin decisions made: native worktrees over `herdr-worktrunk`; `collie` installed;
       `herdr-plus`/`ramarivera-palette`/`herdmates`/`herdr-board` all evaluated and skipped.
+## Collie
+
+Collie's DEPLOYMENT.md "Variant C": the bridge binds `127.0.0.1:8787` and never runs
+`tailscale serve` (the tailnet this Mac joins is not a personal one). Caddy is the only front
+door, bound to the home LAN address with a cert from its own local CA and basic auth as the
+per-device gate (`X-Device-Id` is SET from the basic-auth user, so a client cannot forge it).
+
+- `collie-lan on|off|toggle|status|init`; the palette entry `User: Toggle Remote Control` runs
+  `toggle`. `on` refuses when the default gateway MAC is not the home router (`--force`
+  overrides), and Caddy is not registered at login, so a reboot or a coffee shop lands in the
+  off state.
+- Config lives outside the repo: `~/.config/collie-lan/env` (LAN address, router MAC, user,
+  bcrypt hash; `collie-lan init` writes it) and the plugin's own `.env` under
+  `~/.config/herdr/plugins/config/herdr.collie/` (`COLLIE_SKIP_SERVE=1`, `COLLIE_PUBLIC_HOSTS`,
+  `COLLIE_ALLOWED_ORIGINS`, `COLLIE_DEVICE_HEADER`, `COLLIE_DEVICE_ALLOWLIST`, VAPID keys).
+  The user in the env file must be in `COLLIE_DEVICE_ALLOWLIST` or the phone is read-only.
+- The phone must trust Caddy's root CA once
+  (`~/Library/Application Support/Caddy/pki/authorities/local/root.crt`: AirDrop it, install the
+  profile, then Settings > General > About > Certificate Trust Settings). Without HTTPS the page
+  works but the service worker, install and push silently no-op.
+- Install from `https://<LAN IP>:8443` only. The PWA is pinned to one origin and `.local` names
+  do not resolve through a VPN, so the address needs a DHCP reservation on the router. 8443 rather
+  than 443 because this macOS denies non-root binds below 1024 (`bind: permission denied` on :80
+  and :443), so the Caddyfile also has `auto_https disable_redirects`.
+- `COLLIE_TRUSTED_USER` does nothing without `tailscale serve`; it fails open, so leave it unset.
+
 ## Gotchas that cost real time
 
 - **herdr hardcodes `TERM=xterm-256color`** for the panes it spawns — it is the only TERM

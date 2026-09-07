@@ -1,0 +1,21 @@
+# LAN front door for the collie herdr plugin. Started and stopped by `collie-lan`,
+# which exports the {$COLLIE_LAN_*} values from ~/.config/collie-lan/env.
+{
+	admin localhost:2019
+	# The local root CA is trusted on the phone by hand; never prompt for sudo here.
+	skip_install_trust
+	# macOS denies non-root binds below 1024, hence the high port and no :80 redirect.
+	auto_https disable_redirects
+}
+
+https://{$COLLIE_LAN_HOST}:{$COLLIE_LAN_PORT:8443} {
+	bind {$COLLIE_LAN_HOST}
+	tls internal
+	basic_auth {
+		{$COLLIE_LAN_USER} {$COLLIE_LAN_AUTH_HASH}
+	}
+	reverse_proxy 127.0.0.1:{$COLLIE_PORT:8787} {
+		# Set, not added: collie trusts this header only because a client cannot supply it.
+		header_up X-Device-Id {http.auth.user.id}
+	}
+}

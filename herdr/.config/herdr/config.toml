@@ -64,6 +64,7 @@ accent = "cyan"
 tab_bar_position = "top"               # tmux: set -g status-position top
 tab_bar_right = [
   { type = "command", command = "herdr-zoom-glyph", interval_seconds = 2 },
+  { type = "command", command = "herdr-collie-glyph", interval_seconds = 5 },
   { type = "command", command = "herdr-sysmon-bar", interval_seconds = 5 },
 ]
 mouse_capture = true                   # tmux: set -g mouse on

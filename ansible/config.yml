@@ -65,6 +65,7 @@ homebrew_installed_packages:
   - bat  # A better cat
   - brew-gem  # Manage ruby gems via homebrew
   - bun  # JS runtime; builds the collie herdr plugin
+  - caddy  # TLS front door for collie on the LAN, toggled by collie-lan
   - chafa  # Terminal image viewer for yazi previews
   - dict  # A dictionary cli
   - dockutil  # Manage MacOS dock
@@ -246,6 +247,7 @@ dotfiles_pkgs:
   - amethyst
   - asdf-default-packages
   - bin
+  - caddy
   - ghostty
   - gitconfig
   - gitui
