@@ -40,6 +40,12 @@ id = "toggle-pane-orientation"
 title = "Toggle pane orientation"
 command = ["herdr-pane-flip"]
 
+# Collie LAN front door (Caddy) on/off; the bridge itself stays loopback-only.
+[[actions]]
+id = "toggle-remote-control"
+title = "Toggle Remote Control"
+command = ["collie-lan", "toggle"]
+
 # `herdr plugin pane open --plugin local.user --entrypoint <id> …` spawns the
 # command straight into the pane, no shell, unlike `pane split` + `pane run`.
 [[panes]]

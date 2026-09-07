@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# tab_bar_right entry: a command there gets no shell and no reliable argv, so
+# the one-word wrapper. Must always exit 0 and stay quiet.
+exec collie-lan glyph

@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+# On/off switch for the collie LAN front door: Caddy bound to this Mac's home
+# LAN address, TLS from Caddy's local CA, basic auth as the per-device gate.
+# The collie bridge itself stays on 127.0.0.1 and is never touched here.
+#
+#   collie-lan on|off|toggle   start/stop Caddy; `on` refuses off the home network (--force overrides)
+#   collie-lan status          "on" or "off"
+#   collie-lan glyph           tab-bar glyph when on, nothing when off
+#   collie-lan init            detect LAN address + router MAC, set the password, write the env file
+#
+# Port 8443, not 443: macOS denies non-root binds below 1024.
+#
+# Env file: ~/.config/collie-lan/env. The user name must be in COLLIE_DEVICE_ALLOWLIST
+# of the collie .env, or the phone is read-only.
+set -uo pipefail
+
+cfg_dir="${COLLIE_LAN_DIR:-$HOME/.config/collie-lan}"
+env_file="$cfg_dir/env"
+pidfile="$cfg_dir/caddy.pid"
+logfile="$cfg_dir/caddy.log"
+caddyfile="${COLLIE_LAN_CADDYFILE:-$HOME/.config/caddy/Caddyfile}"
+herdr="${HERDR_BIN_PATH:-herdr}"
+
+notify() { "$herdr" notification show "$1" --body "${2:-}" --sound none >/dev/null 2>&1 || true; }
+die() { echo "collie-lan: $*" >&2; notify "Remote control" "$*"; exit 1; }
+
+load_env() {
+  [ -r "$env_file" ] || die "no $env_file; run: collie-lan init"
+  set -a
+  # shellcheck source=/dev/null
+  . "$env_file"
+  set +a
+}
+
+default_iface() { route -n get default 2>/dev/null | awk '/interface:/{print $2}'; }
+
+# Normalised aa:bb:cc:dd:ee:ff; arp drops leading zeros, so pad before comparing.
+gateway_mac() {
+  local gw mac
+  gw=$(route -n get default 2>/dev/null | awk '/gateway:/{print $2}')
+  [ -n "$gw" ] || return 0
+  mac=$(arp -n "$gw" 2>/dev/null | awk '{for(i=1;i<=NF;i++) if($i=="at"){print $(i+1); exit}}')
+  case "$mac" in *:*) ;; *) return 0 ;; esac
+  printf '%s' "$mac" | awk -F: '{for(i=1;i<=NF;i++) printf "%s%02s", (i>1?":":""), tolower($i)}' | tr ' ' 0
+}
+
+running() { [ -r "$pidfile" ] && kill -0 "$(cat "$pidfile")" 2>/dev/null; }
+at_home() { [ -n "$COLLIE_LAN_GATEWAY_MAC" ] && [ "$(gateway_mac)" = "$COLLIE_LAN_GATEWAY_MAC" ]; }
+
+cmd_on() {
+  load_env
+  if running; then echo on; return; fi
+  if [ "${1:-}" != "--force" ] && ! at_home; then
+    die "not on the home network (gateway MAC mismatch); use: collie-lan on --force"
+  fi
+  [ "$(ipconfig getifaddr "$(default_iface)" 2>/dev/null)" = "$COLLIE_LAN_HOST" ] ||
+    die "this Mac is not $COLLIE_LAN_HOST; check the DHCP reservation"
+  # Not captured: the forked server inherits stdout and a $(...) would never see EOF.
+  caddy start --config "$caddyfile" --adapter caddyfile --pidfile "$pidfile" >"$logfile" 2>&1 ||
+    die "caddy failed to start: $(grep -m1 -o 'Error: .*' "$logfile" || tail -1 "$logfile")"
+  notify "Remote control on" "https://$COLLIE_LAN_HOST:${COLLIE_LAN_PORT:-8443}"
+  echo on
+}
+
+cmd_off() {
+  if ! running; then echo off; return; fi
+  caddy stop >/dev/null 2>&1 || kill "$(cat "$pidfile")" 2>/dev/null
+  rm -f "$pidfile"
+  notify "Remote control off"
+  echo off
+}
+
+cmd_init() {
+  local ip mac user pw hash
+  # shellcheck source=/dev/null
+  [ -r "$env_file" ] && . "$env_file"
+  ip=$(ipconfig getifaddr "$(default_iface)" 2>/dev/null); mac=$(gateway_mac)
+  if [ -z "$ip" ] || [ -z "$mac" ]; then die "no LAN address or gateway found; run this at home"; fi
+  user="${COLLIE_LAN_USER:-$USER}"
+  if [ -n "${COLLIE_LAN_PASSWORD:-}" ]; then pw="$COLLIE_LAN_PASSWORD"
+  else read -rsp "password for $user: " pw; echo; fi
+  [ -n "$pw" ] || die "empty password"
+  hash=$(caddy hash-password --plaintext "$pw") || die "caddy hash-password failed"
+  mkdir -p "$cfg_dir"; umask 077
+  # Single quotes: a bcrypt hash is full of `$`.
+  cat >"$env_file" <<EOT
+COLLIE_LAN_HOST=$ip
+COLLIE_LAN_PORT=${COLLIE_LAN_PORT:-8443}
+COLLIE_LAN_GATEWAY_MAC=$mac
+COLLIE_LAN_USER=$user
+COLLIE_LAN_AUTH_HASH='$hash'
+EOT
+  echo "wrote $env_file: $user @ https://$ip:${COLLIE_LAN_PORT:-8443}, home gateway $mac"
+  running && echo "Caddy is running on the old settings: collie-lan off && collie-lan on"
+  return 0
+}
+
+case "${1:-}" in
+  on)     cmd_on "${2:-}" ;;
+  off)    cmd_off ;;
+  toggle) if running; then cmd_off; else cmd_on "${2:-}"; fi ;;
+  status) if running; then echo on; else echo off; fi ;;
+  glyph)  running && printf ''; exit 0 ;;
+  init)   cmd_init ;;
+  *)      sed -n 2,12p "$0"; exit 1 ;;
+esac
