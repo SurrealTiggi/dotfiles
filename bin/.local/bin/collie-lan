@@ -5,7 +5,7 @@
 #
 #   collie-lan on|off|toggle   start/stop Caddy; `on` refuses off the home network (--force overrides)
 #   collie-lan status          "on" or "off"
-#   collie-lan glyph           tab-bar glyph when on, nothing when off
+#   collie-lan glyph           tab-bar text: ' on' or ' off'
 #   collie-lan init            detect LAN address + router MAC, set the password, write the env file
 #
 # Port 8443, not 443: macOS denies non-root binds below 1024.
@@ -100,7 +100,7 @@ case "${1:-}" in
   off)    cmd_off ;;
   toggle) if running; then cmd_off; else cmd_on "${2:-}"; fi ;;
   status) if running; then echo on; else echo off; fi ;;
-  glyph)  running && printf ''; exit 0 ;;
+  glyph)  if running; then printf ' on'; else printf ' off'; fi; exit 0 ;;
   init)   cmd_init ;;
   *)      sed -n 2,12p "$0"; exit 1 ;;
 esac
