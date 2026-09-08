@@ -65,7 +65,7 @@ keybinds. Verified against `herdr api schema`.
 | --- | --- |
 | `vjeantet/herdr-palette` | command palette (`cmd+k`) |
 | `jeffarese/herdr-bar` | session picker |
-| `smarzban/herdr-file-viewer` | file tree; config stowed alongside |
+| `aemrebarut/herdr-dagr` | task DAG pane (`prefix+t`); `bin/.local/bin/dagr` wraps its binary |
 | `persiyanov/herdr-reviewr` | agent diff review; **passive** (`auto_open = false`), gitui took over |
 | `qu8n/herdr-automatic-rename` | tab = foreground program + Nerd Font glyph |
 | `arjenblokzijl/herdr-launcher` | worktree + agent creation form (`prefix+c`) |
@@ -102,7 +102,7 @@ anything missing and skips the rest. Add new plugins there, not just via `herdr 
 
 `arjenblokzijl/herdr-launcher` (`prefix+c`) replaced `royal-lobster.spinup`, now uninstalled. It declares `[[panes]]` with
 `placement = "split"`, so herdr spawns the binary **directly, no shell** — the same mechanism
-the palette, herdr-bar, file-viewer and reviewr use, and why those open instantly. A manifest
+the palette, herdr-bar and reviewr use, and why those open instantly. A manifest
 `[[panes]]` entry is the way to avoid shell startup; the CLI (`tab create`, `pane split`) takes
 no command, which is a different thing.
 
@@ -127,7 +127,7 @@ bundled command list before trusting it.
 
 Spinup was uninstalled because its cost was its own design, not a herdr limit: a plugin manifest can declare
 `[[panes]]` with `placement = "split" | "popup" | "tab"` and herdr spawns that command
-**directly, with no shell** — which is why the palette, herdr-bar, file-viewer and reviewr open
+**directly, with no shell** — which is why the palette, herdr-bar and reviewr open
 instantly. Spinup declares only an `[[events]]` hook and drives the tab's shell via `pane run`,
 paying shell startup plus paste-injection on every tab. The CLI (`tab create`, `pane split`)
 genuinely takes no command; the manifest is the mechanism that does.

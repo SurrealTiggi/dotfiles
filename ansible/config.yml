@@ -309,7 +309,7 @@ configure_herdr: true
 herdr_plugin_list:
   - {id: "vjeantet.palette",          repo: "vjeantet/herdr-palette"}
   - {id: "herdr-bar",                 repo: "jeffarese/herdr-bar"}
-  - {id: "herdr-file-viewer",         repo: "smarzban/herdr-file-viewer"}
+  - {id: "herdr-dagr",                repo: "aemrebarut/herdr-dagr"}
   - {id: "persiyanov.reviewr",        repo: "persiyanov/herdr-reviewr"}
   - {id: "getpipher.herdr-sysmon",    repo: "getpipher/herdr-sysmon"}
   - {id: "herdr-automatic-rename",    repo: "qu8n/herdr-automatic-rename"}
