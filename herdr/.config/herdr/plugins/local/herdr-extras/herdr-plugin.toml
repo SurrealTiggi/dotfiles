@@ -18,9 +18,18 @@ command = ["herdr-git-tokens"]
 [[startup]]
 command = ["herdr-git-fetch"]
 
+# report-metadata is display-only and lost on restart; herdr-task keeps its
+# own workspace map and re-applies it here.
+[[startup]]
+command = ["herdr-task", "restore"]
+
 [[events]]
 on = "workspace.created"
 command = ["herdr-git-tokens"]
+
+[[events]]
+on = "workspace.created"
+command = ["herdr-task", "restore"]
 
 [[events]]
 on = "pane.focused"
