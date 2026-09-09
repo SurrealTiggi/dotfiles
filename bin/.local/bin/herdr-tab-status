@@ -19,7 +19,7 @@ d=$(find "$HOME/.config/herdr/plugins/github" -maxdepth 1 -type d -name '*sysmon
 if [ -n "$d" ] && [ -r "$d/scripts/metrics.sh" ]; then
   # shellcheck source=/dev/null
   if source "$d/scripts/metrics.sh" 2>/dev/null; then
-    segs+=(" $(sys_cpu)" " $(sys_mem)" "$(sys_batt)")
+    segs+=("󰻠 $(sys_cpu)" "󰍛 $(sys_mem)" "$(sys_batt)")
   fi
 fi
 
