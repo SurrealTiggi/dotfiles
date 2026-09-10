@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Opens agenda in a focused right split. herdr 0.9.0 leaves both panes painting
+# at their pre-split size until a focus change, so nudge the split ratio to
+# force a relayout (no repaint command exists).
+# TODO: drop the ratio nudge once fixed upstream, watch
+# https://github.com/herdrdev/herdr/issues/3672
+set -uo pipefail
+sock="${HERDR_SOCKET_PATH:-$HOME/.config/herdr/herdr.sock}"
+
+out=$(herdr plugin pane open --plugin local.user --entrypoint agenda --placement split --direction right \
+  ${HERDR_ACTIVE_PANE_ID:+--target-pane "$HERDR_ACTIVE_PANE_ID"} --focus 2>/dev/null) || exit 0
+p=$(jq -r '.result.plugin_pane.pane.pane_id // empty' <<<"$out")
+[ -n "$p" ] || exit 0
+
+ratio() {
+  printf '{"id":"agenda-relayout","method":"layout.set_split_ratio","params":{"pane_id":"%s","path":[],"ratio":%s}}\n' "$p" "$1" \
+    | nc -U -w 2 "$sock" >/dev/null
+}
+ratio 0.49
+ratio 0.5

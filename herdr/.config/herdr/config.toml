@@ -184,10 +184,12 @@ command = "vjeantet.palette.open"
 description = "Command palette"
 
 # type = "pane" is always zoomed; the plugin pane gives a plain focused split.
+# The script also nudges the split ratio after opening: without it both panes
+# keep painting at their pre-split size until a focus change (0.9.0).
 [[keys.command]]
 key = "prefix+a"
 type = "shell"
-command = """herdr plugin pane open --plugin local.user --entrypoint agenda --placement split --direction right ${HERDR_ACTIVE_PANE_ID:+--target-pane "$HERDR_ACTIVE_PANE_ID"} --focus >/dev/null 2>&1"""
+command = """herdr-agenda >/dev/null 2>&1"""
 description = "agenda"
 
 [ui.toast]

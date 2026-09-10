@@ -12,6 +12,7 @@
 # it. The local.user plugin runs `restore` at startup.
 #
 #   herdr-task set <ws> SRE-1234[,SRE-5678]   stamp a space (hub: list every ticket it hosts)
+#   herdr-task place <ws>                     move a space up next to the first space sharing its ticket
 #   herdr-task clear <ws>                     remove all ticket tokens from a space
 #   herdr-task release SRE-1234               free the ticket's slot once the work is done
 #   herdr-task restore                        re-apply every stored stamp (herdr startup)
@@ -59,11 +60,49 @@ apply() { # ws [ticket...]: the space ends up showing exactly these tickets
 stored() { jq -r --arg ws "$1" '.workspaces[$ws] // [] | .[]' "$state"; }
 live_workspaces() { "$herdr" workspace list 2>/dev/null | jq -r '(.result.workspaces // [])[] | .workspace_id'; }
 
+place_ws() { # move ws next to the first other space sharing its lead ticket
+  local ws=$1 t anchor before w i keep seen order
+  t=$(stored "$ws" | head -n1); [ -n "$t" ] || return 0
+  order=$(live_workspaces); [ -n "$order" ] || return 0
+  anchor=""
+  while IFS= read -r w; do
+    [ "$w" = "$ws" ] && continue
+    stored "$w" | grep -qx "$t" && { anchor=$w; break; }
+  done <<<"$order"
+  [ -n "$anchor" ] || return 0
+  # Slot in after the anchor's children for tickets earlier in its token list,
+  # so a multi-ticket hub keeps its groups in metadata order.
+  local -a ats=(); while IFS= read -r x; do ats+=("$x"); done < <(stored "$anchor")
+  local tidx=0
+  for i in "${!ats[@]}"; do [ "${ats[$i]}" = "$t" ] && tidx=$i; done
+  before=null seen=0
+  while IFS= read -r w; do
+    [ "$w" = "$anchor" ] && { seen=1; continue; }
+    [ "$seen" = 1 ] || continue
+    [ "$w" = "$ws" ] && continue
+    keep=0
+    for i in $(seq 0 "$tidx"); do
+      stored "$w" | grep -qx "${ats[$i]}" && { keep=1; break; }
+    done
+    [ "$keep" = 0 ] && { before=$w; break; }
+  done <<<"$order"
+  jq -nc --arg ws "$ws" --arg b "$before" \
+    '{id:"herdr-task-place",method:"workspace.move_block",
+      params:{workspace_ids:[$ws],before_workspace_id:(if $b=="null" then null else $b end)}}' \
+    | nc -U -w 2 "${HERDR_SOCKET_PATH:-$HOME/.config/herdr/herdr.sock}" >/dev/null
+}
+
 case "${1:-}" in
   set)
     ws=${2:?workspace id}; IFS=, read -ra list <<<"${3:?ticket[,ticket]}"
     apply "$ws" "${list[@]}" || exit 1
     jqw --arg ws "$ws" --argjson l "$(printf '%s\n' "${list[@]}" | jq -R . | jq -sc .)" '.workspaces[$ws] = $l'
+    # A single-ticket stamp is a fresh worktree space; pull it up next to its
+    # group. Multi-ticket stamps are hub restamps, which stay put.
+    if [ ${#list[@]} -eq 1 ]; then place_ws "$ws"; fi
+    ;;
+  place)
+    place_ws "${2:?workspace id}"
     ;;
   clear)
     ws=${2:?workspace id}
