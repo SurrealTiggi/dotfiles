@@ -150,6 +150,7 @@ homebrew_installed_packages:
   - steampipe  # steampipe.io query cloud like SQL
   - stern  # Kubernetes log tailer
   - stow  # Simple symlink management
+  - swiftformat  # Swift formatter, used by conform.nvim
   - teleport  # Identity aware reverse-proxy for VM's, K8s, DB's, etc
   #- teller  # Easy secrets management on AWS
   - terraform-docs  # Generate docs from terraform modules
@@ -160,6 +161,7 @@ homebrew_installed_packages:
   - tlrc  # Rust based tldr for better man pages
   - tmux  # Terminal multiplexer
   - tree  # File listing as a tree
+  - tree-sitter-cli  # Needed by nvim-treesitter to build the swift parser
   - updatecli  # Dependency management cli utility
   - uv  # The best(?) python package manager
   - velero  # Kubernetes backup utility

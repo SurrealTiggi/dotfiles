@@ -17,6 +17,7 @@ return function()
 			markdown = { "prettier" },
 			python = { "isort", "black" },
 			svelte = { "prettier" },
+			swift = { "swiftformat" },
 			terraform = { "terraform_fmt" },
 			typescript = { "prettier" },
 			typescriptreact = { "prettier" },

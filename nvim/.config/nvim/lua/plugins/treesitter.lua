@@ -1,5 +1,7 @@
 -- TODO: Disable @comment.todo.comment
 return function()
+	-- tree-sitter CLI >= 0.26 dropped --no-bindings, which the frozen nvim-treesitter master still passes
+	require("nvim-treesitter.install").ts_generate_args = { "generate", "--abi", vim.treesitter.language_version }
 	require("nvim-treesitter.configs").setup({
 		auto_install = true,
 		ensure_installed = {
@@ -24,6 +26,7 @@ return function()
 			"python",
 			"regex",
 			"rust",
+			"swift",
 			"toml",
 			"vue",
 			"yaml",

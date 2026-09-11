@@ -121,6 +121,11 @@ return function()
 		},
 	})
 
+	-- sourcekit-lsp ships with Xcode and is not in the mason registry
+	require("lspconfig").sourcekit.setup({
+		capabilities = require("cmp_nvim_lsp").default_capabilities(),
+	})
+
 	mason_tool_installer.setup({
 		ensure_installed = {
 			"prettier", -- prettier formatter
