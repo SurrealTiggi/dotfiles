@@ -1,17 +1,28 @@
 return function()
-	-- Note: LSP server setup is now handled in mason.lua via setup_handlers
-	-- This file only configures keybindings and diagnostics
-
 	local keymap = vim.keymap -- for conciseness
+
+	vim.lsp.config("*", {
+		capabilities = require("cmp_nvim_lsp").default_capabilities(),
+	})
+	vim.lsp.config("lua_ls", {
+		settings = {
+			Lua = {
+				diagnostics = { globals = { "vim" } },
+				completion = { callSnippet = "Replace" },
+			},
+		},
+	})
+	-- sourcekit-lsp ships with Xcode and is not a mason package, so mason-lspconfig never enables it
+	vim.lsp.enable("sourcekit")
 
 	-- Configure diagnostic display to show source
 	vim.diagnostic.config({
 		virtual_text = {
-			source = "always", -- Show source (LSP name) in virtual text
+			source = true,
 			prefix = "●",
 		},
 		float = {
-			source = "always", -- Show source in hover window
+			source = true,
 			border = "rounded",
 			header = "",
 			prefix = "",
@@ -20,7 +31,14 @@ return function()
 				return string.format("[%s] %s", diagnostic.source or "unknown", diagnostic.message)
 			end,
 		},
-		signs = true,
+		signs = {
+			text = {
+				[vim.diagnostic.severity.ERROR] = " ",
+				[vim.diagnostic.severity.WARN] = " ",
+				[vim.diagnostic.severity.HINT] = "󰠠 ",
+				[vim.diagnostic.severity.INFO] = " ",
+			},
+		},
 		underline = true,
 		update_in_insert = false,
 		severity_sort = true,
@@ -62,21 +80,25 @@ return function()
 			keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
 
 			opts.desc = "Go to previous diagnostic"
-			keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
+			keymap.set("n", "[d", function()
+				vim.diagnostic.jump({ count = -1 })
+			end, opts)
 
 			opts.desc = "Go to next diagnostic"
-			keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- jump to next diagnostic in buffer
+			keymap.set("n", "]d", function()
+				vim.diagnostic.jump({ count = 1 })
+			end, opts)
 
 			-- Ctrl+j/k for jumping between diagnostics with automatic popup
 			opts.desc = "Next diagnostic with popup"
 			keymap.set("n", "<C-j>", function()
-				vim.diagnostic.goto_next()
+				vim.diagnostic.jump({ count = 1 })
 				vim.diagnostic.open_float(nil, { focus = false, scope = "cursor" })
 			end, opts)
 
 			opts.desc = "Previous diagnostic with popup"
 			keymap.set("n", "<C-k>", function()
-				vim.diagnostic.goto_prev()
+				vim.diagnostic.jump({ count = -1 })
 				vim.diagnostic.open_float(nil, { focus = false, scope = "cursor" })
 			end, opts)
 
@@ -87,11 +109,4 @@ return function()
 			keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
 		end,
 	})
-
-	-- Change the Diagnostic symbols in the sign column (gutter)
-	local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-	for type, icon in pairs(signs) do
-		local hl = "DiagnosticSign" .. type
-		vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-	end
 end
