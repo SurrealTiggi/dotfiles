@@ -312,7 +312,8 @@ local languages = {
 	-- Treesitter for highlights and AST
 	{
 		"nvim-treesitter/nvim-treesitter",
-		event = { "BufReadPre", "BufNewFile" },
+		branch = "main",
+		lazy = false,
 		build = ":TSUpdate",
 		config = require("plugins.treesitter"),
 		dependencies = {
