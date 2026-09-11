@@ -6,16 +6,32 @@
 	skip_install_trust
 	# macOS denies non-root binds below 1024, hence the high port and no :80 redirect.
 	auto_https disable_redirects
+	# Clients connect by IP and send no SNI; without this they fall through to the
+	# catch-all TLS policy, which has NO client_auth. With it they match the site's
+	# mTLS policy (verified: the adapted policy matches sni ["", host]).
+	default_sni {$COLLIE_LAN_HOST}
+	servers {
+		# Off because no-SNI clients fail the literal Host==SNI comparison (421)
+		# even with default_sni. Safe here: both reachable TLS paths ("" and the
+		# host IP) require a client cert, and any other SNI has no server cert,
+		# so its handshake aborts before HTTP. Re-check if a second site is added.
+		strict_sni_host insecure_off
+	}
 }
 
 https://{$COLLIE_LAN_HOST}:{$COLLIE_LAN_PORT:8443} {
 	bind {$COLLIE_LAN_HOST}
-	tls internal
-	basic_auth {
-		{$COLLIE_LAN_USER} {$COLLIE_LAN_AUTH_HASH}
+	# mTLS: the handshake fails without a client cert from our CA, so there is
+	# no password prompt and no anonymous LAN access. Certs via `collie-lan cert`.
+	tls internal {
+		client_auth {
+			mode require_and_verify
+			trust_pool file {$COLLIE_LAN_MTLS_CA}
+		}
 	}
 	reverse_proxy 127.0.0.1:{$COLLIE_PORT:8787} {
-		# Set, not added: collie trusts this header only because a client cannot supply it.
-		header_up X-Device-Id {http.auth.user.id}
+		# Set, not added: overwrites any client-supplied value. The SAN carries
+		# the device id, which collie checks against its allowlist for writes.
+		header_up X-Device-Id {http.request.tls.client.san.dns_names.0}
 	}
 }

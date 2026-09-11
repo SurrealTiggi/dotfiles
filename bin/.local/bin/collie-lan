@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 # On/off switch for the collie LAN front door: Caddy bound to this Mac's home
-# LAN address, TLS from Caddy's local CA, basic auth as the per-device gate.
+# LAN address, TLS from Caddy's local CA, mTLS as the per-device gate: only
+# devices holding a cert from the client CA under ~/.config/collie-lan/mtls
+# can connect, and their device id comes from the cert's SAN.
 # The collie bridge itself stays on 127.0.0.1 and is never touched here.
 #
 #   collie-lan on|off|toggle   start/stop Caddy; `on` refuses off the home network (--force overrides)
 #   collie-lan status          "on" or "off"
 #   collie-lan glyph           tab-bar text: ' on' or ' off'
-#   collie-lan init            detect LAN address + router MAC, set the password, write the env file
+#   collie-lan init            detect LAN address + router MAC, write the env file
+#   collie-lan cert <device>   issue a client cert (.p12) for a device; creates the CA on first use
 #
 # Port 8443, not 443: macOS denies non-root binds below 1024.
 #
-# Env file: ~/.config/collie-lan/env. The user name must be in COLLIE_DEVICE_ALLOWLIST
-# of the collie .env, or the phone is read-only.
+# Env file: ~/.config/collie-lan/env. The device id must be in COLLIE_DEVICE_ALLOWLIST
+# of the collie .env, or the device is read-only.
 set -uo pipefail
 
 cfg_dir="${COLLIE_LAN_DIR:-$HOME/.config/collie-lan}"
@@ -71,28 +74,46 @@ cmd_off() {
 }
 
 cmd_init() {
-  local ip mac user pw hash
+  local ip mac
   # shellcheck source=/dev/null
   [ -r "$env_file" ] && . "$env_file"
   ip=$(ipconfig getifaddr "$(default_iface)" 2>/dev/null); mac=$(gateway_mac)
   if [ -z "$ip" ] || [ -z "$mac" ]; then die "no LAN address or gateway found; run this at home"; fi
-  user="${COLLIE_LAN_USER:-$USER}"
-  if [ -n "${COLLIE_LAN_PASSWORD:-}" ]; then pw="$COLLIE_LAN_PASSWORD"
-  else read -rsp "password for $user: " pw; echo; fi
-  [ -n "$pw" ] || die "empty password"
-  hash=$(caddy hash-password --plaintext "$pw") || die "caddy hash-password failed"
   mkdir -p "$cfg_dir"; umask 077
-  # Single quotes: a bcrypt hash is full of `$`.
   cat >"$env_file" <<EOT
 COLLIE_LAN_HOST=$ip
 COLLIE_LAN_PORT=${COLLIE_LAN_PORT:-8443}
 COLLIE_LAN_GATEWAY_MAC=$mac
-COLLIE_LAN_USER=$user
-COLLIE_LAN_AUTH_HASH='$hash'
+COLLIE_LAN_MTLS_CA=$cfg_dir/mtls/client-ca.crt
 EOT
-  echo "wrote $env_file: $user @ https://$ip:${COLLIE_LAN_PORT:-8443}, home gateway $mac"
+  echo "wrote $env_file: https://$ip:${COLLIE_LAN_PORT:-8443}, home gateway $mac"
   running && echo "Caddy is running on the old settings: collie-lan off && collie-lan on"
   return 0
+}
+
+cmd_cert() {
+  local dev=$1 d="$cfg_dir/mtls" pw
+  [ -n "$dev" ] || die "usage: collie-lan cert <device-id>"
+  mkdir -p "$d"; umask 077
+  [ -f "$d/client-ca.crt" ] || openssl req -x509 -newkey rsa:2048 -nodes -days 3650 \
+    -keyout "$d/client-ca.key" -out "$d/client-ca.crt" \
+    -subj "/CN=collie-lan client CA" 2>/dev/null || die "CA generation failed"
+  openssl req -newkey rsa:2048 -nodes -keyout "$d/$dev.key" -out "$d/$dev.csr" \
+    -subj "/CN=$dev" 2>/dev/null || die "key/csr generation failed"
+  # The SAN is the device id collie sees; it must be in COLLIE_DEVICE_ALLOWLIST for writes.
+  # Explicit -CAserial: LibreSSL derives the default path by truncating the CA
+  # path at the first dot, which lands outside $d when $HOME contains one.
+  openssl x509 -req -in "$d/$dev.csr" -CA "$d/client-ca.crt" -CAkey "$d/client-ca.key" \
+    -CAcreateserial -CAserial "$d/client-ca.srl" -days 3650 -out "$d/$dev.crt" \
+    -extfile <(printf 'subjectAltName=DNS:%s\nextendedKeyUsage=clientAuth\n' "$dev") 2>/dev/null \
+    || die "cert signing failed"
+  pw=$(openssl rand -hex 4)
+  openssl pkcs12 -export -inkey "$d/$dev.key" -in "$d/$dev.crt" \
+    -passout "pass:$pw" -out "$d/$dev.p12" || die "p12 export failed"
+  rm -f "$d/$dev.csr"
+  echo "wrote $d/$dev.p12 (import password: $pw)"
+  echo "iPhone: AirDrop the .p12, install via Settings > General > VPN & Device Management,"
+  echo "then pick the cert when Safari asks on first visit."
 }
 
 case "${1:-}" in
@@ -102,5 +123,6 @@ case "${1:-}" in
   status) if running; then echo on; else echo off; fi ;;
   glyph)  if running; then printf ' on'; else printf ' off'; fi; exit 0 ;;
   init)   cmd_init ;;
-  *)      sed -n 2,12p "$0"; exit 1 ;;
+  cert)   cmd_cert "${2:-}" ;;
+  *)      sed -n 2,14p "$0"; exit 1 ;;
 esac
