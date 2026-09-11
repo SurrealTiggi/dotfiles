@@ -104,7 +104,7 @@ The Neovim setup is a comprehensive development environment built on modern plug
 
 ### Core Architecture
 - **Plugin Manager**: Lazy.nvim for fast, lazy-loaded plugin management
-- **LSP**: Mason.nvim + lspconfig for language server management
+- **LSP**: Mason installs servers, `vim.lsp.config`/`vim.lsp.enable` configures them (Neovim 0.12)
 - **Configuration Structure**: Modular Lua-based configuration in `nvim/.config/nvim/`
 
 ### Directory Structure
@@ -119,9 +119,9 @@ nvim/.config/nvim/
     │   ├── lazy.lua            # Lazy.nvim bootstrapping
     │   ├── options.lua         # Vim options and settings
     │   └── symbols.lua         # UI symbols and icons
-    ├── lsp-new/                # Modern LSP configuration
-    │   ├── lspconfig.lua       # Language server configurations
-    │   └── mason.lua           # LSP server installation management
+    ├── lsp-new/                # LSP configuration
+    │   ├── lspconfig.lua       # Server settings, diagnostics, keymaps
+    │   └── mason.lua           # Server and tool installation
     ├── plugins/                # Individual plugin configurations
     │   ├── conform.lua         # Code formatting (prettier, stylua, black, etc.)
     │   ├── nvim-cmp.lua        # Completion engine
@@ -141,9 +141,9 @@ nvim/.config/nvim/
 ```
 
 ### Language Server Support
-Configured LSPs via Mason.nvim in `lsp-new/mason.lua:8-25`:
-- **Web**: `ts_ls`, `html`, `cssls`, `tailwindcss`, `emmet_ls`
-- **Backend**: `gopls`, `pyright`, `rust_analyzer`
+Servers installed by Mason in `lsp-new/mason.lua`, plus `sourcekit` from Xcode for Swift:
+- **Web**: `ts_ls`, `html`, `cssls`, `tailwindcss`
+- **Backend**: `gopls`, `pyright`, `rust_analyzer`, `sourcekit`
 - **DevOps**: `bashls`, `terraformls`, `helm_ls`, `ansiblels`
 - **Data**: `jsonls`, `jsonnet_ls`
 - **Lua**: `lua_ls` (with Neovim API support)
@@ -156,6 +156,7 @@ Conform.nvim handles formatting in `plugins/conform.lua:4-24`:
 - **Lua**: `stylua`
 - **Terraform**: `terraform_fmt`
 - **Shell**: `shfmt`
+- **Swift**: `swiftformat`
 - **Universal**: `trim_whitespace` + `trim_newlines`
 
 Format on save enabled with `<leader>mp` manual formatting.
@@ -171,7 +172,7 @@ Format on save enabled with `<leader>mp` manual formatting.
 
 #### Language Support (`user/plugins.lua:66-98`)
 - **nvim-cmp**: Intelligent completion with LSP, path, and snippet sources
-- **Treesitter**: Advanced syntax highlighting and AST navigation
+- **Treesitter**: nvim-treesitter `main` branch; parsers build from source and need `tree-sitter-cli`
 - **LuaSnip**: Snippet engine with completion integration
 - **vim-helm**: Helm chart file detection
 
@@ -207,10 +208,8 @@ Primary mappings in `user/keybinds.lua:14-29`:
 - **Consistency**: Unified keybinding scheme with mnemonic prefixes
 
 ### Migration Notes
-The configuration is transitioning from legacy LSP setup:
-- Old LSP config in `DELETE_ME_lsp/` (deprecated)
-- New LSP config in `lsp-new/` (current)
 - Some legacy Vimscript keybinds still loaded via `keybinds.vim`
+- nvim-treesitter `master` and `require("lspconfig").X.setup()` are both gone; do not reintroduce them
 
 ### Common Operations
 ```bash
