@@ -12,6 +12,8 @@ return function()
 	-- automatic_enable (default) runs vim.lsp.enable for every installed server;
 	-- per-server settings live in lsp-new/lspconfig.lua via vim.lsp.config
 	require("mason-lspconfig").setup({
+		-- stylua ships an LSP mode since 2.5; conform already runs it as a formatter
+		automatic_enable = { exclude = { "stylua" } },
 		ensure_installed = {
 			"ansiblels",
 			"bashls",
