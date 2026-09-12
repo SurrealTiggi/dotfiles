@@ -7,7 +7,7 @@ return function()
 	vim.lsp.config("lua_ls", {
 		settings = {
 			Lua = {
-				diagnostics = { globals = { "vim" } },
+				diagnostics = { globals = { "vim", "COLORS", "SYMBOLS", "DATA_PATH", "CACHE_PATH", "TERMINAL", "USER" } },
 				completion = { callSnippet = "Replace" },
 			},
 		},

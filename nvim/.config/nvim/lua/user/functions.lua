@@ -52,7 +52,7 @@ M.next_hunk_and_preview = function()
 	local main_win = vim.api.nvim_get_current_win()
 
 	-- Always jump to the next hunk (including staged hunks)
-	gitsigns.next_hunk({ target = 'all' })
+	gitsigns.nav_hunk("next", { target = "all" })
 
 	-- Preview the hunk inline after a short delay
 	vim.defer_fn(function()
@@ -73,7 +73,7 @@ M.prev_hunk_and_preview = function()
 	local main_win = vim.api.nvim_get_current_win()
 
 	-- Always jump to the previous hunk (including staged hunks)
-	gitsigns.prev_hunk({ target = 'all' })
+	gitsigns.nav_hunk("prev", { target = "all" })
 
 	-- Preview the hunk inline after a short delay
 	vim.defer_fn(function()
@@ -91,7 +91,7 @@ M.toggle_todo_trouble = function()
 
 	for _, win in ipairs(vim.api.nvim_list_wins()) do
 		local buf = vim.api.nvim_win_get_buf(win)
-		local ft = vim.api.nvim_buf_get_option(buf, "filetype")
+		local ft = vim.bo[buf].filetype
 		if ft == "trouble" then
 			trouble_open = true
 			trouble_win = win
