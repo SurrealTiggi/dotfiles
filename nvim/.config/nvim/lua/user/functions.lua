@@ -52,6 +52,7 @@ M.next_hunk_and_preview = function()
 	local main_win = vim.api.nvim_get_current_win()
 
 	-- Always jump to the next hunk (including staged hunks)
+	---@diagnostic disable-next-line: missing-fields
 	gitsigns.nav_hunk("next", { target = "all" })
 
 	-- Preview the hunk inline after a short delay
@@ -73,6 +74,7 @@ M.prev_hunk_and_preview = function()
 	local main_win = vim.api.nvim_get_current_win()
 
 	-- Always jump to the previous hunk (including staged hunks)
+	---@diagnostic disable-next-line: missing-fields
 	gitsigns.nav_hunk("prev", { target = "all" })
 
 	-- Preview the hunk inline after a short delay
@@ -85,31 +87,20 @@ end
 
 -- Toggle TodoTrouble with focus
 M.toggle_todo_trouble = function()
-	-- Check if Trouble window is open by looking for the filetype
-	local trouble_open = false
-	local trouble_win = nil
-
+	local trouble_win
 	for _, win in ipairs(vim.api.nvim_list_wins()) do
-		local buf = vim.api.nvim_win_get_buf(win)
-		local ft = vim.bo[buf].filetype
-		if ft == "trouble" then
-			trouble_open = true
+		if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "trouble" then
 			trouble_win = win
 			break
 		end
 	end
 
-	if trouble_open then
-		-- If we're in the Trouble window, close it
-		if vim.api.nvim_get_current_win() == trouble_win then
-			vim.cmd("Trouble close")
-		else
-			-- If Trouble is open but we're not in it, focus it
-			vim.api.nvim_set_current_win(trouble_win)
-		end
-	else
-		-- If not open, toggle it (which opens and focuses)
+	if not trouble_win then
 		vim.cmd("Trouble todo toggle focus=true")
+	elseif vim.api.nvim_get_current_win() == trouble_win then
+		vim.cmd("Trouble close")
+	else
+		vim.api.nvim_set_current_win(trouble_win)
 	end
 end
 
@@ -117,7 +108,7 @@ end
 M.toggle_ai_provider = function(provider)
 	local cmp = require("cmp")
 	local config = cmp.get_config()
-	local sources = config.sources
+	local sources = config.sources or {}
 
 	-- Find the provider source
 	local found = false
@@ -199,9 +190,9 @@ M.open_pr_for_line = function()
 
 	-- Convert git URL to HTTPS URL
 	local https_url = remote_url
-		:gsub("^ssh://git@github%.com/", "https://github.com/")  -- Handle ssh://git@github.com/
-		:gsub("^git@github%.com:", "https://github.com/")        -- Handle git@github.com:
-		:gsub("%.git$", "")                                       -- Remove .git suffix
+		:gsub("^ssh://git@github%.com/", "https://github.com/") -- Handle ssh://git@github.com/
+		:gsub("^git@github%.com:", "https://github.com/") -- Handle git@github.com:
+		:gsub("%.git$", "") -- Remove .git suffix
 
 	local url
 	local message

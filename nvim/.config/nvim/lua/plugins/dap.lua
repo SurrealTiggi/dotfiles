@@ -5,7 +5,8 @@ return function()
 	local dapui = require("dapui")
 	local dap_python = require("dap-python")
 
-	require("dapui").setup({})
+	---@diagnostic disable-next-line: missing-fields
+	dapui.setup({})
 	require("dap-go").setup()
 
 	require("nvim-dap-virtual-text").setup({

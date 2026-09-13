@@ -9,19 +9,11 @@ return function()
 	end
 
 	local function lsp_status()
-		local msg = "No Active Lsp"
-		local buf_ft = vim.bo.filetype
-		local clients = vim.lsp.get_clients()
-		if next(clients) == nil then
-			return msg
+		local clients = vim.lsp.get_clients({ bufnr = 0 })
+		if #clients == 0 then
+			return "No Active Lsp"
 		end
-		for _, client in ipairs(clients) do
-			local filetypes = client.config.filetypes
-			if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-				return client.name
-			end
-		end
-		return SYMBOLS.misc.lsp_status .. "LSP: " .. msg
+		return clients[1].name
 	end
 
 	local prettier_tree = {

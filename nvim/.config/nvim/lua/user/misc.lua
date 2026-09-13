@@ -1,6 +1,7 @@
 -- [[ MISCELLANEOUS ]] --
 -------------------------
 -- Set snacks.notifier as main notifier
+---@diagnostic disable-next-line: duplicate-set-field
 vim.notify = function(msg, level, opts)
 	require("snacks").notifier.notify(msg, level, opts)
 end
@@ -33,7 +34,6 @@ vim.cmd([[
 vim.cmd([[
   hi! CursorLine term=bold cterm=bold guibg=#2a303c
 ]])
-
 
 -- Make floating windows the same color as the background
 -- vim.cmd([[

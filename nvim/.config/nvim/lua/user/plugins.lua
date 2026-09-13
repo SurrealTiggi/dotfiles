@@ -431,7 +431,13 @@ local utils = {
 		dependencies = { "nvim-lua/plenary.nvim", "folke/trouble.nvim" },
 		cmd = { "TodoTrouble", "TodoTelescope", "TodoLocList", "TodoQuickFix" },
 		keys = {
-			{ "<leader>td", function() require("user.functions").toggle_todo_trouble() end, desc = "Toggle Todo (Trouble)" },
+			{
+				"<leader>td",
+				function()
+					require("user.functions").toggle_todo_trouble()
+				end,
+				desc = "Toggle Todo (Trouble)",
+			},
 			{ "<leader>tt", "<cmd>TodoTelescope<cr>", desc = "Todo (Telescope)" },
 		},
 		config = function()
@@ -495,13 +501,6 @@ local aesthetics = {
 		"lukas-reineke/indent-blankline.nvim",
 		config = require("plugins.indent-blankline"),
 	},
-	-- Dashboard --
-	-- FIXME: Crashes
-	-- {
-	-- "goolord/alpha-nvim",
-	-- config = require("plugins.alpha-nvim"),
-	-- -- requires = "nvim-web-devicons",
-	-- },
 	-- Inline color display (modern, no build required)
 	{
 		"brenoprata10/nvim-highlight-colors",
