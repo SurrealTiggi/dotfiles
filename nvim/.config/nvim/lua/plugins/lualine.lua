@@ -38,7 +38,7 @@ return function()
 	require("lualine").setup({
 		options = {
 			icons_enabled = true,
-			theme = "catppuccin",
+			theme = "catppuccin-nvim",
 			component_separators = {
 				left = SYMBOLS.misc.left_separator_light,
 				right = SYMBOLS.misc.right_separator_light,
