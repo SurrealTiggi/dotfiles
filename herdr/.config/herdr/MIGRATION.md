@@ -167,27 +167,46 @@ genuinely takes no command; the manifest is the mechanism that does.
 
 Collie's DEPLOYMENT.md "Variant C": the bridge binds `127.0.0.1:8787` and never runs
 `tailscale serve` (the tailnet this Mac joins is not a personal one). Caddy is the only front
-door, bound to the home LAN address with a cert from its own local CA and basic auth as the
-per-device gate (`X-Device-Id` is SET from the basic-auth user, so a client cannot forge it).
+door, bound to the home LAN address with a server cert from its own local CA and **mutual TLS**
+as the gate: the handshake fails without a client cert from our own client CA, so there is no
+login prompt and no anonymous LAN access. Caddy SETS `X-Device-Id` from the client cert's SAN,
+so a client cannot forge it. Basic auth was the first cut and was replaced on 2026-09-11.
 
-- `collie-lan on|off|toggle|status|init`; the palette entry `User: Toggle Remote Control` runs
-  `toggle`. `on` refuses when the default gateway MAC is not the home router (`--force`
-  overrides), and Caddy is not registered at login, so a reboot or a coffee shop lands in the
-  off state.
-- Config lives outside the repo: `~/.config/collie-lan/env` (LAN address, router MAC, user,
-  bcrypt hash; `collie-lan init` writes it) and the plugin's own `.env` under
-  `~/.config/herdr/plugins/config/herdr.collie/` (`COLLIE_SKIP_SERVE=1`, `COLLIE_PUBLIC_HOSTS`,
-  `COLLIE_ALLOWED_ORIGINS`, `COLLIE_DEVICE_HEADER`, `COLLIE_DEVICE_ALLOWLIST`, VAPID keys).
-  The user in the env file must be in `COLLIE_DEVICE_ALLOWLIST` or the phone is read-only.
-- The phone must trust Caddy's root CA once
-  (`~/Library/Application Support/Caddy/pki/authorities/local/root.crt`: AirDrop it, install the
-  profile, then Settings > General > About > Certificate Trust Settings). Without HTTPS the page
-  works but the service worker, install and push silently no-op.
+- `collie-lan on|off|toggle|status|init|cert|p12`; the palette entry `User: Toggle Remote
+  Control` runs `toggle`. `on` refuses when the default gateway MAC is not the home router
+  (`--force` overrides), and Caddy is not registered at login, so a reboot or a coffee shop
+  lands in the off state.
+- Config lives outside the repo. `~/.config/collie-lan/env` (LAN address, port, router MAC,
+  client CA path; `collie-lan init` writes it). `~/.config/collie-lan/mtls/` holds the client CA
+  and per-device certs, with its own README on what to back up. The plugin's `.env` under
+  `~/.config/herdr/plugins/config/herdr.collie/` carries `COLLIE_SKIP_SERVE=1`,
+  `COLLIE_PUBLIC_HOSTS`, `COLLIE_ALLOWED_ORIGINS`, `COLLIE_DEVICE_HEADER=X-Device-Id`,
+  `COLLIE_DEVICE_ALLOWLIST` and the VAPID keys.
+- **Two files go to every device**: the device's `.p12` (client cert + key) and Caddy's server
+  root, `~/Library/Application Support/Caddy/pki/authorities/local/root.crt` (no password).
+  AirDrop both, install both under Settings > General > VPN & Device Management, then switch
+  the root on under Settings > General > About > Certificate Trust Settings. Safari asks which
+  cert to present on first visit. Without the trusted root the page still opens after a warning,
+  but the service worker, install and push silently no-op.
+- **Adding a device.** Either reuse an existing identity, `collie-lan p12 tiago`, and install
+  that `.p12` on the new device too (both then act as `tiago`, revocable only together), or
+  issue its own, `collie-lan cert ipad`, and add `ipad` to `COLLIE_DEVICE_ALLOWLIST` in the
+  collie `.env` followed by `herdr plugin action invoke restart --plugin herdr.collie`. A device
+  whose SAN is not in the allowlist connects but is read-only.
+- **The `.p12` import password is printed once and stored nowhere.** It only protects the file
+  in transit. Forgot it before the install finished? `collie-lan p12 <device>` re-wraps the
+  existing key and cert with a new password; devices that already imported the old file are
+  unaffected. Do not leave `.p12` files or `client-ca.key` in `~/Downloads` after AirDropping.
 - Install from `https://<LAN IP>:8443` only. The PWA is pinned to one origin and `.local` names
   do not resolve through a VPN, so the address needs a DHCP reservation on the router. 8443 rather
   than 443 because this macOS denies non-root binds below 1024 (`bind: permission denied` on :80
   and :443), so the Caddyfile also has `auto_https disable_redirects`.
+- Clients connect by IP and send no SNI, hence `default_sni` and `strict_sni_host insecure_off`
+  in the Caddyfile; without them they fall through to a TLS policy with no `client_auth`.
 - `COLLIE_TRUSTED_USER` does nothing without `tailscale serve`; it fails open, so leave it unset.
+- Push notifications do not pass through Caddy: the bridge talks to Apple's push service
+  directly, so alerts arrive with the door shut or away from home. Subscribing and acting on one
+  need the door open.
 
 ## Gotchas that cost real time
 

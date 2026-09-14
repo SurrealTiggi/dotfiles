@@ -10,6 +10,7 @@
 #   collie-lan glyph           tab-bar text: ' on' or ' off'
 #   collie-lan init            detect LAN address + router MAC, write the env file
 #   collie-lan cert <device>   issue a client cert (.p12) for a device; creates the CA on first use
+#   collie-lan p12 <device>    re-wrap an existing device cert into a .p12 with a fresh import password
 #
 # Port 8443, not 443: macOS denies non-root binds below 1024.
 #
@@ -107,13 +108,22 @@ cmd_cert() {
     -CAcreateserial -CAserial "$d/client-ca.srl" -days 3650 -out "$d/$dev.crt" \
     -extfile <(printf 'subjectAltName=DNS:%s\nextendedKeyUsage=clientAuth\n' "$dev") 2>/dev/null \
     || die "cert signing failed"
+  rm -f "$d/$dev.csr"
+  export_p12 "$dev"
+}
+
+# The import password only guards the .p12 in transit (AirDrop); it is printed
+# once and stored nowhere. Lost it? Run this again: same cert, new wrapper.
+export_p12() {
+  local dev=$1 d="$cfg_dir/mtls" pw
+  if [ ! -f "$d/$dev.key" ] || [ ! -f "$d/$dev.crt" ]; then die "no cert for '$dev' under $d; issue one: collie-lan cert $dev"; fi
   pw=$(openssl rand -hex 4)
   openssl pkcs12 -export -inkey "$d/$dev.key" -in "$d/$dev.crt" \
     -passout "pass:$pw" -out "$d/$dev.p12" || die "p12 export failed"
-  rm -f "$d/$dev.csr"
+  chmod 600 "$d/$dev.p12"
   echo "wrote $d/$dev.p12 (import password: $pw)"
-  echo "iPhone: AirDrop the .p12, install via Settings > General > VPN & Device Management,"
-  echo "then pick the cert when Safari asks on first visit."
+  echo "iPhone/iPad: AirDrop the .p12 and root.crt, install both via Settings > General > VPN & Device Management,"
+  echo "trust the root under Settings > General > About > Certificate Trust Settings, then pick '$dev' when Safari asks."
 }
 
 case "${1:-}" in
@@ -124,5 +134,6 @@ case "${1:-}" in
   glyph)  if running; then printf ' on'; else printf ' off'; fi; exit 0 ;;
   init)   cmd_init ;;
   cert)   cmd_cert "${2:-}" ;;
-  *)      sed -n 2,14p "$0"; exit 1 ;;
+  p12)    export_p12 "${2:-}" ;;
+  *)      sed -n 2,15p "$0"; exit 1 ;;
 esac
