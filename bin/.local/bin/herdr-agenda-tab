@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Names any tab that agenda owns, so herdr shows the agenda glyph instead of
+# the "?" it gives programs it does not recognise. Runs on pane.focused, so it
+# has to be cheap and silent.
+#
+# herdr reads the FOREGROUND process: while agenda shells out to gh for a
+# fetch that reads "gh", so a tab is claimed once and then left alone rather
+# than renamed back and forth.
+set -uo pipefail
+
+glyph=$'\U000f056a'
+want="$glyph agenda"
+
+pane="${HERDR_PANE_ID:-${HERDR_ACTIVE_PANE_ID:-}}"
+[ -n "$pane" ] || exit 0
+
+tab=$(herdr pane get "$pane" 2>/dev/null | jq -r '.result.pane.tab_id // empty')
+[ -n "$tab" ] || exit 0
+
+# Already named: nothing to do, and no rename storm on every focus change.
+label=$(herdr tab get "$tab" 2>/dev/null | jq -r '.result.tab.label // empty')
+case "$label" in *"$want"*) exit 0 ;; esac
+
+# Only claim a tab agenda has to itself; in a split the tab belongs to
+# whatever else lives there.
+[ "$(herdr tab get "$tab" 2>/dev/null | jq -r '.result.tab.pane_count')" = "1" ] || exit 0
+
+# The pane's own command, not the foreground one, so a gh fetch in flight does
+# not hide it.
+case "$(herdr pane get "$pane" 2>/dev/null | jq -r '.result.pane.label // empty')" in
+  agenda) ;;
+  *)
+    argv0=$(herdr pane process-info --pane "$pane" 2>/dev/null |
+      jq -r '[.result.process_info.foreground_processes[]?.argv0] | index("agenda") // empty')
+    [ -n "$argv0" ] || exit 0
+    ;;
+esac
+
+herdr tab rename "$tab" "$want" >/dev/null 2>&1 || true

@@ -35,6 +35,12 @@ command = ["herdr-task", "restore"]
 on = "pane.focused"
 command = ["herdr-git-tokens"]
 
+# herdr names a tab after the program it recognises and shows "?" otherwise,
+# which is what agenda gets. Claim its tab so it shows the agenda glyph.
+[[events]]
+on = "pane.focused"
+command = ["herdr-agenda-tab"]
+
 [[events]]
 on = "workspace.created"
 command = ["herdr-git-fetch"]

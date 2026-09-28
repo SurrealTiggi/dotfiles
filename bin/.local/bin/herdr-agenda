@@ -18,3 +18,12 @@ ratio() {
 }
 ratio 0.49
 ratio 0.5
+
+# herdr picks a tab glyph from the program name and shows "?" for anything it
+# does not recognise, agenda included. Name the tab ourselves so it gets the
+# agenda glyph (U+F056A) instead. Only applies when agenda owns the tab; in a
+# split the tab is named after whatever else lives there.
+tab=$(herdr pane get "$p" 2>/dev/null | jq -r '.result.pane.tab_id // empty')
+if [ -n "$tab" ] && [ "$(herdr tab get "$tab" 2>/dev/null | jq -r '.result.tab.pane_count')" = "1" ]; then
+  herdr tab rename "$tab" $'\U000f056a agenda' >/dev/null 2>&1
+fi
