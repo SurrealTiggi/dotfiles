@@ -5,6 +5,7 @@ local options = {
 	autoread = true, -- reload files when changed on disk
 	autowriteall = true, -- always autosave
 	backspace = "indent,eol,start", -- allow backspace on indent, end of line or insert mode start position
+	commentstring = "# %s", -- fallback for filetypes without one (dotenv, text, none)
 	clipboard = "unnamedplus", -- yank across different terminals
 	completeopt = { "menuone", "noselect" }, -- mostly for cmp
 	cursorline = true, -- highlights the current line

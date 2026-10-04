@@ -8,14 +8,6 @@ return function()
 		return SYMBOLS.misc.symbol_tree .. " Symbols"
 	end
 
-	local function lsp_status()
-		local clients = vim.lsp.get_clients({ bufnr = 0 })
-		if #clients == 0 then
-			return "No Active Lsp"
-		end
-		return clients[1].name
-	end
-
 	local prettier_tree = {
 		sections = {
 			lualine_a = { tree },
@@ -54,7 +46,7 @@ return function()
 			lualine_a = { "mode" },
 			lualine_b = { "branch", "diff", "diagnostics" },
 			lualine_c = { { "filename", path = 1 } },
-			lualine_x = { "encoding", "fileformat", "filetype" },
+			lualine_x = { { "lsp_status", icon = SYMBOLS.misc.lsp_status }, "encoding", "fileformat", "filetype" },
 			lualine_y = {},
 			lualine_z = { "progress", "location" },
 		},
