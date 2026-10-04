@@ -1,4 +1,3 @@
--- TODO: Add lsp_status https://github.com/nvim-lualine/lualine.nvim/blob/master/examples/evil_lualine.lua
 return function()
 	local function tree()
 		return SYMBOLS.misc.nav_tree .. " NvimTree"
@@ -46,7 +45,16 @@ return function()
 			lualine_a = { "mode" },
 			lualine_b = { "branch", "diff", "diagnostics" },
 			lualine_c = { { "filename", path = 1 } },
-			lualine_x = { { "lsp_status", icon = SYMBOLS.misc.lsp_status }, "encoding", "fileformat", "filetype" },
+			lualine_x = {
+				{
+					"lsp_status",
+					icon = SYMBOLS.misc.lsp_status,
+					color = { fg = require("catppuccin.palettes").get_palette().green },
+				},
+				"encoding",
+				"fileformat",
+				"filetype",
+			},
 			lualine_y = {},
 			lualine_z = { "progress", "location" },
 		},

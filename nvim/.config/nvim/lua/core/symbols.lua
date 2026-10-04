@@ -114,7 +114,7 @@ M.misc = {
 	search = "",
 	selector = "",
 	hint_prefix = "❱❱❱",
-	lsp_status = " ",
+	lsp_status = "󰒓 ",
 	robot = "󰚩",
 }
 
