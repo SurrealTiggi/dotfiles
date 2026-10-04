@@ -7,6 +7,16 @@ return function()
 		return SYMBOLS.misc.symbol_tree .. " Symbols"
 	end
 
+	-- The stock component only shows a symbol for servers that report progress;
+	-- seeding every attached client at zero work makes idle read as attached.
+	local LspStatus = require("lualine.components.lsp_status"):extend()
+	function LspStatus:update_status()
+		for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+			self.lsp_work_by_client_id[client.id] = self.lsp_work_by_client_id[client.id] or 0
+		end
+		return LspStatus.super.update_status(self)
+	end
+
 	local prettier_tree = {
 		sections = {
 			lualine_a = { tree },
@@ -47,7 +57,7 @@ return function()
 			lualine_c = { { "filename", path = 1 } },
 			lualine_x = {
 				{
-					"lsp_status",
+					LspStatus,
 					icon = SYMBOLS.misc.lsp_status,
 					color = { fg = require("catppuccin.palettes").get_palette().green },
 				},
