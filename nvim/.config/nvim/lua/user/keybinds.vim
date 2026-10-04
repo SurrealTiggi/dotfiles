@@ -32,7 +32,9 @@ nnoremap <silent><c-z> <Cmd>exe v:count . "ToggleTerm"<CR>
 tnoremap <silent><c-z> <Esc><Cmd>exe v:count . "ToggleTerm"<CR>
 """" NvimTree (disabled - now using snacks.explorer with <C-n>)
 " nnoremap <silent> <C-n> :NvimTreeFindFileToggle<CR>
-"""" NERDCommenter
+"""" NERDCommenter (<C-/> under the kitty keyboard protocol, <C-_> on legacy terminals)
+nmap <C-/> <leader>c<Space>
+vmap <C-/> <leader>c<Space>gv
 nmap <C-_> <leader>c<Space>
 vmap <C-_> <leader>c<Space>gv
 """" Telescope
