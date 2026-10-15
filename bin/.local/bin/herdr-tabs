@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+# herdr-tabs: list a space's worktree tabs under its sidebar row.
+#
+# The sidebar draws spaces and agents, never tabs, so a worktree opened as a
+# tab (the convention since 2026-10-12) is invisible there. This reports each
+# worktree tab of a workspace as display-only metadata tokens that config.toml
+# renders one tab per row under the space:
+#   wt_N_<slot> a branch glyph and the ticket, in the slot token herdr-task
+#               gave it (a..j), so it takes the ticket's colour like the task
+#               tokens do (the glyph rides along: herdr puts a separator
+#               between tokens, so it cannot be its own token)
+#   wt_N        the rest of the label (repo/branch), dim; the glyph is here
+#               when there is no ticket
+# A tab counts as a worktree tab when its root pane's cwd is a linked git
+# worktree (a checkout whose .git is a file, not a directory). report-metadata
+# dies with the herdr process, so the local.user plugin runs `sync` at startup
+# and on tab events.
+#
+#   herdr-tabs sync [WORKSPACE_ID]   re-report one space, or every space
+set -euo pipefail
+herdr=${HERDR_BIN_PATH:-herdr}
+max=6
+
+slots=(a b c d e f g h i j)
+state=${HERDR_TASK_STATE:-$HOME/.herdr/task-slots.json}
+icon=$'\U000f071d' # nf-md-source_branch; Nerd Fonts 3.4 has no U+EC7E yet
+
+label_of() { # strip herdr's "[n] " numbering and any leading glyph
+  sed -E 's/^\[[0-9]+\] //; s/^[^[:alnum:]]+ //'
+}
+
+slot_of() { # the slot letter herdr-task gave a ticket, or nothing
+  [ -f "$state" ] && jq -r --arg t "$1" '.slots[$t] // empty' "$state"
+}
+
+sync_ws() {
+  local ws=$1 args=() i=0 tab cwd label ticket rest slot c
+  for ((n=1; n<=max; n++)); do
+    args+=(--clear-token "wt_$n")
+    for c in "${slots[@]}"; do args+=(--clear-token "wt_${n}_$c"); done
+  done
+  # One line per tab: tab_id, root pane cwd, label. Panes come ordered, so
+  # the first pane seen for a tab is its root.
+  while IFS=$'\t' read -r tab cwd label; do
+    [ -n "$cwd" ] && [ -f "$cwd/.git" ] || continue   # linked worktree: .git is a file
+    i=$((i+1)); [ "$i" -le "$max" ] || break
+    label=$(printf '%s' "$label" | label_of)
+    # "<TICKET> · rest": the ticket goes in its slot token, the rest stays;
+    # herdr draws its own separator between the two.
+    ticket=${label%% · *}; rest=${label#* · }
+    if [ "$ticket" != "$label" ] && slot=$(slot_of "$ticket") && [ -n "$slot" ]; then
+      args+=(--token "wt_${i}_$slot=$icon $ticket" --token "wt_$i=$rest")
+    else
+      args+=(--token "wt_$i=$icon $label")
+    fi
+  done < <(
+    "$herdr" pane list --workspace "$ws" 2>/dev/null | jq -r '
+      (.result.panes // []) | group_by(.tab_id)[] | .[0] | [.tab_id, .cwd] | @tsv' |
+    while IFS=$'\t' read -r tab cwd; do
+      label=$("$herdr" tab list --workspace "$ws" 2>/dev/null | jq -r --arg t "$tab" '(.result.tabs // [])[] | select(.tab_id==$t) | .label')
+      printf '%s\t%s\t%s\n' "$tab" "$cwd" "$label"
+    done
+  )
+  # A report may touch at most 16 tokens; send the ops in batches.
+  local n=${#args[@]} start
+  for ((start=0; start<n; start+=32)); do
+    "$herdr" workspace report-metadata "$ws" --source worktree-tabs "${args[@]:start:32}" >/dev/null
+  done
+}
+
+case "${1:-}" in
+  sync)
+    if [ -n "${2:-}" ]; then sync_ws "$2"; exit; fi
+    live=""; for _ in 1 2 3 4 5 6 7 8 9 10; do
+      live=$("$herdr" workspace list 2>/dev/null | jq -r '(.result.workspaces // [])[] | .workspace_id'); [ -n "$live" ] && break; sleep 1
+    done
+    [ -n "$live" ] || { echo "herdr-tabs: herdr not reachable" >&2; exit 1; }
+    while IFS= read -r ws; do [ -n "$ws" ] && sync_ws "$ws"; done <<<"$live"
+    ;;
+  *)
+    sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+esac

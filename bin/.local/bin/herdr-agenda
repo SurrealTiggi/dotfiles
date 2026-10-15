@@ -1,29 +1,20 @@
 #!/usr/bin/env bash
-# Opens agenda in a focused right split. herdr 0.9.0 leaves both panes painting
-# at their pre-split size until a focus change, so nudge the split ratio to
-# force a relayout (no repaint command exists).
-# TODO: drop the ratio nudge once fixed upstream, watch
-# https://github.com/herdrdev/herdr/issues/3672
+# Toggle for the agenda popup, since herdr's own popup keybind only opens.
+# popup.close answers popup_not_open when there is none, which is the only way
+# to test for one: the session snapshot does not track popups.
+#
+# Closing ends the TUI cleanly, no orphan. With `daemon: true` the background
+# process keeps running; without it, closing quits agenda outright.
 set -uo pipefail
 sock="${HERDR_SOCKET_PATH:-$HOME/.config/herdr/herdr.sock}"
+# A shell keybind runs with a minimal PATH, so resolve herdr explicitly.
+herdr="${HERDR_BIN_PATH:-$HOME/.local/bin/herdr}"
 
-out=$(herdr plugin pane open --plugin local.user --entrypoint agenda --placement split --direction right \
-  ${HERDR_ACTIVE_PANE_ID:+--target-pane "$HERDR_ACTIVE_PANE_ID"} --focus 2>/dev/null) || exit 0
-p=$(jq -r '.result.plugin_pane.pane.pane_id // empty' <<<"$out")
-[ -n "$p" ] || exit 0
+closed=$(printf '{"id":"c","method":"popup.close","params":{}}\n' | nc -U -w 2 "$sock" 2>/dev/null)
+case $closed in
+  *popup_not_open*) ;;        # none open, fall through and open one
+  *) exit 0 ;;                # closed the open one
+esac
 
-ratio() {
-  printf '{"id":"agenda-relayout","method":"layout.set_split_ratio","params":{"pane_id":"%s","path":[],"ratio":%s}}\n' "$p" "$1" \
-    | nc -U -w 2 "$sock" >/dev/null
-}
-ratio 0.49
-ratio 0.5
-
-# herdr picks a tab glyph from the program name and shows "?" for anything it
-# does not recognise, agenda included. Name the tab ourselves so it gets the
-# agenda glyph (U+F056A) instead. Only applies when agenda owns the tab; in a
-# split the tab is named after whatever else lives there.
-tab=$(herdr pane get "$p" 2>/dev/null | jq -r '.result.pane.tab_id // empty')
-if [ -n "$tab" ] && [ "$(herdr tab get "$tab" 2>/dev/null | jq -r '.result.tab.pane_count')" = "1" ]; then
-  herdr tab rename "$tab" $'\U000f056a agenda' >/dev/null 2>&1
-fi
+# Placement comes from the plugin declaration (popup); --placement has no popup value.
+"$herdr" plugin pane open --plugin local.user --entrypoint agenda --focus >/dev/null 2>&1
