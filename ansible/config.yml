@@ -79,6 +79,7 @@ homebrew_installed_packages:
   - fx  # Terminal JSON viewer
   - fzf  # Fuzzy finder
   - fzy  # Optimized fuzzy finder
+  - gcx # Grafana cli
   - gh  # Github cli
   - ghq  # Git repo manager
   - git  # Git, obviously

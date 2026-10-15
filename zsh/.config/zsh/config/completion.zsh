@@ -32,6 +32,10 @@ source <(docker completion zsh)
 source <(kind completion zsh)
 compdef _kind kind
 
+# GCX
+source <(gcx completion zsh)
+compdef _gcx gcx
+
 # K3D
 source <(k3d completion zsh)
 compdef _k3d k3d
@@ -43,6 +47,10 @@ compdef _kustomize kustomize
 # Github CLI
 source <(gh completion -s zsh)
 compdef _gh gh
+
+# Sanity-labs/agenda
+source <(agenda completion zsh)
+compdef _agenda agenda
 
 
 # Gitlab CLI
@@ -78,3 +86,6 @@ source <(tailscale completion zsh)
 
 # Herdr
 source <(herdr completion zsh)
+
+# Temporal
+source <(temporal completion zsh)

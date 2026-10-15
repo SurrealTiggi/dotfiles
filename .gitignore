@@ -35,3 +35,6 @@ bin/.local/bin/terminal-browser
 
 # Work-specific shell config: internal hostnames, and this repo is public.
 zsh/.config/zsh/config/aliases.work.zsh
+
+# Built from source; not a dotfile.
+bin/.local/bin/kustomize-envsubst
