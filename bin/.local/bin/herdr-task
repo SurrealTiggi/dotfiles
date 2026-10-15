@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Stamps ticket tokens on herdr workspaces so related spaces share a colour.
 #
-# The sidebar can only colour a token statically, so there are ten slot tokens
-# (task_a..task_j), each with its own shade in config.toml. A ticket is assigned
-# a free slot on first use and keeps it, so every space stamped with that ticket
-# renders in the same colour. With all ten slots taken, `set` refuses until a
-# finished ticket is released.
+# The sidebar can only colour a token statically, so each slot is its own token
+# (task_a, task_b, ...) with a fixed shade. A ticket takes a free slot on first
+# use and keeps it, so every space stamped with that ticket renders in the same
+# colour. With every slot taken, `set` refuses until a ticket is released.
+# Add or recolour slots in `palette` below, then run `herdr-task sync-config`.
 #
 # report-metadata is display-only and dies with the herdr process, so the
 # workspace→ticket map is kept in the state file too and `restore` re-applies
@@ -16,12 +16,46 @@
 #   herdr-task clear <ws>                     remove all ticket tokens from a space
 #   herdr-task release SRE-1234               free the ticket's slot once the work is done
 #   herdr-task restore                        re-apply every stored stamp (herdr startup)
+#   herdr-task reshuffle                      reassign every ticket to a new random slot
+#   herdr-task sync-config                    write the palette into the herdr config
 #   herdr-task list                           show slot assignments and stamped spaces
 set -uo pipefail
 
 herdr="${HERDR_BIN_PATH:-herdr}"
 state="${HERDR_TASK_SLOTS:-$HOME/.herdr/task-slots.json}"
-slots=(a b c d e f g h i j)
+# Slot letter + colour. The only place either is defined: `sync-config` writes
+# the matching $task_* rows into the herdr config, so edit here and re-run it.
+palette=(
+  "a #89b4fa"  # sky blue
+  "b #c77dff"  # violet
+  "c #d5c6e0"  # pale lavender
+  "d #5b6bff"  # indigo
+  "e #967aa1"  # dusty mauve
+  "f #cea2f0"  # lilac
+  "g #9899f0"  # periwinkle
+  "h #aaa1c8"  # lavender grey
+  "i #7973d0"  # slate violet
+  "j #b2aacd"  # soft lavender
+  # Continuing around the wheel from the blues/violets above, same saturation
+  # and lightness band. Kept clear of $gitref green and $gitbehind red.
+  "k #e085c8"  # orchid
+  "l #f0a6c8"  # rose
+  "m #e8b68a"  # apricot
+  "n #e8cf8a"  # wheat
+  "o #d9d98a"  # flax
+  "p #bcd98a"  # pear
+  "q #a8d8a0"  # sage
+  "r #8ad8b4"  # mint
+  "s #8ad8c8"  # seafoam
+  "t #8acfd8"  # aqua
+  "u #8abfe0"  # sky
+  "v #8ab6e8"  # cornflower
+  "w #a0a8e8"  # cadet
+  "x #b8a0e0"  # wisteria
+  "y #d0a0dd"  # heather
+  "z #e0a0d0"  # mallow
+)
+slots=(); for e in "${palette[@]}"; do slots+=("${e%% *}"); done
 [ -f "$state" ] || echo '{"slots":{},"workspaces":{}}' >"$state"
 # v1 of this file was the bare slots map.
 if ! jq -e 'has("slots")' "$state" >/dev/null 2>&1; then
@@ -34,9 +68,13 @@ slot_for() { # ticket -> slot letter, assigning a free one if needed
   local t=$1 s c
   s=$(jq -r --arg t "$t" '.slots[$t] // empty' "$state")
   if [ -z "$s" ]; then
+    # Random rather than sequential, so a fresh ticket is not always the next
+    # letter (and the same few shades) after a release.
+    local free=()
     for c in "${slots[@]}"; do
-      if ! jq -e --arg c "$c" '.slots | to_entries | any(.value == $c)' "$state" >/dev/null; then s=$c; break; fi
+      jq -e --arg c "$c" '.slots | to_entries | any(.value == $c)' "$state" >/dev/null || free+=("$c")
     done
+    [ ${#free[@]} -gt 0 ] && s=${free[RANDOM % ${#free[@]}]}
     if [ -z "$s" ]; then
       # Reusing a slot would put two tickets in one shade, which is worse than
       # no colour, so stop and let the operator free a finished one.
@@ -50,9 +88,14 @@ slot_for() { # ticket -> slot letter, assigning a free one if needed
 }
 
 apply() { # ws [ticket...]: the space ends up showing exactly these tickets
+  # A report may carry at most 16 tokens, so clear only the slots this space
+  # actually shows rather than every letter in the palette.
   local ws=$1 t s c; shift
   local args=(--clear-token task)
-  for c in "${slots[@]}"; do args+=(--clear-token "task_$c"); done
+  for c in $("$herdr" workspace get "$ws" 2>/dev/null \
+             | jq -r '.result.workspace.tokens // {} | keys[] | select(startswith("task_"))'); do
+    args+=(--clear-token "$c")
+  done
   for t in "$@"; do s=$(slot_for "$t") || return 1; args+=(--token "task_$s=$t"); done
   "$herdr" workspace report-metadata "$ws" --source task-labels "${args[@]}" >/dev/null
 }
@@ -131,6 +174,44 @@ case "${1:-}" in
         jqw --arg ws "$ws" 'del(.workspaces[$ws])'
       fi
     done < <(jq -r '.workspaces | keys[]' "$state")
+    ;;
+  reshuffle)
+    # Drop every slot assignment and let slot_for pick afresh, then restamp.
+    jqw '.slots = {}'
+    while IFS= read -r ws; do
+      list=(); while IFS= read -r x; do list+=("$x"); done < <(stored "$ws")
+      apply "$ws" ${list[@]+"${list[@]}"} || exit 1
+    done < <(jq -r '.workspaces | keys[]' "$state")
+    jq -r '.slots | to_entries[] | "\(.value)  \(.key)"' "$state" | sort
+    ;;
+  sync-config)
+    cfg="${HERDR_CONFIG:-$HOME/.config/herdr/config.toml}"
+    [ -r "$cfg" ] || { echo "herdr-task: no $cfg" >&2; exit 1; }
+    # herdr caps a sidebar ROW at 16 tokens, not the whole block, so the slots
+    # spill into continuation rows. The first row also holds state_icon and
+    # workspace, leaving 14 there and 16 in each row after it.
+    rows="" n=0 limit=14
+    for e in "${palette[@]}"; do
+      if [ "$n" -eq "$limit" ]; then rows="$rows  ],\n  [\n"; n=0; limit=16; fi
+      rows="$rows    { token = \"\$task_${e%% *}\", fg = \"${e#* }\" },\n"
+      n=$((n + 1))
+    done
+    python3 - "$cfg" "$(printf '%b' "$rows")" <<'EOF'
+import re, sys
+cfg, rows = sys.argv[1], sys.argv[2].rstrip("\n")
+src = open(cfg).read()
+start, end = "# >>> herdr-task slots", "# <<< herdr-task slots"
+block = f"{start}\n{rows}\n    {end}"
+if start in src:
+    out = re.sub(re.escape(start) + r".*?" + re.escape(end), block.strip(), src, flags=re.S)
+else:
+    out = re.sub(r'(\n)(    \{ token = "\$task_[a-z]", fg = "#[0-9a-f]{6}" \},.*?\n)(  \],)',
+                 lambda m: m.group(1) + "    " + block.strip() + "\n" + m.group(3), src, count=1, flags=re.S)
+    if out == src:
+        sys.exit("herdr-task: could not find the $task_* block to replace")
+open(cfg, "w").write(out)
+print(f"wrote {rows.count('token')} slot rows to {cfg}")
+EOF
     ;;
   list)
     jq -r '.slots | to_entries[] | "\(.value)  \(.key)"' "$state" | sort
