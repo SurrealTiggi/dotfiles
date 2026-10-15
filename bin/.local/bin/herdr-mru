@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# Most-recently-used workspace order, for alt+tab style switching.
+# herdr has previous/next_workspace (positional) and last_pane, but no
+# last_workspace, so the order is tracked here. The local.user plugin calls
+# `record` on every workspace.focused event.
+#
+#   herdr-mru watch            follow focus events (started by the local.user plugin)
+#   herdr-mru record           push the focused space onto the list
+#   herdr-mru switch [N]       focus the Nth most recent other space (default 1)
+#   herdr-mru list             show the current order, most recent first
+set -uo pipefail
+
+sock="${HERDR_SOCKET_PATH:-$HOME/.config/herdr/herdr.sock}"
+state="${HERDR_MRU_STATE:-$HOME/.herdr/mru}"
+depth=20
+
+live() { herdr workspace list 2>/dev/null | jq -r '(.result.workspaces // [])[].workspace_id'; }
+focused() { herdr workspace list 2>/dev/null | jq -r '.result.workspaces[] | select(.focused) | .workspace_id'; }
+
+push() {
+  [ -n "${1:-}" ] || return 0
+  mkdir -p "$(dirname "$state")"
+  { echo "$1"; [ -r "$state" ] && cat "$state"; } | awk 'NF && !seen[$0]++' | head -n "$depth" > "$state.tmp"
+  mv "$state.tmp" "$state"
+}
+
+# Most recent first, dropping spaces that have since closed. The live set goes
+# through a file: awk -v cannot carry the embedded newlines.
+order() {
+  local known; known=$(mktemp); live > "$known"
+  [ -s "$known" ] || { rm -f "$known"; return 0; }
+  { [ -r "$state" ] && cat "$state"; cat "$known"; } \
+    | awk 'NR == FNR { ok[$0] = 1; next } !seen[$0]++ && ok[$0]' "$known" -
+  rm -f "$known"
+}
+
+case "${1:-}" in
+  record)
+    push "$(focused)"
+    ;;
+  watch)
+    # The plugin's workspace.focused hook proved unreliable; the event stream
+    # is not. Reconnects on its own so a herdr restart does not end the watch.
+    while true; do
+      # Events only report changes, so seed from live focus on every (re)connect.
+      push "$(focused)"
+      # The subscribe request must stay open: a plain printf closes the write
+      # end and herdr drops the stream before any event arrives.
+      { printf '{"id":"mru","method":"events.subscribe","params":{"subscriptions":[{"type":"workspace.focused"}]}}\n'; while true; do sleep 3600; done; } \
+        | nc -U "$sock" 2>/dev/null \
+        | while IFS= read -r line; do
+            case $line in *workspace_focused*) ;; *) continue ;; esac
+            push "$(jq -r '.data.workspace_id // empty' <<<"$line" 2>/dev/null)"
+          done
+      sleep 2
+    done
+    ;;
+  switch)
+    # Focus can change without the plugin hook seeing it (sidebar click, the
+    # built-in prev/next binds), so reconcile before reading the order.
+    cur=$(focused); push "$cur"
+    target=$(order | grep -vx "$cur" | sed -n "${2:-1}p")
+    [ -n "$target" ] && herdr workspace focus "$target" >/dev/null 2>&1
+    ;;
+  list)
+    cur=$(focused)
+    order | while IFS= read -r w; do
+      printf '%s  %s%s\n' "$w" \
+        "$(herdr workspace get "$w" 2>/dev/null | jq -r '.result.workspace.label // ""')" \
+        "$([ "$w" = "$cur" ] && echo '  (current)')"
+    done
+    ;;
+  *) sed -n 's/^#   \(herdr-mru .*\)/  \1/p' "$0"; exit 1 ;;
+esac

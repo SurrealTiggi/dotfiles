@@ -31,6 +31,22 @@ command = ["herdr-git-tokens"]
 on = "workspace.created"
 command = ["herdr-task", "restore"]
 
+# Worktree tabs under their space (report-metadata, so re-done at startup).
+[[startup]]
+command = ["herdr-tabs", "sync"]
+
+[[events]]
+on = "tab.created"
+command = ["herdr-tabs", "sync"]
+
+[[events]]
+on = "tab.closed"
+command = ["herdr-tabs", "sync"]
+
+[[events]]
+on = "workspace.created"
+command = ["herdr-tabs", "sync"]
+
 [[events]]
 on = "pane.focused"
 command = ["herdr-git-tokens"]
@@ -78,5 +94,12 @@ command = ["yazi"]
 [[panes]]
 id = "agenda"
 title = "agenda"
-placement = "split"
+placement = "popup"
+width = "90%"
+height = "90%"
 command = ["agenda"]
+
+# MRU space order for ctrl+tab. A [[startup]] watcher on the event stream, not
+# an [[events]] hook: the hook misses focus changes made from the sidebar.
+[[startup]]
+command = ["herdr-mru", "watch"]

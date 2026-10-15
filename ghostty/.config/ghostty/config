@@ -14,4 +14,15 @@ keybind = cmd+k=unbind
 
 # Nerd Font explicitly: the sidebar's branch glyph (U+F418) and other PUA
 # codepoints need it, and the bundled default does not reliably cover them.
-font-family = "FiraCode Nerd Font Mono"
+# font-family = "FiraCode Nerd Font Mono"
+font-family = "VictorMono Nerd Font"
+#font-style = "Extra Light"
+
+# This display runs unscaled (1x), where macOS stem-darkening would normally
+# apply; Ghostty disables it by default, which leaves bold looking washed out.
+font-thicken = true
+
+# herdr cannot bind ctrl+tab (terminals send it as a bare tab), so translate it
+# into plain F9/F10, whose sequences herdr decodes unambiguously. MRU switch.
+keybind = ctrl+tab=csi:20~
+keybind = ctrl+shift+tab=csi:21~
