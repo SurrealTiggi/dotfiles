@@ -6,7 +6,7 @@
 # worktree tab of a workspace as display-only metadata tokens that config.toml
 # renders one tab per row under the space:
 #   wt_N_<slot> a branch glyph and the ticket, in the slot token herdr-task
-#               gave it (a..j), so it takes the ticket's colour like the task
+#               gave it, so it takes the ticket's colour like the task
 #               tokens do (the glyph rides along: herdr puts a separator
 #               between tokens, so it cannot be its own token)
 #   wt_N        the rest of the label (repo/branch), dim; the glyph is here
@@ -21,7 +21,9 @@ set -euo pipefail
 herdr=${HERDR_BIN_PATH:-herdr}
 max=6
 
-slots=(a b c d e f g h i j)
+# From herdr-task, the one place the palette lives: a slot letter with no
+# matching $wt_N_<slot> style in config.toml renders with no ticket marker.
+slots=(); while IFS= read -r c; do slots+=("$c"); done < <(herdr-task slots)
 state=${HERDR_TASK_STATE:-$HOME/.herdr/task-slots.json}
 icon=$'\U000f071d' # nf-md-source_branch; Nerd Fonts 3.4 has no U+EC7E yet
 
@@ -61,7 +63,8 @@ sync_ws() {
       printf '%s\t%s\t%s\n' "$tab" "$cwd" "$label"
     done
   )
-  # A report may touch at most 16 tokens; send the ops in batches.
+  # A report may touch at most 16 tokens, and each --clear-token/--token is
+  # two argv entries, so batch 32 arguments at a time.
   local n=${#args[@]} start
   for ((start=0; start<n; start+=32)); do
     "$herdr" workspace report-metadata "$ws" --source worktree-tabs "${args[@]:start:32}" >/dev/null

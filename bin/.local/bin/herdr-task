@@ -16,6 +16,7 @@
 #   herdr-task clear <ws>                     remove all ticket tokens from a space
 #   herdr-task release SRE-1234               free the ticket's slot once the work is done
 #   herdr-task restore                        re-apply every stored stamp (herdr startup)
+#   herdr-task slots                          print the slot letters (herdr-tabs reads these)
 #   herdr-task reshuffle                      reassign every ticket to a new random slot
 #   herdr-task sync-config                    write the palette into the herdr config
 #   herdr-task list                           show slot assignments and stamped spaces
@@ -56,6 +57,8 @@ palette=(
   "z #e0a0d0"  # mallow
 )
 slots=(); for e in "${palette[@]}"; do slots+=("${e%% *}"); done
+# Worktree tab rows herdr-tabs reports; must match its own `max`.
+wt_max=6
 [ -f "$state" ] || echo '{"slots":{},"workspaces":{}}' >"$state"
 # v1 of this file was the bare slots map.
 if ! jq -e 'has("slots")' "$state" >/dev/null 2>&1; then
@@ -175,6 +178,9 @@ case "${1:-}" in
       fi
     done < <(jq -r '.workspaces | keys[]' "$state")
     ;;
+  slots)
+    printf '%s\n' "${slots[@]}"
+    ;;
   reshuffle)
     # Drop every slot assignment and let slot_for pick afresh, then restamp.
     jqw '.slots = {}'
@@ -187,30 +193,48 @@ case "${1:-}" in
   sync-config)
     cfg="${HERDR_CONFIG:-$HOME/.config/herdr/config.toml}"
     [ -r "$cfg" ] || { echo "herdr-task: no $cfg" >&2; exit 1; }
-    # herdr caps a sidebar ROW at 16 tokens, not the whole block, so the slots
-    # spill into continuation rows. The first row also holds state_icon and
-    # workspace, leaving 14 there and 16 in each row after it.
-    rows="" n=0 limit=14
-    for e in "${palette[@]}"; do
-      if [ "$n" -eq "$limit" ]; then rows="$rows  ],\n  [\n"; n=0; limit=16; fi
-      rows="$rows    { token = \"\$task_${e%% *}\", fg = \"${e#* }\" },\n"
-      n=$((n + 1))
-    done
-    python3 - "$cfg" "$(printf '%b' "$rows")" <<'EOF'
+    python3 - "$cfg" "$wt_max" "${palette[@]}" <<'EOF'
 import re, sys
-cfg, rows = sys.argv[1], sys.argv[2].rstrip("\n")
+
+cfg, wt_max, entries = sys.argv[1], int(sys.argv[2]), sys.argv[3:]
+slots = [e.split()[0] for e in entries]
+colours = {e.split()[0]: e.split()[1] for e in entries}
+
+# herdr caps a sidebar ROW at 16 tokens, so a block longer than that spills
+# into continuation rows. `head` is what the row already holds.
+def block(tok, head):
+    out, n, limit = [], 0, 16 - head
+    for c in slots:
+        if n == limit:
+            out += ["  ],", "  ["]
+            n, limit = 0, 16
+        out.append(f'    {{ token = "${tok}_{c}", fg = "{colours[c]}" }},')
+        n += 1
+    return out, n
+
 src = open(cfg).read()
-start, end = "# >>> herdr-task slots", "# <<< herdr-task slots"
-block = f"{start}\n{rows}\n    {end}"
-if start in src:
-    out = re.sub(re.escape(start) + r".*?" + re.escape(end), block.strip(), src, flags=re.S)
-else:
-    out = re.sub(r'(\n)(    \{ token = "\$task_[a-z]", fg = "#[0-9a-f]{6}" \},.*?\n)(  \],)',
-                 lambda m: m.group(1) + "    " + block.strip() + "\n" + m.group(3), src, count=1, flags=re.S)
-    if out == src:
-        sys.exit("herdr-task: could not find the $task_* block to replace")
-open(cfg, "w").write(out)
-print(f"wrote {rows.count('token')} slot rows to {cfg}")
+
+def replace(src, name, lines):
+    start, end = f"# >>> herdr-task {name}", f"# <<< herdr-task {name}"
+    body = "\n".join([f"    {start}"] + lines + [f"    {end}"])
+    if start not in src:
+        sys.exit(f"herdr-task: no '{start}' marker in {cfg}")
+    return re.sub(re.escape(start) + r".*?" + re.escape(end), body.strip(), src, flags=re.S)
+
+# state_icon and workspace sit in the task row before the slots.
+lines, _ = block("task", 2)
+src = replace(src, "slots", lines)
+
+# Each $wt_N row ends with the dim label token, so reserve one place for it.
+for n in range(1, wt_max + 1):
+    lines, used = block(f"wt_{n}", 0 if n else 0)
+    if used == 16:                      # no room left for the label
+        lines += ["  ],", "  ["]
+    lines.append(f'    {{ token = "$wt_{n}", dim = true }},')
+    src = replace(src, f"wt_{n}", lines)
+
+open(cfg, "w").write(src)
+print(f"wrote {len(slots)} slots to task and wt_1..{wt_max}")
 EOF
     ;;
   list)
